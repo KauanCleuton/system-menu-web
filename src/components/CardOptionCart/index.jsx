@@ -4,7 +4,7 @@ import { Box, Grid, IconButton, Paper, Typography } from "@mui/material";
 import Image from "next/image";
 import { useDispatch } from "react-redux";
 
-const CartOptionCart = ({ img, quantity, price = 20, item, description }) => {
+const CartOptionCart = ({ img, quantity, price, item, description }) => {
     const dispatch = useDispatch();
 
     const handleRemoveFromCart = (id) => {
@@ -13,13 +13,13 @@ const CartOptionCart = ({ img, quantity, price = 20, item, description }) => {
 
     return (
         <Paper elevation={2} sx={{ cursor: "pointer", mb: 2 }}>
-            <Grid container p={0}>
-                <Grid item xs={4} md={4} lg={3} sm={3}>
+            <Grid container justifyContent={"space-between"}  columnSpacing={2}>
+                <Grid item xs={3} md={4} lg={3} sm={3}>
                     <Box sx={{ position: "relative", width: "100%", height: { lg: '130px', md: '125px', sm: '120px', xs: '100px' } }}>
                         <Image src={img} layout="fill" alt="Imagem do produto" style={{ objectFit: "cover" }} />
                     </Box>
                 </Grid>
-                <Grid item xs={8} md={8} lg={9} sm={9}>
+                <Grid item xs={9} md={8} lg={9} sm={9}>
                     <Box sx={{ height: "100%", display: "flex", flexDirection: "column", justifyContent: "space-between", py: 1 }}>
                         <Box>
                             <Typography variant="h6" sx={{ fontWeight: "bold", fontSize: { xs: '13px', md: '18px' } }}>{item.title}</Typography>

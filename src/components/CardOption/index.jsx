@@ -1,4 +1,4 @@
-import { addItemToCart } from "@/store/cartSlice";
+import { openModal } from "@/store/modalSlice";
 import { AddShoppingCartOutlined } from "@mui/icons-material";
 import { Box, Grid, IconButton, Paper, Typography } from "@mui/material";
 import Image from "next/image";
@@ -7,8 +7,8 @@ import { useDispatch } from "react-redux";
 const CartOption = ({ img, title, description, price, item }) => {
     const dispatch = useDispatch();
 
-    const handleAddToCart = () => {
-        dispatch(addItemToCart(item));
+    const handleOpenModal = () => {
+        dispatch(openModal(item));
     };
 
     return (
@@ -20,7 +20,7 @@ const CartOption = ({ img, title, description, price, item }) => {
                     </Box>
                 </Grid>
                 <Grid item xs={8} md={8} lg={9} sm={9}>
-                    <Box sx={{ height: "100%", display: "flex", flexDirection: "column", gap: '7px',py: 1}}>
+                    <Box sx={{ height: "100%", display: "flex", flexDirection: "column", gap: '7px', py: 1 }}>
                         <Box>
                             <Typography variant="h6" sx={{ fontWeight: "bold", fontSize: { xs: '13px', md: '18px' } }}>{title}</Typography>
                             <Typography variant="body1" sx={{ fontSize: { xs: '13px', md: '16px' } }}>{description}</Typography>
@@ -28,7 +28,7 @@ const CartOption = ({ img, title, description, price, item }) => {
                         <Box sx={{ display: "flex", justifyContent: "space-between", alignItems: "center" }}>
                             <Typography variant="body2" sx={{ fontWeight: "bold", fontSize: { xs: '13px', md: '16px' } }}>R$ {price.toFixed(2)}</Typography>
                             <IconButton
-                                onClick={handleAddToCart}
+                                onClick={handleOpenModal}
                                 sx={{
                                     color: "#fff",
                                     bgcolor: "#000",
@@ -48,10 +48,10 @@ const CartOption = ({ img, title, description, price, item }) => {
                         </Box>
                     </Box>
                 </Grid>
-
             </Grid>
         </Paper>
+        
     );
-}
+};
 
 export default CartOption;

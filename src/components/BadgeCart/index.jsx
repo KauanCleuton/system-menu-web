@@ -23,8 +23,16 @@ export default function BadgeCart() {
   const totalItems = useSelector(state => state.cart.totalItems);
   const item = useSelector(state => state.cart.items);
   const trigger = useScrollTrigger({ disableHysteresis: true, threshold: 0 });
-  console.log(totalItems)
-  console.table(item)
+  const [hydrated, setHydrated] = React.useState(false);
+
+  React.useEffect(() => {
+    setHydrated(true);
+  }, []);
+
+  if (!hydrated) {
+    return null; // ou um placeholder enquanto está hidratando
+  }
+
   return (
     <IconButton aria-label="cart" LinkComponent={'a'} href='/cart'>
       <StyledBadge badgeContent={totalItems} color='success'>

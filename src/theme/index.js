@@ -1,6 +1,5 @@
 import { Roboto, Inter } from 'next/font/google';
 import { createTheme } from '@mui/material/styles';
-import componentStyleOverrides from './compStyleOverride';
 import palette from './palette';
 
 export const roboto = Inter({
@@ -159,6 +158,6 @@ const theme = createTheme({
     fontFamily: roboto.style.fontFamily,
   },
 });
-theme.components = componentStyleOverrides(theme);
+// theme.components = componentStyleOverrides(theme);
 
 export default theme;

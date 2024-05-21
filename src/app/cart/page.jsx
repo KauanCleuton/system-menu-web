@@ -2,9 +2,19 @@
 import CartOptionCart from "@/components/CardOptionCart";
 import { Box, Container, Grid, Typography } from "@mui/material";
 import { useSelector } from "react-redux";
+import { useState, useEffect } from 'react';
 
 const Cart = () => {
     const items = useSelector(state => state.cart.items);
+    const [hydrated, setHydrated] = useState(false);
+
+    useEffect(() => {
+        setHydrated(true);
+    }, []);
+
+    if (!hydrated) {
+        return null; // ou um placeholder enquanto está hidratando
+    }
 
     return (
         <Box
@@ -27,11 +37,11 @@ const Cart = () => {
                         </Grid>
                     ) : (
                         items.map((item) => (
-                            <Grid item xs={12} lg={6} key={item.id}>
+                            <Grid item xs={12} lg={6} key={`${item.id}-${item.description}`}>
                                 <CartOptionCart
-                                    img={item.img}
+                                    img={item.photo}
                                     quantity={item.quantity}
-                                    price={item.totalPrice}
+                                    price={item.price}
                                     item={item}
                                     description={item.description}
                                 />
