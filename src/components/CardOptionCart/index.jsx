@@ -29,7 +29,7 @@ const CartOptionCart = ({ img, quantity, price, item, description }) => {
                                     <Typography variant="body1" sx={{ fontSize: { xs: '13px', md: '16px' } }}>Quantidade: {quantity}</Typography>
                                 </Box>
                                 <Box sx={{ display: "flex", justifyContent: "space-between", alignItems: "center" }}>
-                                    <Typography variant="body2" sx={{ fontWeight: "bold", fontSize: { xs: '13px', md: '16px' } }}>R$ {price * quantity}</Typography>
+                                    <Typography variant="body2" sx={{ fontWeight: "bold", fontSize: { xs: '13px', md: '16px' } }}>R$ {Number(price * quantity).toFixed(2)}</Typography>
                                     <IconButton
                                         onClick={() => handleRemoveFromCart(item.id)}
                                         sx={{

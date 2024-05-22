@@ -82,3 +82,53 @@ const cartReducer = createReducer(initialState, (builder) => {
 });
 
 export default cartReducer;
+
+
+export function printCartItems() {
+  const items = getStoredItems();
+  const totalAmount = getStoredAmount();
+  const totalItems = items.reduce((total, item) => total + item.quantity, 0);
+
+  let content = `
+    <h1>Pedido do Carrinho</h1>
+    <table border="1" style="width: 100%; border-collapse: collapse;">
+      <thead>
+        <tr>
+          <th>Nome</th>
+          <th>Preço</th>
+          <th>Quantidade</th>
+          <th>Descrição</th> 
+        </tr>
+      </thead>
+      <tbody>
+  `;
+
+  items.forEach(item => {
+    content += `
+      <tr>
+        <td>${item.title}</td>
+        <td>${item.price.toFixed(2)}</td>
+        <td>${item.quantity}</td>
+        <td>${item.description || ''}</td>
+      </tr>
+    `;
+  });
+
+  content += `
+      <tr>
+        <td colspan="1" style="text-align:left"><strong>Total de Itens:</strong></td>
+        <td colspan="1">${totalItems}</td>
+      </tr>
+      <tr>
+        <td colspan="1" style="text-align:left"><strong>Total a Pagar:</strong></td>
+        <td colspan="1">${totalAmount.toFixed(2)}</td>
+      </tr>
+      </tbody>
+    </table>
+  `;
+
+  const newWindow = window.open('', '', 'width=800,height=600');
+  newWindow.document.write(content);
+  newWindow.document.close();
+  newWindow.print();
+}

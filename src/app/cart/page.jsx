@@ -4,7 +4,7 @@ import { Box, Button, Container, Grid, Paper, Typography } from "@mui/material";
 import { useDispatch, useSelector } from "react-redux";
 import { useState, useEffect } from 'react';
 import Link from "next/link";
-import { clearCart } from "@/store/cartSlice";
+import { clearCart, printCartItems } from "@/store/cartSlice";
 import { useRouter } from "next/navigation";
 
 const Cart = () => {
@@ -15,7 +15,7 @@ const Cart = () => {
     const [hydrated, setHydrated] = useState(false);
 
     useEffect(() => {
-        if(items.length === 0) {
+        if (items.length === 0) {
             router.push("/")
         }
         setHydrated(true);
@@ -29,6 +29,7 @@ const Cart = () => {
     if (!hydrated) {
         return null; // ou um placeholder enquanto está hidratando
     }
+    
 
     return (
         <Box
@@ -39,7 +40,7 @@ const Cart = () => {
                 justifyContent: "center",
                 alignItems: "flex-start",
                 py: 12,
-                px: 2
+                px: 2,
             }}
         >
             <Grid container spacing={2}>
@@ -50,13 +51,13 @@ const Cart = () => {
                             width: "100%",
                             justifyContent: "center"
                         }}>
-                            <Typography variant="h3" sx={{fontSize: {lg: 43, md: 39, sm: 32, xs: 27}}}>O carrinho está vazio.</Typography>
+                            <Typography variant="h3" sx={{ fontSize: { lg: 43, md: 39, sm: 32, xs: 27 } }}>O carrinho está vazio.</Typography>
                         </Box>
                     </Grid>
                     :
                     <>
                         <Grid item xs={12} >
-                            <Container fixed sx={{ py: 4, height: {lg: 500, md: 500, sm: 500, xs: 440}, overflow: "auto" }} component={Paper} elevation={1}>
+                            <Container fixed sx={{ py: 4, height: { lg: 500, md: 500, sm: 500, xs: 440 }, overflow: "auto" }} component={Paper} elevation={1}>
                                 <Grid container spacing={2}>
 
                                     {items.map((item) => (
@@ -73,7 +74,7 @@ const Cart = () => {
                                 </Grid>
                             </Container>
                         </Grid>
-                        <Grid item xs={12} >
+                        <Grid item xs={12} mb={4}>
                             <Container fixed component={Paper} elevation={1} sx={{ py: 2 }}>
                                 <Grid container alignItems={"center"} justifyContent={"space-between"} spacing={3}>
                                     <Grid item xs={12} md={8} lg={8} sm={12} >
@@ -82,7 +83,7 @@ const Cart = () => {
                                             display: "flex",
                                             justifyContent: "flex-start"
                                         }}>
-                                            <Typography variant="h3" sx={{ fontSize: {lg: 28, md: 25, sm: 22, xs: 21}, fontWeight: "bold" }}>
+                                            <Typography variant="h3" sx={{ fontSize: { lg: 28, md: 25, sm: 22, xs: 21 }, fontWeight: "bold" }}>
                                                 Total do pedido: {items.length !== "0" && `R$ ${Number(totalAmount).toFixed(2)}`}
                                             </Typography>
                                         </Box>
@@ -97,7 +98,7 @@ const Cart = () => {
                                                 textTransform: "inherit",
                                                 bgcolor: "#000",
                                                 border: `1px solid #000`,
-                                                fontSize: {lg: '16px', xs: '9px'},
+                                                fontSize: { lg: '16px', xs: '9px' },
                                                 ":hover": {
                                                     bgcolor: "transparent",
                                                     color: "#000"
@@ -111,7 +112,7 @@ const Cart = () => {
                                                 sx={{
                                                     textTransform: "inherit", bgcolor: "#e01212",
                                                     border: `1px solid #e01212`,
-                                                    fontSize: {lg: '16px', xs: '9px'},
+                                                    fontSize: { lg: '16px', xs: '9px' },
                                                     ":hover": {
                                                         bgcolor: "transparent",
                                                         color: "#e01212"
@@ -119,11 +120,13 @@ const Cart = () => {
                                                 }}>
                                                 Limpar Tudo
                                             </Button>
-                                            <Button component={Link} href="/" variant="contained" sx={{
+                                            <Button 
+                                            onClick={() => printCartItems()}
+                                             variant="contained" sx={{
                                                 textTransform: "inherit",
                                                 bgcolor: "#060f4c",
                                                 border: `1px solid #060f4c`,
-                                                fontSize: {lg: '16px', xs: '9px'},
+                                                fontSize: { lg: '16px', xs: '9px' },
                                                 ":hover": {
                                                     bgcolor: "transparent",
                                                     color: "#060f4c"
