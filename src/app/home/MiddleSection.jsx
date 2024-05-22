@@ -10,7 +10,7 @@ const menu = [
                 id: 'hamburguer_1',
                 title: 'Hambúrguer Clássico',
                 description: 'Pão, carne bovina, queijo, alface, tomate e maionese.',
-                price: 15.00,
+                price: 15.21,
                 photo: '/img/hamburguer-bg.png'
             },
             {
@@ -109,7 +109,7 @@ const menu = [
                 id: 'porcao_3',
                 title: 'Onion Rings',
                 description: 'Porção de anéis de cebola empanados e fritos.',
-                price: 15.00,
+                price: 15.75,
                 photo: '/img/hamburguer1.png'
             }
         ]

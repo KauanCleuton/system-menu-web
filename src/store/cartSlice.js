@@ -3,12 +3,12 @@ import { createAction, createReducer } from '@reduxjs/toolkit';
 const initialState = {
   items: getStoredItems(),
   totalAmount: getStoredAmount(),
-  totalItems: getStoredItems().reduce((total, item) => total + item.quantity, 0),
+  totalItems: getStoredItems().length,
 };
 
 function getStoredItems() {
   try {
-    const storedItems = localStorage.getItem('cartItems');
+    const storedItems = window.localStorage.getItem('cartItems');
     return storedItems ? JSON.parse(storedItems) : [];
   } catch (error) {
     console.error('Error retrieving cart items from localStorage:', error);
@@ -18,7 +18,7 @@ function getStoredItems() {
 
 function getStoredAmount() {
   try {
-    const storedAmount = localStorage.getItem('totalAmount');
+    const storedAmount = window.localStorage.getItem('totalAmount');
     return storedAmount ? JSON.parse(storedAmount) : 0;
   } catch (error) {
     console.error('Error retrieving total amount from localStorage:', error);
@@ -48,14 +48,14 @@ const cartReducer = createReducer(initialState, (builder) => {
         const existingItem = state.items.find((item) => item.id === newItem.id);
         if (!existingItem) {
           state.items.push(newItem);
+          state.totalItems++;
         } else {
           existingItem.quantity += newItem.quantity;
         }
         state.totalAmount += newItem.price * newItem.quantity;
-        state.totalItems += newItem.quantity;
-        localStorage.setItem('cartItems', JSON.stringify(state.items));
-        localStorage.setItem('totalAmount', JSON.stringify(state.totalAmount));
-        localStorage.setItem('totalItems', JSON.stringify(state.totalItems));
+        window.localStorage.setItem('cartItems', JSON.stringify(state.items));
+        window.localStorage.setItem('totalAmount', JSON.stringify(state.totalAmount));
+        window.localStorage.setItem('totalItems', JSON.stringify(state.totalItems));
       }
     })
     .addCase(removeItemFromCart, (state, action) => {
@@ -64,20 +64,20 @@ const cartReducer = createReducer(initialState, (builder) => {
       if (existingItemIndex !== -1) {
         const existingItem = state.items[existingItemIndex];
         state.totalAmount -= existingItem.price * existingItem.quantity;
-        state.totalItems -= existingItem.quantity;
         state.items.splice(existingItemIndex, 1);
-        localStorage.setItem('cartItems', JSON.stringify(state.items));
-        localStorage.setItem('totalAmount', JSON.stringify(state.totalAmount));
-        localStorage.setItem('totalItems', JSON.stringify(state.totalItems));
+        state.totalItems--;
+        window.localStorage.setItem('cartItems', JSON.stringify(state.items));
+        window.localStorage.setItem('totalAmount', JSON.stringify(state.totalAmount));
+        window.localStorage.setItem('totalItems', JSON.stringify(state.totalItems));
       }
     })
     .addCase(clearCart, (state) => {
       state.items = [];
       state.totalAmount = 0;
       state.totalItems = 0;
-      localStorage.removeItem('cartItems');
-      localStorage.removeItem('totalAmount');
-      localStorage.removeItem('totalItems');
+      window.localStorage.removeItem('cartItems');
+      window.localStorage.removeItem('totalAmount');
+      window.localStorage.removeItem('totalItems');
     });
 });
 
