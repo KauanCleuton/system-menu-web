@@ -25,7 +25,7 @@ const CartOptionCart = ({ img, quantity, price, item, description }) => {
                             <Box sx={{ height: "100%", display: "flex", flexDirection: "column", justifyContent: "space-between", py: 1 }}>
                                 <Box>
                                     <Typography variant="h6" sx={{ fontWeight: "bold", fontSize: { xs: '13px', md: '18px' } }}>{item.title}</Typography>
-                                    <Typography variant="body1" sx={{ fontSize: { xs: '13px', md: '16px' } }}>{item.deliveryDescription}</Typography>
+                                    <Typography variant="body1" sx={{ fontSize: { xs: '13px', md: '16px' } }}>Observação: {item.deliveryDescription}</Typography>
                                     <Typography variant="body1" sx={{ fontSize: { xs: '13px', md: '16px' } }}>Quantidade: {quantity}</Typography>
                                 </Box>
                                 <Box sx={{ display: "flex", justifyContent: "space-between", alignItems: "center" }}>

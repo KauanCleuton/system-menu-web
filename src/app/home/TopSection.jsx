@@ -6,17 +6,17 @@ import Image from "next/image"
 import { useSelector } from "react-redux"
 
 const TopSection = () => {
-    
+
     const theme = useTheme()
     return (
         <Box
             sx={{
                 width: "100%",
-                height: { xs: 330, sm: 350, md: 380,lg: 506 },
+                height: { xs: 330, sm: 350, md: 380, lg: 506 },
                 position: "relative",
                 overflow: 'hidden',
-                px:2,
-                py: {lg: 2, xs: 7},
+                px: 2,
+                py: { lg: 2, xs: 7 },
                 mt: -8,
                 zIndex: -1,
                 "&::before": {
@@ -38,7 +38,7 @@ const TopSection = () => {
                 width: "100%",
                 height: "100%",
                 position: "relative",
-                py:{lg: 16, xs: 2},
+                py: { lg: 16, xs: 2 },
             }}>
                 <Container
                     fixed
@@ -62,19 +62,17 @@ const TopSection = () => {
                                     }}>
                                         <Box
                                             sx={{
-                                                width: { lg: '150px', md:"140px", sm: '120px', xs: '110px'},
-                                                height: { lg: '150px', md:"140px", sm: '120px', xs: '110px'},
+                                                width: { lg: '150px', md: "140px", sm: '120px', xs: '110px' },
+                                                height: { lg: '150px', md: "140px", sm: '120px', xs: '110px' },
                                                 position: "relative",
-
                                             }}
                                         >
                                             <Image
                                                 alt="Image do hamburguer"
                                                 src="/img/hamburguer-bg.png"
                                                 style={{ cursor: 'pointer', objectFit: "cover", borderRadius: "50%" }}
-                                                layout="fill"
+                                                fill
                                             />
-
                                         </Box>
                                     </Box>
                                 </Grid>
@@ -87,7 +85,7 @@ const TopSection = () => {
                                                 justifyContent: "center"
                                             }}
                                         >
-                                            <Typography sx={{ textAlign: "center",fontSize: { lg: 28, md: 26, sm: 24, xs: 20 }, fontWeight: 'bold', color: "#fff" }} >
+                                            <Typography sx={{ textAlign: "center", fontSize: { lg: 28, md: 26, sm: 24, xs: 20 }, fontWeight: 'bold', color: "#fff" }} >
                                                 PaPum Delivery
                                             </Typography>
                                         </Box>
@@ -100,7 +98,7 @@ const TopSection = () => {
                                                 justifyContent: "center"
                                             }}
                                         >
-                                            <Typography sx={{ textAlign: "center",fontSize: { lg: 16, md: 14, sm: 12, xs: 11 }, fontWeight: '500', color: "#fff" }} >
+                                            <Typography sx={{ textAlign: "center", fontSize: { lg: 16, md: 14, sm: 12, xs: 11 }, fontWeight: '500', color: "#fff" }} >
                                                 Rua São Cristóvão, 93, Guaiúba, CE
                                             </Typography>
                                         </Box>
