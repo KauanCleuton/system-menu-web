@@ -1,4 +1,4 @@
-"use client";
+"use client"
 import CartOptionCart from "@/components/CardOptionCart";
 import { Box, Button, Container, Grid, Paper, Typography } from "@mui/material";
 import { useDispatch, useSelector } from "react-redux";
@@ -8,28 +8,27 @@ import { clearCart, printCartItems } from "@/store/cartSlice";
 import { useRouter } from "next/navigation";
 
 const Cart = () => {
-    const dispatch = useDispatch()
-    const router = useRouter()
+    const dispatch = useDispatch();
+    const router = useRouter();
     const items = useSelector(state => state.cart.items);
     const totalAmount = useSelector(state => state.cart.totalAmount);
     const [hydrated, setHydrated] = useState(false);
 
     useEffect(() => {
         if (items.length === 0) {
-            router.push("/")
+            router.push("/");
         }
         setHydrated(true);
-    }, []);
-
+    }, [items.length, router]); // Adicionando dependências ao useEffect
 
     const handleClearCart = () => {
-        dispatch(clearCart())
-        router.push("/")
-    }
+        dispatch(clearCart());
+        router.push("/");
+    };
+
     if (!hydrated) {
         return null; // ou um placeholder enquanto está hidratando
     }
-    
 
     return (
         <Box
@@ -59,7 +58,6 @@ const Cart = () => {
                         <Grid item xs={12} >
                             <Container fixed sx={{ py: 4, height: { lg: 500, md: 500, sm: 500, xs: 440 }, overflow: "auto"}} component={Paper} elevation={1}>
                                 <Grid container spacing={2}>
-
                                     {items.map((item) => (
                                         <Grid item xs={12} lg={6} md={6} sm={12} key={`${item.id}-${item.description}`}>
                                             <CartOptionCart
@@ -84,7 +82,7 @@ const Cart = () => {
                                             justifyContent: {lg: "flex-start", xs: "center"}
                                         }}>
                                             <Typography variant="h3" sx={{ fontSize: { lg: 28, md: 25, sm: 22, xs: 21 }, fontWeight: "bold", color: "#000" }}>
-                                                Total do pedido: {items.length !== "0" && `R$ ${Number(totalAmount).toFixed(2)}`}
+                                                Total do pedido: {items.length !== 0 && `R$ ${Number(totalAmount).toFixed(2)}`}
                                             </Typography>
                                         </Box>
                                     </Grid>
@@ -97,7 +95,7 @@ const Cart = () => {
                                             <Button component={Link} href="/" variant="contained" sx={{
                                                 textTransform: "inherit",
                                                 bgcolor: "#000",
-                                                border: `1px solid"#000`,
+                                                border: `1px solid #000`,
                                                 color: "#FF4D00",
                                                 fontSize: { lg: '16px', xs: '9px' },
                                                 ":hover": {
@@ -111,7 +109,8 @@ const Cart = () => {
                                                 onClick={handleClearCart}
                                                 variant="contained"
                                                 sx={{
-                                                    textTransform: "inherit", bgcolor: "#e01212",
+                                                    textTransform: "inherit",
+                                                    bgcolor: "#e01212",
                                                     border: `1px solid #e01212`,
                                                     fontSize: { lg: '16px', xs: '9px' },
                                                     ":hover": {
@@ -122,17 +121,18 @@ const Cart = () => {
                                                 Limpar Tudo
                                             </Button>
                                             <Button 
-                                            onClick={() => printCartItems()}
-                                             variant="contained" sx={{
-                                                textTransform: "inherit",
-                                                bgcolor: "#FF4D00",
-                                                border: `1px solid #FF4D00`,
-                                                fontSize: { lg: '16px', xs: '9px' },
-                                                ":hover": {
-                                                    bgcolor: "transparent",
-                                                    color: "#FF4D00"
-                                                }
-                                            }}>
+                                                onClick={() => printCartItems()} 
+                                                variant="contained" 
+                                                sx={{
+                                                    textTransform: "inherit",
+                                                    bgcolor: "#FF4D00",
+                                                    border: `1px solid #FF4D00`,
+                                                    fontSize: { lg: '16px', xs: '9px' },
+                                                    ":hover": {
+                                                        bgcolor: "transparent",
+                                                        color: "#FF4D00"
+                                                    }
+                                                }}>
                                                 Próximo
                                             </Button>
                                         </Box>
@@ -143,7 +143,6 @@ const Cart = () => {
                     </>
                 }
             </Grid>
-
         </Box>
     );
 }

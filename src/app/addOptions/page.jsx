@@ -5,7 +5,7 @@ import axios from "axios"
 import Image from "next/image"
 import { useState } from "react"
 
-const addOptions = () => {
+const AddOptions = () => {
     const [itemUploadImage, setItemUploadImage] = useState(null)
     const [data, setData] = useState({
         title: "",
@@ -174,4 +174,4 @@ const addOptions = () => {
     )
 }
 
-export default addOptions
+export default AddOptions
