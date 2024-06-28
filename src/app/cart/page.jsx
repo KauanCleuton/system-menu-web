@@ -57,7 +57,7 @@ const Cart = () => {
                     :
                     <>
                         <Grid item xs={12} >
-                            <Container fixed sx={{ py: 4, height: { lg: 500, md: 500, sm: 500, xs: 440 }, overflow: "auto" }} component={Paper} elevation={1}>
+                            <Container fixed sx={{ py: 4, height: { lg: 500, md: 500, sm: 500, xs: 440 }, overflow: "auto"}} component={Paper} elevation={1}>
                                 <Grid container spacing={2}>
 
                                     {items.map((item) => (
@@ -81,9 +81,9 @@ const Cart = () => {
                                         <Box sx={{
                                             width: "100%",
                                             display: "flex",
-                                            justifyContent: "flex-start"
+                                            justifyContent: {lg: "flex-start", xs: "center"}
                                         }}>
-                                            <Typography variant="h3" sx={{ fontSize: { lg: 28, md: 25, sm: 22, xs: 21 }, fontWeight: "bold" }}>
+                                            <Typography variant="h3" sx={{ fontSize: { lg: 28, md: 25, sm: 22, xs: 21 }, fontWeight: "bold", color: "#000" }}>
                                                 Total do pedido: {items.length !== "0" && `R$ ${Number(totalAmount).toFixed(2)}`}
                                             </Typography>
                                         </Box>
@@ -97,14 +97,15 @@ const Cart = () => {
                                             <Button component={Link} href="/" variant="contained" sx={{
                                                 textTransform: "inherit",
                                                 bgcolor: "#000",
-                                                border: `1px solid #000`,
+                                                border: `1px solid"#000`,
+                                                color: "#FF4D00",
                                                 fontSize: { lg: '16px', xs: '9px' },
                                                 ":hover": {
                                                     bgcolor: "transparent",
                                                     color: "#000"
                                                 }
                                             }}>
-                                                Voltar
+                                                Comprar Mais
                                             </Button>
                                             <Button
                                                 onClick={handleClearCart}
@@ -124,12 +125,12 @@ const Cart = () => {
                                             onClick={() => printCartItems()}
                                              variant="contained" sx={{
                                                 textTransform: "inherit",
-                                                bgcolor: "#060f4c",
-                                                border: `1px solid #060f4c`,
+                                                bgcolor: "#FF4D00",
+                                                border: `1px solid #FF4D00`,
                                                 fontSize: { lg: '16px', xs: '9px' },
                                                 ":hover": {
                                                     bgcolor: "transparent",
-                                                    color: "#060f4c"
+                                                    color: "#FF4D00"
                                                 }
                                             }}>
                                                 Próximo

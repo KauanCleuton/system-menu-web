@@ -17,7 +17,8 @@ const AuthCard = ({ children, ...other }) => {
                         flexBasis: '50%'
                     },
                     borderRadius: '12px',
-                    py: 1
+                    py: 1,
+                    bgcolor: "#000000"
                 }}
                 content={false}
                 {...other}

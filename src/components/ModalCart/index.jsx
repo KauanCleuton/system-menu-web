@@ -27,7 +27,7 @@ const ModalAddItemCart = ({ item, quantity, deliveryDescription }) => {
         dispatch(closeModal());
     };
 
-   
+
 
 
     return (
@@ -43,7 +43,7 @@ const ModalAddItemCart = ({ item, quantity, deliveryDescription }) => {
                             }}>
 
                                 <IconButton onClick={() => dispatch(closeModal())}>
-                                    <CloseOutlined />
+                                    <CloseOutlined sx={{ color: "#FF4D00" }} />
                                 </IconButton>
                             </Box>
                         </Grid>
@@ -82,11 +82,31 @@ const ModalAddItemCart = ({ item, quantity, deliveryDescription }) => {
                         </Grid>
                         <Grid item xs={12}>
                             <TextField
-                                label="Delivery Description"
+                                label="Observação"
+                                sx={{
+                                    '& .MuiInputLabel-root': { // Estilo para o label
+                                        color: '#FF4D00',
+                                    },
+                                    '& .MuiOutlinedInput-root': {
+                                        '& fieldset': { // Estilo para o outline
+                                            borderColor: '#FF4D00',
+                                        },
+                                        '&:hover fieldset': { // Estilo para o outline no hover
+                                            borderColor: '#FF4D00',
+                                        },
+                                        '&.Mui-focused fieldset': { // Estilo para o outline quando o campo está focado
+                                            borderColor: '#FF4D00',
+                                        },
+                                        '& input': { // Estilo para o texto de entrada
+                                            color: '#FF4D00',
+                                        },
+                                    },
+                                }}
                                 fullWidth
                                 value={deliveryDescription}
                                 onChange={handleDescriptionChange}
                             />
+
                         </Grid>
                         <Grid item xs={12} sx={{ display: 'flex', alignItems: 'center', justifyContent: "center" }}>
                             <Box sx={{
@@ -126,9 +146,9 @@ const ModalAddItemCart = ({ item, quantity, deliveryDescription }) => {
                                     mb: 3,
                                     mt: 3,
                                     textTransform: "inherit",
-                                    bgcolor: "#060f4c",
+                                    bgcolor: "#FF4D00",
                                     ":hover": {
-                                        bgcolor: "#060f4c"
+                                        bgcolor: "#FF4D00"
                                     }
                                 }}
                                 onClick={handleAddToCart}

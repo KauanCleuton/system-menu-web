@@ -1,4 +1,6 @@
 import { createAction, createReducer } from '@reduxjs/toolkit';
+import { jsPDF } from 'jspdf';
+import 'jspdf-autotable'; // Certifique-se de ter este plugin instalado
 
 const initialState = {
   items: getStoredItems(),
@@ -83,52 +85,29 @@ const cartReducer = createReducer(initialState, (builder) => {
 
 export default cartReducer;
 
-
 export function printCartItems() {
   const items = getStoredItems();
   const totalAmount = getStoredAmount();
   const totalItems = items.reduce((total, item) => total + item.quantity, 0);
 
-  let content = `
-    <h1>Pedido do Carrinho</h1>
-    <table border="1" style="width: 100%; border-collapse: collapse;">
-      <thead>
-        <tr>
-          <th>Nome</th>
-          <th>Preço</th>
-          <th>Quantidade</th>
-          <th>Descrição</th> 
-        </tr>
-      </thead>
-      <tbody>
-  `;
+  const doc = new jsPDF();
 
-  items.forEach(item => {
-    content += `
-      <tr>
-        <td>${item.title}</td>
-        <td>${item.price.toFixed(2)}</td>
-        <td>${item.quantity}</td>
-        <td>${item.description || ''}</td>
-      </tr>
-    `;
+  doc.setFontSize(18);
+  doc.text('Pedido do Carrinho', 14, 22);
+
+  doc.setFontSize(12);
+  doc.autoTable({
+    head: [['Nome', 'Preço', 'Quantidade', 'Descrição']],
+    body: items.map(item => [item.title, item.price.toFixed(2), item.quantity, item.description || '']),
+    startY: 30,
+    styles: { fontSize: 12 },
+    theme: 'grid',
   });
 
-  content += `
-      <tr>
-        <td colspan="1" style="text-align:left"><strong>Total de Itens:</strong></td>
-        <td colspan="1">${totalItems}</td>
-      </tr>
-      <tr>
-        <td colspan="1" style="text-align:left"><strong>Total a Pagar:</strong></td>
-        <td colspan="1">${totalAmount.toFixed(2)}</td>
-      </tr>
-      </tbody>
-    </table>
-  `;
+  const finalY = doc.lastAutoTable.finalY || 30;
 
-  const newWindow = window.open('', '', 'width=800,height=600');
-  newWindow.document.write(content);
-  newWindow.document.close();
-  newWindow.print();
+  doc.text(`Total de Itens: ${totalItems}`, 14, finalY + 10);
+  doc.text(`Total a Pagar: R$ ${totalAmount.toFixed(2)}`, 14, finalY + 20);
+
+  doc.save('comanda.pdf');
 }

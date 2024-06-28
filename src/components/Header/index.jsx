@@ -4,6 +4,7 @@ import AccountCircleIcon from '@mui/icons-material/AccountCircle';
 import { useSelector } from 'react-redux';
 import BadgeCart from '../BadgeCart';
 import { usePathname } from 'next/navigation';
+import Image from 'next/image';
 
 const Header = () => {
     const totalItems = useSelector(state => state.cart.totalItems);
@@ -14,25 +15,36 @@ const Header = () => {
         <AppBar
             position="fixed"
             sx={{
-                backgroundColor: trigger || path !== '/' ? "#e8e8e8" : "transparent",
-                color: trigger || path !== '/' ? "#001928" : "#fff",
+                backgroundColor: trigger || path !== '/' ? "#000000" : "transparent",
+                color: trigger || path !== '/' ? "#fff" : "#fff",
                 transition: "background-color 0.3s, color 0.3s"
             }}
         >
             <Toolbar>
-                <Grid container alignItems="center">
-                    <Grid item xs={11} sx={{ textAlign: 'center' }}>
+                <Grid container alignItems="center" justifyContent={"space-between"}>
+                    <Grid item sx={{ textAlign: 'center' }}>
                         <Box sx={{
                             width: "100%",
                             display: "flex",
                             justifyContent: "flex-start"
                         }}>
-                            <Typography variant="h6" component="div">
-                                Seu Logo
-                            </Typography>
+                            <Box
+                                sx={{
+                                    width: "74px",
+                                    height: '74px',
+                                    position: "relative"
+                                }}
+                            >
+                                <Image
+                                    src="/img/logo.svg"
+                                    alt="Logo do Site"
+                                    layout='fill'
+                                    style={{ objectFit: "cover" }}
+                                />
+                            </Box>
                         </Box>
                     </Grid>
-                    <Grid item xs={1}>
+                    <Grid item >
                         <Box sx={{
                             width: "100%",
                             display: "flex",
@@ -40,7 +52,7 @@ const Header = () => {
                         }}>
                             <IconButton>
                                 <AccountCircleIcon sx={{
-                                    color: trigger || path !== '/' ? "#001928" : "#fff",
+                                    color: trigger || path !== '/' ? "#FF4D00" : "#fff",
                                 }} />
                             </IconButton>
                             <BadgeCart totalItems={totalItems} />

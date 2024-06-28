@@ -1,6 +1,6 @@
 "use client"
 import Menu from "@/components/Menu";
-import { Box, Container, Grid, Typography } from "@mui/material"
+import { Box, Container, Grid, Paper, Typography } from "@mui/material"
 
 const menu = [
     {
@@ -138,7 +138,8 @@ const MiddleSection = () => {
                                     sx={{
                                         fontSize: 34,
                                         fontWeight: "bold",
-                                        textAlign: "center"
+                                        textAlign: "center",
+                                        color: "#000000"
                                     }}
                                 >
                                     Conheça nosso menu de opções
@@ -147,7 +148,7 @@ const MiddleSection = () => {
                         </Grid>
                         <Grid item xs={12}>
                             <Grid container >
-                                <Grid item xs={12} spacing={2} p={2} py={0} sx={{
+                                <Grid item xs={12}  spacing={2}  p={2} py={0} sx={{
                                     // height: { lg: 500, md: 'auto', sm: 700, xs: 'auto' },
                                     overflow: "auto"
                                 }}>

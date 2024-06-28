@@ -6,14 +6,14 @@ import { CssBaseline, ThemeProvider } from "@mui/material";
 import { Provider } from "react-redux";
 
 
-export default function Template ({children}) {
+export default function Template({ children }) {
     return (
         <Provider store={store}>
-            {/* <ThemeProvider theme={theme}> */}
+            <ThemeProvider theme={theme}>
                 <Header />
-                {/* <CssBaseline /> */}
+                <CssBaseline />
                 {children}
-            {/* </ThemeProvider> */}
+            </ThemeProvider>
         </Provider>
     )
 }

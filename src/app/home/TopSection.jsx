@@ -24,8 +24,8 @@ const TopSection = () => {
                     position: 'absolute',
                     inset: 0,
                     backgroundImage: `linear-gradient(
-                        rgba(0, 33, 71, 0.78), 
-                        rgba(0, 33, 74, 0.02)
+                        rgba(14, 14, 14, 0.626), 
+                        #23212117
                       ),
                       url(/img/bg.svg)`,
                     backgroundSize: 'cover',
@@ -119,7 +119,8 @@ const TopSection = () => {
                                                         px: '8px',
                                                         borderRadius: '4px',
                                                         display: "flex",
-                                                        bgcolor: '#54CC0A',
+                                                        // bgcolor: '#54CC0A',
+                                                        bgcolor: "#FF4D00",
                                                         fontSize: { lg: 16, md: 14, sm: 12, xs: 9 },
                                                         fontWeight: 'bold',
                                                         color: "#fff",

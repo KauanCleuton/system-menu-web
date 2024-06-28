@@ -34,10 +34,28 @@ export default function BadgeCart() {
   }
 
   return (
-    <IconButton aria-label="cart" LinkComponent={'a'} href='/cart'>
-      <StyledBadge badgeContent={totalItems} color='success'>
-        <ShoppingCartIcon sx={{ color: trigger || path !== '/' ? "#001928" : "#fff", }} />
+    <IconButton
+      aria-label="cart"
+      LinkComponent={'a'}
+      href='/cart'
+      sx={{ color: "#FF4D00" }}
+    >
+      <StyledBadge
+        badgeContent={totalItems}
+        sx={{
+          '& .MuiBadge-badge': {
+            backgroundColor: trigger || path !== '/' ? "transparent" : "#FF4D00",
+            color: trigger || path !== '/' ? "#FF4D00" : "#fff",
+          }
+        }}
+      >
+        <ShoppingCartIcon
+          sx={{
+            color: trigger || path !== '/' ? "#FF4D00" : "#fff",
+          }}
+        />
       </StyledBadge>
     </IconButton>
+
   );
 }

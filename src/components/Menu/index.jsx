@@ -14,7 +14,7 @@ const Menu = ({ data }) => {
     };
 
     return (
-        <Box sx={{ width: "100%", height: "100%" }}>
+        <Box sx={{ width: "100%", height: "100%", mb:2 }}>
             {data.map((category, index) => (
                 <Grid container key={`${category.category}-${index}`} spacing={2}>
                     <Grid item xs={12} mt={2}>

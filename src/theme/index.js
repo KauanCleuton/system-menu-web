@@ -43,19 +43,19 @@ const theme = createTheme({
       color: '#FFFFFF',
       fontSize: '145px',
       fontWeight: '900',
-      textShadow: '0px 3.86px 3.86px rgba(0, 0, 0, 0.25)',
+      // textShadow: '0px 3.86px 3.86px rgba(0, 0, 0, 0.25)',
     },
     h2: {
       color: '#FFFFFF',
       fontSize: '52px',
       fontWeight: '700',
-      textShadow: '0px 3.86px 3.86px rgba(0, 0, 0, 0.25)',
+      // textShadow: '0px 3.86px 3.86px rgba(0, 0, 0, 0.25)',
     },
     h3: {
       color: '#FFFFFF',
       fontSize: '36px',
       fontWeight: '700',
-      textShadow: '0px 3.86px 3.86px rgba(0, 0, 0, 0.25)',
+      // textShadow: '0px 3.86px 3.86px rgba(0, 0, 0, 0.25)',
     },
     h4: {
       color: '#FFFFFF',
@@ -77,7 +77,7 @@ const theme = createTheme({
       color: '#FFFFFF',
       fontSize: '25px',
       fontWeight: '900',
-      textShadow: '0px 3.86px 3.86px rgba(0, 0, 0, 0.25)',
+      // textShadow: '0px 3.86px 3.86px rgba(0, 0, 0, 0.25)',
     },
     card2: {
       color: '#FFFFFF',
@@ -137,7 +137,7 @@ const theme = createTheme({
     body2: {
       fontSize: '1.125rem',
       color: 'rgba( 255, 255, 255, 0.9 )',
-      textShadow: '0px 3.86px 3.86px rgba(0, 0, 0, 0.25)',
+      // textShadow: '0px 3.86px 3.86px rgba(0, 0, 0, 0.25)',
     },
     h8: {
       fontSize: '1.2rem',
