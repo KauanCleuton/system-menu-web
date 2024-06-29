@@ -118,50 +118,49 @@ const menu = [
 
 
 const MiddleSection = () => {
-    
+
     return (
-        <>
-            <Box
-                sx={{
-                    width: "100%",
-                }}
-            >
-                <Container fixed sx={{ py: '46px', px: 1 }}>
-                    <Grid container spacing={'34px'}>
-                        <Grid item xs={12} >
-                            <Box sx={{
-                                width: "100%",
-                                display: "flex",
-                                justifyContent: "center"
-                            }}>
-                                <Typography variant="h1"
-                                    sx={{
-                                        fontSize: 34,
-                                        fontWeight: "bold",
-                                        textAlign: "center",
-                                        color: "#000000"
-                                    }}
-                                >
-                                    Conheça nosso menu de opções
-                                </Typography>
-                            </Box>
-                        </Grid>
-                        <Grid item xs={12}>
-                            <Grid container >
-                                <Grid item xs={12}  spacing={2}  p={2} py={0} sx={{
-                                    // height: { lg: 500, md: 'auto', sm: 700, xs: 'auto' },
-                                    overflow: "auto"
-                                }}>
-                                    <Menu
-                                        data={menu}
-                                    />
-                                </Grid>
-                            </Grid>
-                        </Grid>
+        <Box
+            sx={{
+                width: "100vw",
+                display: "flex",
+                justifyContent: "center",
+                py: 2,
+            }}
+        >
+            <Container fixed sx={{ py: '46px'}}>
+                <Grid container spacing={'34px'}>
+                    <Grid item xs={12} >
+                        <Box sx={{
+                            width: "100%",
+                            display: "flex",
+                            justifyContent: "center"
+                        }}>
+                            <Typography variant="h1"
+                                sx={{
+                                    fontSize: 34,
+                                    fontWeight: "bold",
+                                    textAlign: "center",
+                                    color: "#000000"
+                                }}
+                            >
+                                Conheça nosso menu de opções
+                            </Typography>
+                        </Box>
                     </Grid>
-                </Container>
-            </Box>
-            </>
+
+                    <Grid item xs={12} sx={{
+                        // height: { lg: 500, md: 'auto', sm: 700, xs: 'auto' },
+                        overflow: "auto"
+                    }}>
+                        <Menu
+                            data={menu}
+                        />
+                    </Grid>
+
+                </Grid>
+            </Container>
+        </Box>
     )
 }
 export default MiddleSection

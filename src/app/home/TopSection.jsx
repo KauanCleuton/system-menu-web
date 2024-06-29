@@ -11,11 +11,10 @@ const TopSection = () => {
     return (
         <Box
             sx={{
-                width: "100%",
+                width: "100vw",
                 height: { xs: 330, sm: 350, md: 380, lg: 506 },
                 position: "relative",
                 overflow: 'hidden',
-                px: 2,
                 py: { lg: 2, xs: 7 },
                 mt: -8,
                 zIndex: -1,
@@ -85,8 +84,10 @@ const TopSection = () => {
                                                 justifyContent: "center"
                                             }}
                                         >
-                                            <Typography sx={{ textAlign: "center", fontSize: { lg: 28, md: 26, sm: 24, xs: 20 }, fontWeight: 'bold', color: "#fff" }} >
-                                                PaPum Delivery
+                                            <Typography sx={{ textAlign: "center", 
+                                                fontSize: { lg: 35, md: 26, sm: 24, xs: 20 }, fontWeight: 'bold', color: "#fff" 
+                                                }} >
+                                                Vishi Delivery
                                             </Typography>
                                         </Box>
                                     </Grid>
@@ -111,8 +112,6 @@ const TopSection = () => {
                                                 justifyContent: "center",
                                             }}
                                         >
-                                            <Box
-                                            >
                                                 <Typography
                                                     sx={{
                                                         py: '10px',
@@ -130,7 +129,6 @@ const TopSection = () => {
                                                 >
                                                     Seg á Dom - 18:00 as 22:00
                                                 </Typography>
-                                            </Box>
                                         </Box>
                                     </Grid>
                                 </Grid>

@@ -10,7 +10,7 @@ const AuthCard = ({ children, ...other }) => {
         <>
             <Card
                 sx={{
-                    maxWidth: { xs: 400, lg: 475 },
+                    width: { xs: 350, lg: 475 },
                     margin: { xs: 2.5, md: 7 },
                     '& > *': {
                         flexGrow: 1,
@@ -18,7 +18,7 @@ const AuthCard = ({ children, ...other }) => {
                     },
                     borderRadius: '12px',
                     py: 1,
-                    bgcolor: "#000000"
+                    bgcolor: "#141414"
                 }}
                 content={false}
                 {...other}

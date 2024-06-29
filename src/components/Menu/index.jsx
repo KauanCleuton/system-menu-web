@@ -14,7 +14,8 @@ const Menu = ({ data }) => {
     };
 
     return (
-        <Box sx={{ width: "100%", height: "100%", mb:2 }}>
+        <>
+            <Box sx={{ width: "100%", height: "100%", mb:2 }}>
             {data.map((category, index) => (
                 <Grid container key={`${category.category}-${index}`} spacing={2}>
                     <Grid item xs={12} mt={2}>
@@ -41,20 +42,22 @@ const Menu = ({ data }) => {
                     </Grid>
                 </Grid>
             ))}
-            <Modal
-                open={opened}
-                onClose={handleClose}
-                aria-labelledby="modal-modal-title"
-                aria-describedby="modal-modal-description"
-                sx={{ overflowY: 'scroll' }}
-            >
-                <ModalAddItemCart
-                    item={selectedItem}
-                    quantity={quantity}
-                    deliveryDescription={deliveryDescription}
-                />
-            </Modal>
+            
         </Box>
+        <Modal
+        open={opened}
+        onClose={handleClose}
+        aria-labelledby="modal-modal-title"
+        aria-describedby="modal-modal-description"
+        sx={{ overflowY: 'scroll' }}
+    >
+        <ModalAddItemCart
+            item={selectedItem}
+            quantity={quantity}
+            deliveryDescription={deliveryDescription}
+        />
+    </Modal>
+        </>
     );
 };
 
