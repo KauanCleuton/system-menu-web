@@ -6,6 +6,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { SET_LOGIN_MENU, SET_MENU } from "@/store/actions";
 import AuthCard from "../Card";
 import AuthLogin from "./components/AuthLogin";
+import AuthRegister from "./components/AuthRegister";
 
 
 
@@ -59,7 +60,8 @@ const ModalLogin = () => {
                         </Grid>
                         <Grid item xs={12} >
                             {mode === 'login' && <AuthLogin modal setMode={setMode} />}
-                            {/* {mode === 'register' && <AuthRegister modal setMode={setMode} />}
+                            {mode === 'register' && <AuthRegister modal setMode={setMode} />}
+                            {/* 
                             {mode === 'forgotPassword' && <AuthForgotPassword modal setMode={setMode} />} */}
                         </Grid>
                         {/* <Grid item xs={12} mb={{ xs: 4, md: 8 }}>
