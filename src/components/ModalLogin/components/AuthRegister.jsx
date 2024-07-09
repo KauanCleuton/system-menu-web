@@ -1,322 +1,228 @@
-import Visibility from '@mui/icons-material/Visibility';
-import VisibilityOff from '@mui/icons-material/VisibilityOff';
-import LockIcon from '@mui/icons-material/Lock';
-import { Box, Button, Checkbox, FormControl, FormControlLabel, FormGroup, FormHelperText, Grid, IconButton, InputAdornment, InputBase, InputLabel, TextField, Typography, useTheme } from "@mui/material"
-import { Field, Form, Formik } from "formik";
-import { useState } from "react";
-import LockOutlinedIcon from '@mui/icons-material/LockOutlined';
-import Image from 'next/image';
-// import IconMessage from '@mui/icons-material/IconMessage'
-import { MailOutlineOutlined, Person, PersonOutline, PersonOutlineOutlined, PhoneIphoneOutlined, SendOutlined } from '@mui/icons-material';
+import React, { useState } from 'react';
+import { Visibility, VisibilityOff, LockOutlined, Person, PhoneIphoneOutlined } from '@mui/icons-material';
+import { Box, Button, Checkbox, FormControl, FormControlLabel, FormHelperText, Grid, IconButton, InputAdornment, InputLabel, Typography, useTheme, InputBase } from "@mui/material";
+import { Formik, Form, ErrorMessage } from "formik";
 import ReactInputMask from 'react-input-mask';
+import * as Yup from 'yup';
+import { login, Signup } from '@/service/auth.service';
 
 const numberMask = '(99) 99999-9999';
 
-const AuthRegister = ({ modal, setMode }) => {
-    const theme = useTheme()
-
-    const [phoneMask, setPhoneMask] = useState(numberMask);
-    const [errors, setErrors] = useState({});
-    const [data, setData] = useState({
-        phone: "",
-    });
-
-    const handleInputChange = (e) => {
-        const onlyDigits = e.target.value?.replace(/\D/g, '');
-        console.log(onlyDigits);
-        onlyDigits.length < 11
-            && setPhoneMask(phoneMask)
-        setData({ ...data, phone: onlyDigits });
-    };
-
-    const handleInputBlur = () => {
-        if (data.phone?.replace(/\D/g, '').length === 11) {
-            setPhoneMask(phoneMask);
-        }
-    };
-
-    const validate = (values) => {
-        const errors = {};
-        if (!values.name) {
-            errors.name = 'Campo obrigatório';
-        }
-
-        if (!values.phone) {
-            errors.phone = 'Campo obrigatório';
-        }
-
-        if (!values.password) {
-            errors.password = 'Campo obrigatório';
-        }
-
-        return errors;
-    };
-
-
+const AuthRegister = ({ setMode }) => {
+    const theme = useTheme();
     const [showPassword, setShowPassword] = useState(false);
 
     const togglePasswordVisibility = () => {
         setShowPassword(!showPassword);
     };
+
+    const handleRegisterUser = async (values, { setSubmitting }) => {
+        try {
+            // Remover caracteres não numéricos do telefone
+            const formattedValues = {
+                ...values,
+                phone: values.phone.replace(/\D/g, ''),
+            };
+
+            const response = await Signup(formattedValues);
+            console.log(response.data);
+            setMode("login");
+        } catch (error) {
+            console.error("Erro ao registrar usuário!", error);
+        } finally {
+            setSubmitting(false);
+        }
+    };
+
+    const validationSchema = Yup.object().shape({
+        name: Yup.string().required('Campo obrigatório'),
+        phone: Yup.string().required('Campo obrigatório'),
+        senha: Yup.string().required('Campo obrigatório')
+    });
+
     return (
         <Grid container justifyContent="center" alignItems="center" spacing={{ xs: 1, md: 3 }} sx={{ mb: { lg: 0, xs: 4 } }}>
-            <Grid item xs={12} >
-                <Grid container >
-                    <Grid item xs={12}>
-                        <Grid container spacing={2}>
-                            <Grid item xs={12} >
-                                <Typography variant="titleLogin" fontWeight="400" lineHeight={"40px"} sx={{ color: '#FF4D00' }}>
-                                    Cadastrar
-                                </Typography>
-                            </Grid>
-                        </Grid>
-                    </Grid>
-                </Grid>
+            <Grid item xs={12}>
+                <Typography variant="titleLogin" fontWeight="400" lineHeight={"40px"} sx={{ color: '#FF4D00' }}>
+                    Cadastrar
+                </Typography>
             </Grid>
             <Grid item xs={12}>
                 <Formik
-                    initialValues={{ name: '', phone: '', password: '' }}
-                    validate={validate}
-                // onSubmit={handleSubmit}
+                    initialValues={{ name: '', phone: '', senha: '' }}
+                    validationSchema={validationSchema}
+                    onSubmit={handleRegisterUser}
                 >
-                    <Form>
-                        <Grid container spacing={2}>
-                            <Grid item xs={12} container spacing={1}>
-                                <Grid item xs={12} container spacing={{ xs: 1, md: 3 }}>
-                                    <Grid item xs={12}>
-                                        <InputLabel htmlFor="name" sx={{ color: "#FFF" }}>Nome</InputLabel>
-                                        <Field name="name">
-                                            {({ field, form }) => (
-                                                <FormControl fullWidth sx={{ mt: 1 }}>
-                                                    <InputBase
-                                                        {...field}
-                                                        id="name"
-                                                        variant="standard"
-                                                        placeholder="Digite seu nome"
-                                                        type='text'
-                                                        sx={{
-                                                            borderRadius: '8px',
-                                                            // color: "#FF4D00",
-                                                            border: `2px solid #FF4D00`,
-                                                            p: 1,
-                                                            '&:hover': {
-                                                                borderColor: "#fff",
-                                                            },
-                                                            '&:focus': {
-                                                                borderColor: "#FF4D00",
-                                                            },
-                                                        }}
-                                                        InputProps={{
-                                                            sx: {
-                                                                py: 0.5,
-                                                                color: "#fff",
-                                                                '& input::placeholder': {
-                                                                    color: "#fff",
-                                                                }
-                                                            },
-                                                        }}
-                                                        endAdornment={
-                                                            <InputAdornment position="start">
-                                                                <Person sx={{ color: "#FFF", width: 17, height: 17 }} />
-                                                            </InputAdornment>
-                                                        }
-                                                    />
-                                                    {form.errors.name && form.touched.name && (
-                                                        <FormHelperText error>{form.errors.name}</FormHelperText>
-                                                    )}
-                                                </FormControl>
-                                            )}
-                                        </Field>
-
-                                    </Grid>
-                                    <Grid item xs={12}>
-                                        <InputLabel htmlFor="phone" sx={{ color: "#FFF" }}>Telefone</InputLabel>
-                                        <Field name="phone">
-                                            {({ field, form }) => (
-                                                <FormControl fullWidth error={Boolean(errors['cpfcnpj'])}>
-                                                    <ReactInputMask
-                                                        {...field}
-                                                        mask={numberMask}
-                                                        value={data.phone}
-                                                        onChange={handleInputChange}
-                                                        onBlur={handleInputBlur}
-                                                        name="Telefone"
-                                                    >
-                                                        {(inputProps) => (
-                                                            <InputBase
-                                                                {...inputProps}
-                                                                id="text"
-                                                                type="text"
-                                                                placeholder='Digite seu telefone'
-                                                                sx={{
-                                                                    mt: 1,
-                                                                    borderRadius: '8px',
-                                                                    // color: "#FF4D00",
-                                                                    border: `2px solid #FF4D00`,
-                                                                    p: 1,
-                                                                    '&:hover': {
-                                                                        borderColor: "#fff",
-                                                                    },
-                                                                    '&:focus': {
-                                                                        borderColor: "#FF4D00",
-                                                                    },
-                                                                }}
-                                                                InputProps={{
-                                                                    sx: {
-                                                                        py: 0.5,
-                                                                        color: "#fff",
-                                                                        '& input::placeholder': {
-                                                                            color: "#fff",
-                                                                        }
-                                                                    },
-                                                                }}
-                                                                endAdornment={
-                                                                    <InputAdornment position="end">
-                                                                        <PhoneIphoneOutlined sx={{ color: "#FFF", width: 17, height: 17 }} />
-                                                                    </InputAdornment>
-                                                                }
-                                                            />
-                                                        )}
-                                                    </ReactInputMask>
-
-                                                    {form.errors.phone && form.touched.phone && (
-                                                        <FormHelperText error>
-                                                            {form.errors.phone}
-                                                        </FormHelperText>
-                                                    )}
-                                                </FormControl>
-                                            )}
-                                        </Field>
-                                    </Grid>
-                                    <Grid item xs={12}>
-                                        <InputLabel htmlFor="password" sx={{ color: "#FFF" }}>Senha</InputLabel>
-                                        <Field name="password">
-                                            {({ field, form }) => (
-                                                <FormControl fullWidth sx={{ mt: 1 }}>
-                                                    <InputBase
-                                                        {...field}
-                                                        id="password"
-                                                        type={showPassword ? 'text' : 'password'}
-                                                        variant="standard"
-                                                        autoComplete="current-password"
-                                                        placeholder="Insira sua senha"
-                                                        sx={{
-                                                            borderRadius: '8px',
-                                                            // color: "#FF4D00",
-                                                            border: `2px solid #FF4D00`,
-                                                            p: 1,
-                                                            '&:hover': {
-                                                                borderColor: "#fff",
-                                                            },
-                                                            '&:focus': {
-                                                                borderColor: "#FF4D00",
-                                                            },
-                                                        }}
-                                                        InputProps={{
-                                                            sx: {
-                                                                py: 0.5,
-                                                                color: "#fff",
-                                                                '& input::placeholder': {
-                                                                    color: "#fff",
-                                                                }
-                                                            },
-                                                        }}
-                                                        startAdornment={
-                                                            <InputAdornment position="start">
-                                                                <LockOutlinedIcon sx={{ color: "#FFF", width: 17, height: 17 }} />
-                                                            </InputAdornment>
-                                                        }
-                                                        endAdornment={
-                                                            <InputAdornment position="end">
-                                                                <IconButton
-                                                                    aria-label="toggle password visibility"
-                                                                    onClick={togglePasswordVisibility}
-                                                                >
-                                                                    {showPassword ? <Visibility sx={{ color: "#FFF", width: 17, height: 17 }} /> : <VisibilityOff sx={{ color: "#FFF", width: 17, height: 17 }} />}
-                                                                </IconButton>
-                                                            </InputAdornment>
-                                                        }
-
-                                                    />
-                                                    {form.errors.password && form.touched.password && (
-                                                        <FormHelperText error>{form.errors.password}</FormHelperText>
-                                                    )}
-                                                </FormControl>
-                                            )}
-                                        </Field>
-
-                                    </Grid>
+                    {({ values, handleChange, handleBlur }) => (
+                        <Form>
+                            <Grid container spacing={2}>
+                                <Grid item xs={12}>
+                                    <FormControl fullWidth>
+                                        <InputBase
+                                            id="name"
+                                            name="name"
+                                            type="text"
+                                            value={values.name}
+                                            onChange={handleChange}
+                                            onBlur={handleBlur}
+                                            placeholder="Digite seu nome"
+                                            sx={{
+                                                mt: 1,
+                                                borderRadius: '8px',
+                                                border: `2px solid #FF4D00`,
+                                                p: 1,
+                                                '&:hover': {
+                                                    borderColor: "#fff",
+                                                },
+                                                '&:focus': {
+                                                    borderColor: "#FF4D00",
+                                                },
+                                            }}
+                                            endAdornment={
+                                                <InputAdornment position="start">
+                                                    <Person sx={{ color: "#FFF", width: 17, height: 17 }} />
+                                                </InputAdornment>
+                                            }
+                                        />
+                                        <ErrorMessage name="name" component={FormHelperText} error />
+                                    </FormControl>
                                 </Grid>
-                                <Grid item xs={12} >
-                                    <Grid container direction="row" alignItems="center" justifyContent={"space-between"}>
-                                        <Grid item>
-                                            <FormGroup>
-                                                <FormControlLabel
-                                                    control={
-                                                        <Checkbox
-                                                            sx={{
-                                                                color: "#FFF",
-                                                                '&.Mui-checked': {
-                                                                    color: '#FF4D00',
-                                                                },
-                                                            }}
-                                                        />
+                                <Grid item xs={12}>
+                                    <FormControl fullWidth>
+                                        <ReactInputMask
+                                            mask={numberMask}
+                                            value={values.phone}
+                                            onChange={handleChange}
+                                            onBlur={handleBlur}
+                                        >
+                                            {(inputProps) => (
+                                                <InputBase
+                                                    id="phone"
+                                                    name="phone"
+                                                    type="text"
+                                                    {...inputProps}
+                                                    placeholder="Digite seu telefone"
+                                                    sx={{
+                                                        mt: 1,
+                                                        borderRadius: '8px',
+                                                        border: `2px solid #FF4D00`,
+                                                        p: 1,
+                                                        '&:hover': {
+                                                            borderColor: "#fff",
+                                                        },
+                                                        '&:focus': {
+                                                            borderColor: "#FF4D00",
+                                                        },
+                                                    }}
+                                                    endAdornment={
+                                                        <InputAdornment position="end">
+                                                            <PhoneIphoneOutlined sx={{ color: "#FFF", width: 17, height: 17 }} />
+                                                        </InputAdornment>
                                                     }
-                                                    label={<Typography variant="subtitle1" sx={{ color: "#FFF" }}>Lembrar-me</Typography>}
                                                 />
-                                            </FormGroup>
-                                        </Grid>
-                                        <Grid item>
-                                            <Button
-                                                variant="text"
-                                                sx={{
-                                                    textTransform: "inherit",
-                                                    p: 0
-                                                }}
-                                                onClick={() => setMode("login")}
-                                            >
-                                                <Typography
-                                                    variant="subtitle1"
+                                            )}
+                                        </ReactInputMask>
+                                        <ErrorMessage name="phone" component={FormHelperText} error />
+                                    </FormControl>
+                                </Grid>
+                                <Grid item xs={12}>
+                                    <FormControl fullWidth>
+                                        <InputBase
+                                            id="senha"
+                                            name="senha"
+                                            type={showPassword ? 'text' : 'password'}
+                                            value={values.senha}
+                                            onChange={handleChange}
+                                            onBlur={handleBlur}
+                                            placeholder="Insira sua senha"
+                                            sx={{
+                                                mt: 1,
+                                                borderRadius: '8px',
+                                                border: `2px solid #FF4D00`,
+                                                p: 1,
+                                                '&:hover': {
+                                                    borderColor: "#fff",
+                                                },
+                                                '&:focus': {
+                                                    borderColor: "#FF4D00",
+                                                },
+                                            }}
+                                            startAdornment={
+                                                <InputAdornment position="start">
+                                                    <LockOutlined sx={{ color: "#FFF", width: 17, height: 17 }} />
+                                                </InputAdornment>
+                                            }
+                                            endAdornment={
+                                                <InputAdornment position="end">
+                                                    <IconButton
+                                                        aria-label="toggle password visibility"
+                                                        onClick={togglePasswordVisibility}
+                                                    >
+                                                        {showPassword ? <Visibility sx={{ color: "#FFF", width: 17, height: 17 }} /> : <VisibilityOff sx={{ color: "#FFF", width: 17, height: 17 }} />}
+                                                    </IconButton>
+                                                </InputAdornment>
+                                            }
+                                        />
+                                        <ErrorMessage name="senha" component={FormHelperText} error />
+                                    </FormControl>
+                                </Grid>
+                                <Grid item xs={12}>
+                                    <Grid container direction="row" alignItems="center" justifyContent="space-between">
+                                        <FormControlLabel
+                                            control={
+                                                <Checkbox
                                                     sx={{
                                                         color: "#FFF",
-                                                    }}>
-                                                    Já tem conta?
-                                                </Typography>
-                                            </Button>
-                                        </Grid>
+                                                        '&.Mui-checked': {
+                                                            color: '#FF4D00',
+                                                        },
+                                                    }}
+                                                />
+                                            }
+                                            label={<Typography variant="subtitle1" sx={{ color: "#FFF" }}>Lembrar-me</Typography>}
+                                        />
+                                        <Button
+                                            variant="text"
+                                            sx={{ textTransform: "inherit", p: 0 }}
+                                            onClick={() => setMode("login")}
+                                        >
+                                            <Typography variant="subtitle1" sx={{ color: "#FFF" }}>
+                                                Já tem conta?
+                                            </Typography>
+                                        </Button>
                                     </Grid>
                                 </Grid>
+                                <Grid item xs={12}>
+                                    <Box sx={{ width: "100%", mt: { xs: 0, md: '40px' }, mb: { xs: 0, md: '40px' } }}>
+                                        <Button
+                                            type="submit"
+                                            variant="contained"
+                                            sx={{
+                                                bgcolor: "#ec500d",
+                                                borderRadius: '5px',
+                                                textTransform: 'inherit',
+                                                width: '100%',
+                                                fontSize: '18px',
+                                                fontWeight: 400,
+                                                color: "#fff",
+                                                border: `1px solid #FF4D00`,
+                                                ":hover": {
+                                                    bgcolor: "transparent",
+                                                    color: "#FF4D00"
+                                                }
+                                            }}
+                                        >
+                                            Cadastrar
+                                        </Button>
+                                    </Box>
+                                </Grid>
                             </Grid>
-                            <Grid item xs={12}>
-                                <Box sx={{ width: "100%", mt: { xs: 0, md: '40px' }, mb: { xs: 0, md: '40px' } }}>
-                                    <Button
-                                        type="submit"
-                                        variant="contained"
-                                        sx={{
-                                            bgcolor: "#ec500d",
-                                            borderRadius: '5px',
-                                            textTransform: 'inherit',
-                                            width: '100%',
-                                            fontSize: '18px',
-                                            fontWeight: 400,
-                                            color: "#fff",
-                                            border: `1px solid #FF4D00`,
-                                            ":hover": {
-                                                bgcolor: "transparent",
-                                                color: "#FF4D00"
-                                            }
-                                        }}
-                                    >
-                                        Cadastrar
-                                    </Button>
-                                </Box>
-                            </Grid>
-                        </Grid>
-                    </Form>
+                        </Form>
+                    )}
                 </Formik>
             </Grid>
         </Grid>
-    )
-}
+    );
+};
 
-export default AuthRegister
+export default AuthRegister;

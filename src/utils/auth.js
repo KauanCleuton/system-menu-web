@@ -1,6 +1,6 @@
 'use client';
 import { jwtDecode } from 'jwt-decode';
-//import { refreshToken } from '@/services/auth.service';
+// import { refreshToken } from '@/services/auth.service';
 
 const verifyJWTExpiration = (decoded) => {
   const timestamp = new Date().getTime();
@@ -81,3 +81,4 @@ export const extractDataFromSession = () => {
 };
 
 export const decodeToken = (token) => jwtDecode(token).data;
+
