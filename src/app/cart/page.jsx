@@ -61,7 +61,7 @@ const Cart = () => {
                                     {items.map((item) => (
                                         <Grid item xs={12} lg={6} md={6} sm={12} key={`${item.id}-${item.description}`}>
                                             <CartOptionCart
-                                                img={item.photo}
+                                                img={item.file_url}
                                                 quantity={item.quantity}
                                                 price={item.price}
                                                 item={item}

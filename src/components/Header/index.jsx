@@ -11,6 +11,7 @@ import { isLoggedIn } from '@/utils/auth';
 import userService from '@/service/user.service';
 import { AccountCircle } from '@mui/icons-material';
 import UserMenu from '../MenuProfile';
+import SnackBar from '../SnackBar';
 
 const Header = () => {
     const totalItems = useSelector(state => state.cart.totalItems);
@@ -122,13 +123,13 @@ const Header = () => {
                                                     <Avatar
                                                         src={userData?.photo_url || "https://github.com/KauanCleuton.png"}
                                                         alt={userData?.name || "User Avatar"}
-                                                        sx={{ width: 32, height: 32, mr: 1 }}
+                                                        sx={{ width: 40, height: 40, mr: 1 }}
                                                     />
-                                                    <Typography variant='body1' sx={{ color: '#fff' }}>
+                                                    <Typography variant='body1' sx={{ color: '#fff', display: {xs: "none", lg: "block",md: "block", sm: "block"} }}>
                                                         {userData?.name}
                                                     </Typography>
                                                 </IconButton>
-                                                <UserMenu anchorEl={anchorEl} handleClose={handleCloseMenu} handleLogout={handleLogout} />
+                                                <UserMenu anchorEl={anchorEl} handleClose={handleCloseMenu} handleLogout={handleLogout} user={userData} />
                                             </>
                                         ) : (
                                             <IconButton onClick={handleLeftDrawerToggle}>
@@ -145,6 +146,7 @@ const Header = () => {
                     </Container>
                 </AppBar>
             </Box>
+            <SnackBar />
         </>
     );
 };

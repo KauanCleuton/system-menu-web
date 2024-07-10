@@ -6,3 +6,15 @@ export const CLOSE_ALERT = '@alert/CLOSE_ALERT';
 export const SET_MENU = '@customization/SET_MENU';
 export const MENU_TOGGLE = '@customization/MENU_TOGGLE';
 export const MENU_OPEN = '@customization/MENU_OPEN';
+export const SHOW_ALERT = 'SHOW_ALERT';
+export const HIDE_ALERT = 'HIDE_ALERT';
+
+export const showAlert = (message, severity, type) => ({
+    type: SHOW_ALERT,
+    payload: { message, severity, type,open: true },
+  });
+  
+  export const hideAlert = () => ({
+    type: HIDE_ALERT,
+  });
+  

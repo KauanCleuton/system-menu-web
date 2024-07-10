@@ -4,14 +4,14 @@ import { useDispatch } from 'react-redux';
 import { AccountCircle } from '@mui/icons-material';
 import Link from 'next/link';
 
-const UserMenu = ({ anchorEl, handleClose, handleLogout}) => {
+const UserMenu = ({ anchorEl, handleClose, handleLogout, user}) => {
 
 
     return (
         <Box sx={{ flexGrow: 0 }}>
-            {/* <Tooltip title="Open settings">
+            {/* <Tooltip title="Open settings" sx={{display: {xs: "flex", lg: "none"}}}>
                 <IconButton onClick={handleClose} sx={{ p: 0 }}>
-                    <Avatar alt="User Avatar" src={user.avatarUrl} />
+                    <Avatar alt="User Avatar" src={user?.photo_url || "https://github.com/KauanCleuton.png"} />
                 </IconButton>
             </Tooltip> */}
             <Menu

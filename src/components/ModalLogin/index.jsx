@@ -7,6 +7,7 @@ import { SET_LOGIN_MENU, SET_MENU } from "@/store/actions";
 import AuthCard from "../Card";
 import AuthLogin from "./components/AuthLogin";
 import AuthRegister from "./components/AuthRegister";
+import SnackBar from "../SnackBar";
 
 
 

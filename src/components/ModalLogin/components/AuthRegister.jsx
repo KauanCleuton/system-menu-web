@@ -5,13 +5,15 @@ import { Formik, Form, ErrorMessage } from "formik";
 import ReactInputMask from 'react-input-mask';
 import * as Yup from 'yup';
 import { login, Signup } from '@/service/auth.service';
+import { showAlert } from '@/store/actions';
+import { useDispatch } from 'react-redux';
 
 const numberMask = '(99) 99999-9999';
 
 const AuthRegister = ({ setMode }) => {
     const theme = useTheme();
     const [showPassword, setShowPassword] = useState(false);
-
+    const dispatch = useDispatch()
     const togglePasswordVisibility = () => {
         setShowPassword(!showPassword);
     };
@@ -27,7 +29,9 @@ const AuthRegister = ({ setMode }) => {
             const response = await Signup(formattedValues);
             console.log(response.data);
             setMode("login");
+            dispatch(showAlert(data.message, "success", "user"))
         } catch (error) {
+            dispatch(showAlert(error.message, "error", "key"))
             console.error("Erro ao registrar usuário!", error);
         } finally {
             setSubmitting(false);

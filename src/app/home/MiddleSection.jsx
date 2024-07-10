@@ -154,7 +154,6 @@ const MiddleSection = () => {
                         overflow: "auto"
                     }}>
                         <Menu
-                            data={menu}
                         />
                     </Grid>
 

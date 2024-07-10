@@ -22,7 +22,7 @@ import VisibilityOff from "@mui/icons-material/VisibilityOff";
 import ReactInputMask from "react-input-mask";
 import { login } from "@/service/auth.service";
 import { useDispatch } from "react-redux";
-import { SET_LOGIN_DATA, SET_LOGIN_MENU } from "@/store/actions";
+import { SET_LOGIN_DATA, SET_LOGIN_MENU, showAlert } from "@/store/actions";
 import { useRouter } from "next/navigation";
 
 const numberMask = "(99) 99999-9999";
@@ -40,25 +40,26 @@ const AuthLogin = ({ modal, setMode }) => {
 
   const handleSubmit = async (values, { setSubmitting }) => {
     try {
-        const formattedValues = {
-            ...values,
-            phone: values.phone.replace(/\D/g, ''),
-        };
+      const formattedValues = {
+        ...values,
+        phone: values.phone.replace(/\D/g, ''),
+      };
 
 
       const response = await login(formattedValues);
-      const { accessToken, refreshToken, role } = response.data;
+      const { accessToken, refreshToken, role, message } = response.data;
       sessionStorage.setItem("accessToken", accessToken);
       sessionStorage.setItem("refreshToken", refreshToken);
-
+      console.log(response.data, '11')
       if (role === "ADMIN") {
         router.push("/admin");
-      } else {
-        closeModal();
       }
+
+      closeModal();
+      dispatch(showAlert(response.data.message, "success", "user"))
       dispatch({ type: SET_LOGIN_DATA })
-      window.location.reload()
     } catch (error) {
+      dispatch(showAlert(error.message, "error", "key"))
       console.error("Erro ao fazer login!", error);
     } finally {
       setSubmitting(false);
@@ -77,7 +78,7 @@ const AuthLogin = ({ modal, setMode }) => {
     }
 
     if (!values.senha) {
-      errors.password = "Campo obrigatório";
+      errors.senha = "Campo obrigatório";
     }
 
     return errors;
@@ -89,7 +90,7 @@ const AuthLogin = ({ modal, setMode }) => {
       justifyContent="center"
       alignItems="center"
       spacing={2}
-      sx={{ mb: { lg: 0, xs: 4 } }}
+      sx={{ mb: { lg: 0, xs: 0 } }}
     >
       <Grid item xs={12}>
         <Grid container>
@@ -328,7 +329,7 @@ const AuthLogin = ({ modal, setMode }) => {
                   </Grid>
                 </Grid>
                 <Grid item xs={12}>
-                  <Box sx={{ width: "100%", mt: { xs: 2, sm: 3, lg: 4 } }}>
+                  <Box sx={{ width: "100%", mb: { xs: 2, sm: 3, lg: 2 } }}>
                     <Grid container spacing={2}>
                       <Grid item xs={12}>
                         <Button
