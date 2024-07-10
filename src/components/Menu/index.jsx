@@ -31,13 +31,11 @@ const Menu = () => {
         } finally {
             setLoading(false)
         }
-        
+
     };
 
     useEffect(() => {
-        if (isLoggedIn()) {
-            fetchProducts();
-        }
+        fetchProducts();
     }, []);
 
     const renderProductsByCategory = () => {
