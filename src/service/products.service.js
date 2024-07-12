@@ -1,12 +1,8 @@
 import customAxios from "./middleware";
 
 class Products {
-    getProducts(accessToken) {
-        return customAxios.get("/products", {
-            headers: {
-                Authorization: `Bearer ${accessToken}`
-            }
-        });
+    getProducts() {
+        return customAxios.get("/products")
     }
 
     getUser(accessToken) {

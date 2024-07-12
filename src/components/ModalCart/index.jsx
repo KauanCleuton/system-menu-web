@@ -1,16 +1,15 @@
 import React from 'react';
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { updateQuantity, updateDeliveryDescription, closeModal } from '@/store/modalSlice';
 import { addItemToCart } from '@/store/cartSlice';
-import { Box, Button, Container, Grid, IconButton, TextField, Typography } from '@mui/material';
+import { Box, Button, Grid, IconButton, TextField, Typography } from '@mui/material';
 import AuthCard from '../Card';
 import { CloseOutlined } from '@mui/icons-material';
 import Image from 'next/image';
 
-const ModalAddItemCart = ({ item, quantity, deliveryDescription }) => {
-    const items = useDispatch(state => state.cart.items)
-    console.log(item.photo)
+const ModalAddItemCart = () => {
     const dispatch = useDispatch();
+    const { selectedItem: item, quantity, deliveryDescription } = useSelector(state => state.modal);
 
     const handleQuantityChange = (newQuantity) => {
         if (newQuantity > 0) {
@@ -27,9 +26,6 @@ const ModalAddItemCart = ({ item, quantity, deliveryDescription }) => {
         dispatch(closeModal());
     };
 
-
-
-
     return (
         <Grid container justifyContent="center" alignItems="center" sx={{ minHeight: 'calc(100vh - 68px)' }}>
             <Grid item >
@@ -41,7 +37,6 @@ const ModalAddItemCart = ({ item, quantity, deliveryDescription }) => {
                                 display: "flex",
                                 justifyContent: "flex-end"
                             }}>
-
                                 <IconButton onClick={() => dispatch(closeModal())}>
                                     <CloseOutlined sx={{ color: "#FF4D00" }} />
                                 </IconButton>
@@ -106,7 +101,6 @@ const ModalAddItemCart = ({ item, quantity, deliveryDescription }) => {
                                 value={deliveryDescription}
                                 onChange={handleDescriptionChange}
                             />
-
                         </Grid>
                         <Grid item xs={12} sx={{ display: 'flex', alignItems: 'center', justifyContent: "center" }}>
                             <Box sx={{
@@ -163,7 +157,6 @@ const ModalAddItemCart = ({ item, quantity, deliveryDescription }) => {
                 </AuthCard>
             </Grid>
         </Grid>
-
     );
 };
 

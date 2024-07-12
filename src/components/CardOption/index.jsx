@@ -54,7 +54,6 @@ const CartOption = ({ img, title, description, price, item }) => {
                 </Grid>
             </Grid>
         </Paper>
-
     );
 };
 

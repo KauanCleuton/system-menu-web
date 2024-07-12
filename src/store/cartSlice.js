@@ -47,12 +47,12 @@ const cartReducer = createReducer(initialState, (builder) => {
     .addCase(addItemToCart, (state, action) => {
       const newItem = action.payload;
       if (newItem) {
-        const existingItem = state.items.find((item) => item.id === newItem.id);
-        if (!existingItem) {
-          state.items.push(newItem);
-          state.totalItems++;
-        } else {
+        const existingItem = state.items.find((item) => item.idProducts === newItem.idProducts);
+        if (existingItem) {
           existingItem.quantity += newItem.quantity;
+        } else {
+          state.items.push({ ...newItem, quantity: newItem.quantity });
+          state.totalItems++;
         }
         state.totalAmount += newItem.price * newItem.quantity;
         window.localStorage.setItem('cartItems', JSON.stringify(state.items));
@@ -62,7 +62,7 @@ const cartReducer = createReducer(initialState, (builder) => {
     })
     .addCase(removeItemFromCart, (state, action) => {
       const id = action.payload;
-      const existingItemIndex = state.items.findIndex((item) => item.id === id);
+      const existingItemIndex = state.items.findIndex((item) => item.idProducts === id);
       if (existingItemIndex !== -1) {
         const existingItem = state.items[existingItemIndex];
         state.totalAmount -= existingItem.price * existingItem.quantity;
