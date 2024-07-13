@@ -197,7 +197,7 @@ const AuthRegister = ({ setMode }) => {
                                     </Grid>
                                 </Grid>
                                 <Grid item xs={12}>
-                                    <Box sx={{ width: "100%", mt: { xs: 0, md: '40px' }, mb: { xs: 0, md: '40px' } }}>
+                                    <Box sx={{ width: "100%"}}>
                                         <Button
                                             type="submit"
                                             variant="contained"

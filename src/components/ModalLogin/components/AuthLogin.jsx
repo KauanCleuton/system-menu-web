@@ -58,6 +58,7 @@ const AuthLogin = ({ modal, setMode }) => {
       closeModal();
       dispatch(showAlert(response.data.message, "success", "user"))
       dispatch({ type: SET_LOGIN_DATA })
+      window.location.reload()
     } catch (error) {
       dispatch(showAlert(error.message, "error", "key"))
       console.error("Erro ao fazer login!", error);
@@ -337,7 +338,15 @@ const AuthLogin = ({ modal, setMode }) => {
                           fullWidth
                           variant="contained"
                           disabled={isSubmitting}
-                          sx={{ backgroundColor: "#FF4D00", color: "#FFF" }}
+                          sx={{
+                            backgroundColor: "#FF4D00", color: "#FFF",
+                            border: `1px solid #FF4D00`,
+                            ":hover": {
+                              bgcolor: 'transparent',
+                              color: "#FF4D00"
+                            }
+                          }}
+
                         >
                           Entrar
                         </Button>

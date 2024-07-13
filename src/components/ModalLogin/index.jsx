@@ -7,7 +7,10 @@ import { SET_LOGIN_MENU, SET_MENU } from "@/store/actions";
 import AuthCard from "../Card";
 import AuthLogin from "./components/AuthLogin";
 import AuthRegister from "./components/AuthRegister";
-import SnackBar from "../SnackBar";
+import VerifyToken from "./components/VerifyToken";
+import ResetPassword from "./components/ResetPassword";
+import { useState } from "react";
+import AuthForgotPassword from "./components/AuthResetPassword";
 
 
 
@@ -18,12 +21,12 @@ const ModalLogin = () => {
     //const [mode, setMode] = useState('login');
     const setMode = (mode) => dispatch({ type: SET_LOGIN_MENU, mode: mode });
     const closeModal = () => dispatch({ type: SET_LOGIN_MENU, opened: false });
-
+    const [phone, setPhone] = useState("")
     return (
         <Grid container justifyContent="center" alignItems="center" sx={{ minHeight: 'calc(100vh - 68px)' }}>
             <Grid item  >
                 <AuthCard >
-                    <Grid container  alignItems="center" justifyContent="center">
+                    <Grid container alignItems="center" justifyContent="center">
                         <Grid item xs={12} >
                             <Grid container>
                                 <Grid item xs={12}>
@@ -53,7 +56,7 @@ const ModalLogin = () => {
                                             alt="EADY"
                                             layout="fill"
                                             objectFit="contain"
-                                            style={{cursor: "pointer"}}
+                                            style={{ cursor: "pointer" }}
                                         />
                                     </Box>
                                 </Grid>
@@ -62,8 +65,10 @@ const ModalLogin = () => {
                         <Grid item xs={12} >
                             {mode === 'login' && <AuthLogin modal setMode={setMode} />}
                             {mode === 'register' && <AuthRegister modal setMode={setMode} />}
-                            {/* 
-                            {mode === 'forgotPassword' && <AuthForgotPassword modal setMode={setMode} />} */}
+
+                            {mode === 'forgotPassword' && <AuthForgotPassword modal setPhone={setPhone} setMode={setMode} />}
+                            {mode === 'verifyToken' && <VerifyToken setMode={setMode} />}
+                            {mode === 'resetPassword' && <ResetPassword setMode={setMode} phone={phone} />}
                         </Grid>
                         {/* <Grid item xs={12} mb={{ xs: 4, md: 8 }}>
                             <AuthSocialButtons />
