@@ -50,15 +50,15 @@ const AuthLogin = ({ modal, setMode }) => {
       const { accessToken, refreshToken, role, message } = response.data;
       sessionStorage.setItem("accessToken", accessToken);
       sessionStorage.setItem("refreshToken", refreshToken);
+      sessionStorage.setItem("role", role)
       console.log(response.data, '11')
       if (role === "ADMIN") {
         router.push("/admin");
+        dispatch(showAlert(response.data.message, "success", "user"))
       }
-
       closeModal();
       dispatch(showAlert(response.data.message, "success", "user"))
       dispatch({ type: SET_LOGIN_DATA })
-      window.location.reload()
     } catch (error) {
       dispatch(showAlert(error.message, "error", "key"))
       console.error("Erro ao fazer login!", error);
