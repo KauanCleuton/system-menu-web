@@ -18,6 +18,7 @@ const Cart = () => {
         if (items.length === 0) {
             router.push("/");
         }
+        console.log(items)
         setHydrated(true);
     }, [items.length, router]); // Adicionando dependências ao useEffect
 
@@ -61,11 +62,9 @@ const Cart = () => {
                                     {items.map((item) => (
                                         <Grid item xs={12} lg={6} md={6} sm={12} key={`${item.id}-${item.description}`}>
                                             <CartOptionCart
-                                                img={item.file_url}
-                                                quantity={item.quantity}
-                                                price={item.price}
+                                               
                                                 item={item}
-                                                description={item.description}
+                                                
                                             />
                                         </Grid>
                                     ))}
