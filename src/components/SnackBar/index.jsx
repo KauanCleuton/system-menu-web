@@ -11,7 +11,7 @@ import KeyIcon from '@mui/icons-material/Key'
 import { useDispatch, useSelector } from 'react-redux';
 import { CLOSE_ALERT, hideAlert } from '@/store/actions';
 
-const SnackBar = ({ data }) => {
+const SnackBar = () => {
     const dispatch = useDispatch();
     const { open, message, severity, type } = useSelector(state => state.alert);
 

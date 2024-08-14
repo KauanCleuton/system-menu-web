@@ -4,13 +4,13 @@ import CssBaseline from '@mui/material/CssBaseline';
 import { Provider, useDispatch, useSelector } from 'react-redux';
 import React, { useEffect } from 'react';
 import { CLOSE_ALERT, SET_LOGIN_DATA } from '@/store/actions';
-import AlertMessage from '@/components/Snackbar';
 import { Box } from '@mui/material';
 // import Footer from '@/components/Footer';
 import Header from '@/components/Header';
 import { isLoggedIn } from '@/utils/auth';
 import theme from '@/theme';
 import store from '@/store';
+import SnackBar from '@/components/SnackBar';
 
 export default function Template({ children, pageProps }) {
   const Session = () => {
@@ -24,11 +24,7 @@ export default function Template({ children, pageProps }) {
       dispatch({ type: SET_LOGIN_DATA });
     }, []);
     return (
-      <AlertMessage
-        open={alert.open}
-        onClose={() => dispatch({ type: CLOSE_ALERT })}
-        message={alert.message}
-        severity={alert.severity}
+      <SnackBar
       />
     );
   };
