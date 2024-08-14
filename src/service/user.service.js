@@ -1,101 +1,24 @@
 import customAxios from "./middleware";
+import ServiceBase from "./service.base";
 
-class User {
-    getUsers(accessToken) {
-        return customAxios.get("/users", {
-            headers: {
-                Authorization: `Bearer ${accessToken}`
-            }
-        });
+
+class UserSv extends ServiceBase {
+
+}
+
+class UserNoAuthSv extends ServiceBase {
+    constructor() {
+        super("noAuth")
     }
-
-    getUser(accessToken) {
-        return customAxios.get("/user", {
-            headers: {
-                Authorization: `Bearer ${accessToken}`
-            }
-        });
-    }
-
-    addUserByAdmin(data, accessToken) {
-        return customAxios.post("/user", data, {
-            headers: {
-                Authorization: `Bearer ${accessToken}`
-            }
-        });
-    }
-
-    updateUser(data, accessToken) {
-        return customAxios.put("/user", data, {
-            headers: {
-                Authorization: `Bearer ${accessToken}`
-            }
-        });
-    }
-
-    updateUserByAdmin(userId, data, accessToken) {
-        return customAxios.put(`/user/${userId}/update`, data, {
-            headers: {
-                Authorization: `Bearer ${accessToken}`
-            }
-        });
-    }
-
-    changeUserPassword(data, accessToken) {
-        return customAxios.put("/user/change-password", data, {
-            headers: {
-                Authorization: `Bearer ${accessToken}`
-            }
-        });
-    }
-
-    disableUser(userId, accessToken) {
-        return customAxios.get(`/user/${userId}/disable`, {
-            headers: {
-                Authorization: `Bearer ${accessToken}`
-            }
-        });
-    }
-
-    enableUser(userId, accessToken) {
-        return customAxios.get(`/user/${userId}/enable`, {
-            headers: {
-                Authorization: `Bearer ${accessToken}`
-            }
-        });
-    }
-
-    setAdmin(userId, accessToken) {
-        return customAxios.get(`/user/${userId}/set-admin`, {
-            headers: {
-                Authorization: `Bearer ${accessToken}`
-            }
-        });
-    }
-
-    unsetAdmin(userId, accessToken) {
-        return customAxios.get(`/user/${userId}/unset-admin`, {
-            headers: {
-                Authorization: `Bearer ${accessToken}`
-            }
-        });
-    }
-
-    getUserById(userId, accessToken) {  
-        return customAxios.get(`/user/${userId}`, {
-            headers: {
-                Authorization: `Bearer ${accessToken}`
-            }
-        });
-    }
-
-    deleteUser(userId, accessToken) {
-        return customAxios.delete(`/user/${userId}`, {
-            headers: {
-                Authorization: `Bearer ${accessToken}`
-            }
-        });
+    getAddress(phone) {
+        console.log(phone, '11312j3j213j21j')
+        return this.get(`/address/${phone}`)
     }
 }
 
-export default new User();
+
+
+export default {
+    UserSv,
+    UserNoAuthSv
+}

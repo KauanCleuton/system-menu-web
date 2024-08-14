@@ -1,29 +1,21 @@
-import { SHOW_ALERT, HIDE_ALERT } from './actions';
+import * as actionTypes from './actions';
 
-const initialState = {
+export const initialState = {
   open: false,
   message: '',
-  severity: '',
-  type: ''
+  severity: 'success',
 };
 
 const alertReducer = (state = initialState, action) => {
   switch (action.type) {
-    case SHOW_ALERT:
+    case actionTypes.SET_ALERT:
       return {
-        ...state,
         open: true,
-        message: action.payload.message,
-        severity: action.payload.severity,
-        type: action.payload.type
+        message: action.message,
+        severity: action.severity || 'success',
       };
-    case HIDE_ALERT:
-      return {
-        ...state,
-        open: false,
-        message: '',
-        type: ''
-      };
+    case actionTypes.CLOSE_ALERT:
+      return { ...state, open: false };
     default:
       return state;
   }

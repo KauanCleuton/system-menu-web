@@ -120,7 +120,8 @@ const Cart = () => {
                                                 Limpar Tudo
                                             </Button>
                                             <Button 
-                                                onClick={() => printCartItems()} 
+                                                LinkComponent={Link} 
+                                                href="/checkout"
                                                 variant="contained" 
                                                 sx={{
                                                     textTransform: "inherit",

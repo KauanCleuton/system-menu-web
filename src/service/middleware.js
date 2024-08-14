@@ -1,6 +1,6 @@
 import axios from 'axios';
 import { isLoggedIn, isclientCredentialsExpired } from '../utils/auth';
-// import ServiceError from './service.error';
+import ServiceError from './service.error';
 
 const customAxios = axios.create({
   baseURL: `${process.env.NEXT_PUBLIC_BASE_URL}`,
@@ -29,7 +29,6 @@ customAxios.interceptors.response.use(
       sessionStorage.removeItem('accessToken');
       sessionStorage.removeItem('refreshToken');
     } else if (response.status === 402) {
-      console.log(767676);
       window.location = '/pagamento';
     }
 
@@ -37,7 +36,6 @@ customAxios.interceptors.response.use(
   },
   async (error) => {
     if (error.response?.data.code === 401) {
-      process.env.NODE_ENV !== 'production' && console.log('kkk');
       if (error.response?.data.data.error === 'invalid client_token') {
         if (!isclientCredentialsRefreshed) {
           await setclientCredentials();
@@ -61,6 +59,7 @@ customAxios.interceptors.response.use(
 customAxios.interceptors.request.use(
   async (request) => {
     if (request.headers.isAuth) {
+      delete request.headers.isAuth;
       process.env.NODE_ENV !== 'production' && console.log('kkk34');
       if (!isLoggedIn('accessToken')) {
         process.env.NODE_ENV !== 'production' && console.log('kkk35');
@@ -68,7 +67,7 @@ customAxios.interceptors.request.use(
         if (refreshToken) {
           try {
             const { data } = await customAxios.post(
-              'auth/refresh-token',
+              '/auth/refresh-token',
               { refreshToken: refreshToken },
               { headers: { isClientCredentials: true } }
             );

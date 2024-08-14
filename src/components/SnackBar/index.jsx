@@ -9,7 +9,7 @@ import LockIcon from '@mui/icons-material/Lock';
 import LockOpenIcon from '@mui/icons-material/LockOpen';
 import KeyIcon from '@mui/icons-material/Key'
 import { useDispatch, useSelector } from 'react-redux';
-import { hideAlert } from '@/store/actions';
+import { CLOSE_ALERT, hideAlert } from '@/store/actions';
 
 const SnackBar = ({ data }) => {
     const dispatch = useDispatch();
@@ -19,7 +19,7 @@ const SnackBar = ({ data }) => {
         if (reason === 'clickaway') {
             return;
         }
-        dispatch(hideAlert());
+        dispatch({type: CLOSE_ALERT});
     };
 
     const getIcon = () => {
