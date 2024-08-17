@@ -40,7 +40,7 @@ const SnackBar = () => {
     };
 
     return (
-        <Snackbar open={open} autoHideDuration={4000} onClose={handleClose}>
+        <Snackbar open={open} autoHideDuration={3000} onClose={handleClose}>
             <Alert
                 variant='filled'
                 onClose={handleClose}

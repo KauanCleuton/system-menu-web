@@ -25,7 +25,7 @@ const CartOptionCart = ({ item }) => {
                     </Box>
                 </Grid>
                 <Grid item xs>
-                    <Box sx={{ width: "100%", height: "100%", px: 1, display: "flex", flexDirection: "column", justifyContent: "space-between", py: 0}}>
+                    <Box sx={{ width: "100%", height: "100%", px: 1, display: "flex", flexDirection: "column", justifyContent: "space-between", py: 0 }}>
                         <Box sx={{
                             width: "100%"
                         }}>
@@ -34,7 +34,9 @@ const CartOptionCart = ({ item }) => {
                             <Typography variant="body1" sx={{ fontSize: { xs: '13px', md: '16px' } }}>Quantidade: {item.quantity}</Typography>
                         </Box>
                         <Box sx={{ display: "flex", justifyContent: "space-between", alignItems: "center", width: "100%" }}>
-                            <Typography variant="body2" sx={{ fontWeight: "bold", fontSize: { xs: '13px', md: '16px' } }}>R$ {Number(item.price * item.quantity).toFixed(2)}</Typography>
+                            <Typography variant="body2" sx={{ fontWeight: "bold", fontSize: { xs: '13px', md: '16px' } }}>
+                                {parseFloat(item.price).toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' })}
+                            </Typography>
                             <IconButton
                                 onClick={() => handleRemoveFromCart(item.id)}
                                 sx={{

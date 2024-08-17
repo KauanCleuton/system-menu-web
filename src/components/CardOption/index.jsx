@@ -30,7 +30,9 @@ const CartOption = ({ img, title, description, price, item }) => {
                             <Typography variant="body1" sx={{ fontSize: { xs: '13px', md: '16px' } }}>{description}</Typography>
                         </Box>
                         <Box sx={{ display: "flex", justifyContent: "space-between", alignItems: "center" }}>
-                            <Typography variant="body2" sx={{ fontWeight: "bold", fontSize: { xs: '13px', md: '16px' } }}>R$ {price.toFixed(2)}</Typography>
+                            <Typography variant="body2" sx={{ fontWeight: "bold", fontSize: { xs: '13px', md: '16px' } }}>
+                                {parseFloat(item.price).toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' })}
+                                </Typography>
                             <IconButton
                                 onClick={handleOpenModal}
                                 sx={{
