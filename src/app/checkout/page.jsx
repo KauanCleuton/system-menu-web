@@ -1,75 +1,184 @@
-'use client';
-import React, { useEffect, useState } from 'react';
-import {
-  Container,
-  Box,
-  Typography,
-  Grid,
-  useTheme,
-  Button,
-} from '@mui/material';
+"use client"
+import React, { useState } from 'react';
+import { Container, Box, Grid } from '@mui/material';
 import CheckoutSteps from '@/components/StepsCheckout';
-import Image from 'next/image';
-import { isLoggedIn } from '@/utils/auth';
-import { useParams } from 'next/navigation';
-import Loading from '@/app/loading';
-import { useDispatch } from 'react-redux';
+import PhoneNumberInput from '@/components/PhoneNumberInput';
+import BillingAddress from '@/components/BillingAddress';
+import userService from '@/service/user.service';
+import { useDispatch, useSelector } from 'react-redux';
+import Pagamento from '@/components/Pagamento';
+import CheckoutPreviewAndEdit from '@/components/CheckoutPreviewAndEdit';
 import { SET_ALERT } from '@/store/actions';
+import { clearCart } from '@/store/cartSlice';
+import { useRouter } from 'next/navigation';
+import Finalizado from '@/components/Finalizado';
 
-
+const UserSv = new userService.UserNoAuthSv();
 
 const Checkout = () => {
-    const [activeStep, setActiveStep] = useState(0)
+  const dispatch = useDispatch()
+  const items = useSelector(state => state.cart.items);
+  const total_price = useSelector(state => state.cart.totalAmount);
+  const quantity = useSelector(state => state.cart.totalItems);
+  const [activeStep, setActiveStep] = useState(0);
+  const [phoneNumber, setPhoneNumber] = useState('');
+  const [address, setAddress] = useState(null);
+  const [initialValues, setInitialValues] = useState(null);
+  const [mode, setMode] = useState(false);
+  const [message, setMessage] = useState('')
+  const router = useRouter()
+  const [data, setData] = useState({
+    quantity: '',
+    total_price: '',
+    payment: '',
+    address: '',
+    orderItems: '',
+    phone: '',
+    troco: ''  // Added troco field
+  });
 
+  const handleNext = () => {
+    setActiveStep((prevStep) => prevStep + 1);
+  };
+
+  const handleBack = () => {
+    setActiveStep((prevStep) => prevStep - 1);
+  };
+
+  const fetchAddress = async (phoneNumber) => {
+    try {
+      setPhoneNumber(phoneNumber);
+      const data = await UserSv.getAddress(phoneNumber);
+      if (data) {
+        setAddress(data);
+        setInitialValues(data);
+        handleNext();
+        setMode(false);
+      } else {
+        setInitialValues({
+          road: '',
+          house_number: '',
+          neighborhood: '',
+          city: '',
+          complement: '',
+        });
+        setMode(true);
+      }
+    } catch (error) {
+      console.error('Erro ao buscar o endereço:', error);
+      setInitialValues({
+        road: '',
+        house_number: '',
+        neighborhood: '',
+        city: '',
+        complement: '',
+      });
+      setMode(true);
+    }
+  };
+
+  const handleAddressSubmit = (values) => {
+    setAddress(values);
+    setData(prevData => ({
+      ...prevData,
+      address: values,
+      phone: phoneNumber,
+      quantity: quantity,
+      total_price: total_price,
+      orderItems: items.map((item) => ({
+        product_id: item.idProducts,
+        quantity: item.quantity,
+        price: item.price,
+        observation: item.deliveryDescription,
+        title: item.title,
+      })),
+    }));
+    handleNext();
+  };
+
+  const handlePaymentMethodChange = (method, troco) => {
+    setData(prevData => ({
+      ...prevData,
+      payment: method,
+      troco: method === 'Dinheiro' ? troco : ''
+    }));
+  };
+
+  const handleFinalize = async () => {
+    try {
+      const response = await UserSv.createPedido(data)
+      handleNext()
+      dispatch({ type: SET_ALERT, message: response.message, severity: 'error' })
+      setMessage('success')
+      dispatch(clearCart());
+    } catch (error) {
+      console.error(error)
+      setMessage('error')
+      dispatch({ type: SET_ALERT, message: 'Erro ao finalizar compra', severity: 'error' })
+    }
+  }
+
+  const getStepContent = (step) => {
+    switch (step) {
+      case 0:
+        return (
+          <Grid item xs={12}>
+            {mode ? (
+              <BillingAddress
+                handleSubmit={handleAddressSubmit}
+                initialValues={initialValues}
+              />
+            ) : (
+              <PhoneNumberInput onFetchAddress={fetchAddress} />
+            )}
+          </Grid>
+        );
+      case 1:
+        return (
+          <Grid item xs={12}>
+            <Pagamento
+              onPaymentMethodChange={handlePaymentMethodChange}
+              handleNext={handleNext}
+            />
+          </Grid>
+        );
+      case 2:
+        return (
+          <Grid item xs={12}>
+            <CheckoutPreviewAndEdit
+              data={data}
+              handleFinalize={handleFinalize}
+            />
+          </Grid>
+        )
+      case 3:
+        return (
+          <Grid item xs={12}>
+            <Finalizado
+              status={message}
+            />
+          </Grid>
+        )
+      default:
+        return 'Unknown step';
+    }
+  };
+
+  console.log(data)
   return (
     <Box sx={{ width: '100%', height: 'auto', py: 13 }}>
       <Container fixed>
         <Grid container spacing={3}>
-          <Grid item xs={12} lg={12}>
+          <Grid item xs={12}>
             <Box sx={{ bgcolor: '#fff', p: 2 }}>
-              <Grid container spacing={3}>
-                <Grid item xs={12}>
-                  <CheckoutSteps activeStep={activeStep} />
-                </Grid>
-                {/* <Grid item xs={12}>
-                  {getStepContent(activeStep)}
-                </Grid> */}
-              </Grid>
+              <CheckoutSteps activeStep={activeStep} />
             </Box>
           </Grid>
-          {/* <Grid item xs={12} lg={4}>
+          <Grid item xs={12}>
             <Box sx={{ bgcolor: '#fff', p: 2 }}>
-              <Typography variant="h6" sx={{ color: '#000' }}>
-                Carrinho
-              </Typography>
-              <Box
-                sx={{
-                  width: '100px',
-                  height: '100px',
-                  position: 'relative',
-                  my: 2,
-                }}
-              >
-                <Image
-                  layout="fill"
-                  alt="Imagem Avatar Vip"
-                  src={'/img/avatar-vip.png'}
-                  style={{ objectFit: 'contain' }}
-                />
-              </Box>
-              <Box
-                sx={{
-                  display: 'flex',
-                  flexDirection: 'column',
-                  gap: 1,
-                }}
-              >
-                <Typography variant="body1">Total: {plans.value}</Typography>
-                <Typography variant="body1">{plans.title}</Typography>
-                <Typography variant="body1">{plans.value}</Typography>
-              </Box>
+              {getStepContent(activeStep)}
             </Box>
-          </Grid> */}
+          </Grid>
         </Grid>
       </Container>
     </Box>

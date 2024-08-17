@@ -81,7 +81,7 @@ const Cart = () => {
                                             justifyContent: {lg: "flex-start", xs: "center"}
                                         }}>
                                             <Typography variant="h3" sx={{ fontSize: { lg: 28, md: 25, sm: 22, xs: 21 }, fontWeight: "bold", color: "#000" }}>
-                                                Total do pedido: {items.length !== 0 && `R$ ${Number(totalAmount).toFixed(2)}`}
+                                                Total do pedido: {items.length !== 0 && `${parseFloat(totalAmount).toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' })}`}
                                             </Typography>
                                         </Box>
                                     </Grid>
