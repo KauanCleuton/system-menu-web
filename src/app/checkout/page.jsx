@@ -159,8 +159,8 @@ const Checkout = () => {
 
   console.log(data)
   return (
-    <Box sx={{ width: '100%', height: '100vh', py: 13 }}>
-      <Container fixed>
+    <Box sx={{ width: '100%', height: {xs:'auto', lg: "100vh"}, py: 13 }}>
+      <Container fixed sx={{paddingBottom: "90px"}}>
         <Grid container spacing={3}>
           <Grid item xs={12}>
             <Box sx={{ bgcolor: '#fff', p: 2 }}>
