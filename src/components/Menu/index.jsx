@@ -39,7 +39,7 @@ const Menu = () => {
         fetchProducts();
     }, []);
 
-    return loading ? <Loading /> : (
+    return (
         <>
             <Box sx={{ width: "100%", height: "100%", mb: 2 }}>
                 {categories && Object.keys(categories).map((categoryName, index) => (

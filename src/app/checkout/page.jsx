@@ -12,6 +12,7 @@ import { SET_ALERT } from '@/store/actions';
 import { clearCart } from '@/store/cartSlice';
 import { useRouter } from 'next/navigation';
 import Finalizado from '@/components/Finalizado';
+import { isLoggedIn } from '@/utils/auth';
 
 const UserSv = new userService.UserNoAuthSv();
 
@@ -49,12 +50,14 @@ const Checkout = () => {
     try {
       setPhoneNumber(phoneNumber);
       const data = await UserSv.getAddress(phoneNumber);
-      if (data) {
-        setAddress(data);
-        setInitialValues(data);
-        handleNext();
-        setMode(false);
-      } else {
+      console.log(data, 231321)
+      setAddress(data);
+      setInitialValues(data);
+      // handleNext();
+      setMode(true);
+    } catch (error) {
+      console.error('Erro ao buscar o endereço:', error);
+      if (isLoggedIn()) {
         setInitialValues({
           road: '',
           house_number: '',
@@ -64,16 +67,6 @@ const Checkout = () => {
         });
         setMode(true);
       }
-    } catch (error) {
-      console.error('Erro ao buscar o endereço:', error);
-      setInitialValues({
-        road: '',
-        house_number: '',
-        neighborhood: '',
-        city: '',
-        complement: '',
-      });
-      setMode(true);
     }
   };
 
@@ -166,7 +159,7 @@ const Checkout = () => {
 
   console.log(data)
   return (
-    <Box sx={{ width: '100%', height: 'auto', py: 13 }}>
+    <Box sx={{ width: '100%', height: '100vh', py: 13 }}>
       <Container fixed>
         <Grid container spacing={3}>
           <Grid item xs={12}>

@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { AppBar, Toolbar, IconButton, Grid, Box, Container, Menu, MenuItem, Avatar, useScrollTrigger, Modal, Typography } from '@mui/material';
 import { useDispatch, useSelector } from 'react-redux';
 import BadgeCart from '../BadgeCart';
-import { usePathname } from 'next/navigation';
+import { usePathname, useRouter } from 'next/navigation';
 import Image from 'next/image';
 import ModalLogin from '../ModalLogin';
 import { SET_LOGIN_MENU } from '@/store/actions';
@@ -17,11 +17,11 @@ const Header = () => {
     const totalItems = useSelector(state => state.cart.totalItems);
     const path = usePathname();
     const trigger = useScrollTrigger({ disableHysteresis: true, threshold: 0 });
-    const [userData, setUserData] = useState(null);
+    const userData = useSelector(state => state.login.data)
     const [anchorEl, setAnchorEl] = useState(null);
     const loginMenuOpened = useSelector(state => state.login.opened);
     const dispatch = useDispatch();
-
+const router = useRouter()
     const handleLeftDrawerToggle = () => {
         dispatch({ type: SET_LOGIN_MENU, opened: true, mode: 'login' });
     };
@@ -34,22 +34,16 @@ const Header = () => {
         window.location.reload();
     };
 
-    const fetchUserData = async () => {
-        try {
-            const accessToken = sessionStorage.getItem("accessToken");
-            const response = await userService.getUser(accessToken);
-            setUserData(response.data);
-        } catch (error) {
-            console.error('Erro ao buscar usuário logado!', error);
-            throw error;
-        }
-    };
-
-    useEffect(() => {
-        if (isLoggedIn()) {
-            fetchUserData();
-        }
-    }, []);
+    // const fetchUserData = async () => {
+    //     try {
+    //         const accessToken = sessionStorage.getItem("accessToken");
+    //         const response = await userService.getUser(accessToken);
+    //         setUserData(response.data);
+    //     } catch (error) {
+    //         console.error('Erro ao buscar usuário logado!', error);
+    //         throw error;
+    //     }
+    // };
 
     const handleOpenMenu = (event) => {
         setAnchorEl(event.currentTarget);
@@ -117,7 +111,7 @@ const Header = () => {
                                         display: "flex",
                                         justifyContent: "flex-end"
                                     }}>
-                                        {userData ? (
+                                        {isLoggedIn() ? (
                                             <>
                                                 <IconButton onClick={handleOpenMenu}>
                                                     <Avatar

@@ -63,7 +63,7 @@ const ModalLogin = () => {
                             </Grid>
                         </Grid>
                         <Grid item xs={12} >
-                            {mode === 'login' && <AuthLogin modal setMode={setMode} />}
+                        {mode === 'login' && <AuthLogin modal setMode={setMode} />}
                             {mode === 'register' && <AuthRegister modal setMode={setMode} />}
 
                             {mode === 'forgotPassword' && <AuthForgotPassword modal setPhone={setPhone} setMode={setMode} />}

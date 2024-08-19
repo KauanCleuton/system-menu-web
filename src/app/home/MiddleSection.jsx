@@ -123,6 +123,7 @@ const MiddleSection = () => {
         <Box
             sx={{
                 width: "100vw",
+                height: "100vh",
                 display: "flex",
                 justifyContent: "center",
                 py: 2,
@@ -150,7 +151,7 @@ const MiddleSection = () => {
                     </Grid>
 
                     <Grid item xs={12} sx={{
-                        // height: { lg: 500, md: 'auto', sm: 700, xs: 'auto' },
+                        // height: { lg: 900, md: 900, sm: 700, xs: 'auto' },
                         overflow: "auto"
                     }}>
                         <Menu

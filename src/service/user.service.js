@@ -8,7 +8,7 @@ class UserSv extends ServiceBase {
 
 class UserNoAuthSv extends ServiceBase {
     constructor() {
-        super("noAuth")
+        super("user")
     }
     getAddress(phone) {
         console.log(phone, '11312j3j213j21j')

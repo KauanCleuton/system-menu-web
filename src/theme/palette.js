@@ -5,7 +5,7 @@ const palette = {
       headerText: 'rgba(255, 255, 255, 1)',
     },
     secondary: {
-      main: '#FFB606',
+      main: '#000',
       light: '#EF9900',
       headerText: '#FF4D00',
     },

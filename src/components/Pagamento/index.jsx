@@ -34,7 +34,7 @@ const Pagamento = ({ onPaymentMethodChange, handleNext }) => {
       </Typography>
       <Grid container spacing={2}>
         <Grid item xs={12} sm={6}>
-          <Button 
+          <Button
             fullWidth
             variant={paymentMethod === 'PIX' ? 'contained' : 'outlined'}
             color="primary"
@@ -42,11 +42,11 @@ const Pagamento = ({ onPaymentMethodChange, handleNext }) => {
             startIcon={<PixOutlined />}
             sx={{ py: 2 }}
           >
-            PIX
+            PIX {`(85) 99298-5693`}
           </Button>
         </Grid>
         <Grid item xs={12} sm={6}>
-          <Button 
+          <Button
             fullWidth
             variant={paymentMethod === 'Dinheiro' ? 'contained' : 'outlined'}
             color="primary"
@@ -63,6 +63,17 @@ const Pagamento = ({ onPaymentMethodChange, handleNext }) => {
               label="Troco"
               type="number"
               value={troco}
+              sx={{
+                "& .MuiInputBase-input": {
+                  color: "#000", // Cor do texto ajustada
+                },
+                "& .MuiFormLabel-root": {
+                  color: "#000", // Cor do rótulo ajustada
+                },
+                "& .MuiFormHelperText-root": {
+                  color: "#d32f2f" // Cor do texto de ajuda
+                }
+              }}
               onChange={handleTrocoChange}
               fullWidth
               margin="normal"

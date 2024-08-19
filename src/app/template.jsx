@@ -11,6 +11,7 @@ import { isLoggedIn } from '@/utils/auth';
 import theme from '@/theme';
 import store from '@/store';
 import SnackBar from '@/components/SnackBar';
+import Footer from '@/components/Footer';
 
 export default function Template({ children, pageProps }) {
   const Session = () => {
@@ -37,7 +38,7 @@ export default function Template({ children, pageProps }) {
         <Box >
           {children}
         </Box>
-        {/* <Footer /> */}
+        <Footer />
       </ThemeProvider>
     </Provider>
   );

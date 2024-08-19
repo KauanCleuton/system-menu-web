@@ -9,6 +9,7 @@ const CartOptionCart = ({ item }) => {
 
     const handleRemoveFromCart = (id) => {
         dispatch(removeItemFromCart(id));
+        console.log(id)
     };
 
     return (
@@ -35,10 +36,10 @@ const CartOptionCart = ({ item }) => {
                         </Box>
                         <Box sx={{ display: "flex", justifyContent: "space-between", alignItems: "center", width: "100%" }}>
                             <Typography variant="body2" sx={{ fontWeight: "bold", fontSize: { xs: '13px', md: '16px' } }}>
-                                {parseFloat(item.price).toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' })}
+                                {Number(item.price).toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' })}
                             </Typography>
                             <IconButton
-                                onClick={() => handleRemoveFromCart(item.id)}
+                                onClick={() => handleRemoveFromCart(item.idProducts)}
                                 sx={{
                                     color: "#fff",
                                     bgcolor: "#FF4D00",

@@ -7,7 +7,7 @@ import { TextField, Button, Grid, FormControl, FormHelperText, InputAdornment } 
 // Validação com Yup
 const validationSchema = Yup.object({
     road: Yup.string().required('Rua é obrigatória'),
-    house_number: Yup.string().required('Número da casa é obrigatório'),
+    house_number: Yup.number().required('Número da casa é obrigatório'),
     neighborhood: Yup.string().required('Bairro é obrigatório'),
     city: Yup.string().required('Cidade é obrigatória'),
     complement: Yup.string(),
