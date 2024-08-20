@@ -1,12 +1,13 @@
-"use client"
+"use client";
 import CartOptionCart from "@/components/CardOptionCart";
-import { Box, Button, Container, Grid, Paper, Typography } from "@mui/material";
+import { Box, Button, Container, Grid, Typography } from "@mui/material";
 import { useDispatch, useSelector } from "react-redux";
 import { useState, useEffect } from 'react';
 import Link from "next/link";
-import { clearCart, printCartItems } from "@/store/cartSlice";
+import { clearCart } from "@/store/cartSlice";
 import { useRouter } from "next/navigation";
 import { isLoggedIn } from "@/utils/auth";
+import Loading from "../loading";
 
 const Cart = () => {
     const dispatch = useDispatch();
@@ -18,10 +19,10 @@ const Cart = () => {
     useEffect(() => {
         if (!isLoggedIn()) {
             router.push("/");
+        } else {
+            setHydrated(true);
         }
-        console.log(items)
-        setHydrated(true);
-    }, [items.length, router]); // Adicionando dependências ao useEffect
+    }, [items.length, router]);
 
     const handleClearCart = () => {
         dispatch(clearCart());
@@ -29,9 +30,8 @@ const Cart = () => {
     };
 
     if (!hydrated) {
-        return null; // ou um placeholder enquanto está hidratando
+        return <Loading />;
     }
-    console.log(items, totalAmount, '129392392932199')
 
     return (
         <Box
@@ -54,9 +54,7 @@ const Cart = () => {
                         <Grid container spacing={2}>
                             {items.map((item) => (
                                 <Grid item xs={12} lg={6} md={6} sm={12} key={`${item.idProducts}-${item.description}`}>
-                                    <CartOptionCart
-                                        item={item}
-                                    />
+                                    <CartOptionCart item={item} />
                                 </Grid>
                             ))}
                         </Grid>

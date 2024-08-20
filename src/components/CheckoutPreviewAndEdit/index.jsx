@@ -1,6 +1,7 @@
 import React from 'react';
 import { Box, Grid, Typography, Button } from '@mui/material';
 import { PDFDownloadLink, Document, Page, Text, View } from '@react-pdf/renderer';
+import { useSelector } from 'react-redux';
 
 // Simulação do documento PDF
 const PDFDocument = ({ data }) => (
@@ -27,13 +28,17 @@ const PDFDocument = ({ data }) => (
 
 const CheckoutPreviewAndEdit = ({ data, handleFinalize }) => {
   // Função para gerar mensagem para o WhatsApp
+  const nameUser = useSelector(state => state.login.data.name);
+  const phone = useSelector(state => state.login.data.phone);
+
   const generateWhatsAppMessage = () => {
     const address = `${data?.address.road}, ${data?.address.house_number}, ${data?.address.neighborhood}, ${data?.address.city}, ${data?.address.complement}`;
     const items = data?.orderItems.map(item =>
       `Produto: ${item.title}, Quantidade: ${item.quantity}, Preço: ${Number(item.price).toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' })}`
     ).join('%0A');
     const total = `Total: ${parseInt(data?.total_price).toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' })}`;
-    return `Olá,%20aqui%20estão%20os%20detalhes%20do%20meu%20pedido:%0A%0AEndereço:%20${address}%0A%0A${items}%0A%0A${total}`;
+
+    return `Olá,%20aqui%20estão%20os%20detalhes%20do%20meu%20pedido:%0A%0ANome:%20${nameUser}%0ATelefone:%20${phone}%0A%0AEndereço:%20${address}%0A%0A${items}%0A%0A${total}`;
   };
 
   return (
@@ -43,6 +48,12 @@ const CheckoutPreviewAndEdit = ({ data, handleFinalize }) => {
       </Typography>
       <Grid container spacing={2}>
         <Grid item xs={12} sm={6}>
+          <Typography variant="body1" sx={{ color: "#000" }}>
+            <strong>Nome:</strong> {nameUser}
+          </Typography>
+          <Typography variant="body1" sx={{ color: "#000" }}>
+            <strong>Telefone:</strong> {phone}
+          </Typography>
           <Typography variant="body1" sx={{ color: "#000" }}>
             <strong>Endereço:</strong> {data?.address ? `${data?.address.road}, ${data?.address.house_number}, ${data?.address.neighborhood}, ${data?.address.city}, ${data?.address.complement}` : 'Não disponível'}
           </Typography>

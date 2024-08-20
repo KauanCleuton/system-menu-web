@@ -3,7 +3,7 @@ import { ThemeProvider } from '@mui/material/styles';
 import CssBaseline from '@mui/material/CssBaseline';
 import { Provider, useDispatch, useSelector } from 'react-redux';
 import React, { useEffect } from 'react';
-import { CLOSE_ALERT, SET_LOGIN_DATA } from '@/store/actions';
+import { CLOSE_ALERT, SET_ALERT, SET_LOGIN_DATA } from '@/store/actions';
 import { Box } from '@mui/material';
 // import Footer from '@/components/Footer';
 import Header from '@/components/Header';
@@ -23,6 +23,7 @@ export default function Template({ children, pageProps }) {
         sessionStorage.removeItem("refreshToken")
       }
       dispatch({ type: SET_LOGIN_DATA });
+      dispatch({ type: SET_ALERT, message: 'Seja Bem-vindo!', severity: "success", type: "user" });
     }, []);
     return (
       <SnackBar

@@ -29,7 +29,7 @@ const AuthRegister = ({ setMode }) => {
             const response = await Signup(formattedValues);
             console.log(response.data);
             setMode("login");
-            dispatch(showAlert(data.message, "success", "user"))
+            dispatch(showAlert(response.data.message, "success", "user"))
         } catch (error) {
             dispatch(showAlert(error.message, "error", "key"))
             console.error("Erro ao registrar usuário!", error);
