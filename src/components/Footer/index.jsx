@@ -26,7 +26,7 @@ const Footer = () => {
                     </Grid>
 
                     {/* Seção de Informações de Contato */}
-                    <Grid item xs={12} md={5}>
+                    <Grid item xs={12} md={3}>
                         <Box sx={{ display: 'flex', flexDirection: 'column', alignItems: { lg: 'flex-start', xs: 'center' } }} >
                             <Typography variant="h6" sx={{ mb: 2, fontSize: {lg: '0.875rem', xs: '0.775rem'}, fontWeight: 'bold' }}>
                                 Contato
@@ -35,7 +35,7 @@ const Footer = () => {
                                 Rua São Cristóvão, 93, Guaiúba, CE
                             </Typography>
                             <Typography variant="body2" sx={{ mb: 1, fontSize: {lg: '0.75rem', xs: '0.60rem'} }}>
-                                Telefone: <Link href="mailto:558592985693" style={{
+                                Telefone: <Link href="tel:558592985693" style={{
                                     color: theme.palette.primary.main
                                 }}>
                                     (85) 99298-5693
@@ -48,7 +48,7 @@ const Footer = () => {
                     </Grid>
 
                     {/* Seção de Redes Sociais */}
-                    <Grid item xs={12} md={5}>
+                    <Grid item xs={12} md={3}>
                         <Box sx={{ display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
                             <Typography variant="h6" sx={{ mb: 2, fontSize: {lg: '0.875rem', xs: '0.775rem'}, fontWeight: 'bold' }}>
                                 Siga-nos
@@ -57,7 +57,7 @@ const Footer = () => {
                                 <IconButton
                                     component={Link}
                                     target="_blank"
-                                    href="https://instagram.com/kauan.cleuton"
+                                    href="https://www.instagram.com/vishidelivery"
                                     sx={{ color: 'primary.main' }}
                                 >
                                     <Instagram />
@@ -82,6 +82,20 @@ const Footer = () => {
                         </Box>
                     </Grid>
 
+                    <Grid item xs={12} lg={3} sx={{ textAlign: 'center'}}>
+                        <Typography variant="h6" sx={{ mb: 1, fontSize: { lg: '0.875rem', xs: '0.775rem' }, fontWeight: 'bold' }}>
+                            Desenvolvido Por
+                        </Typography>
+                        <Typography variant="body2" sx={{ fontSize: { lg: '0.75rem', xs: '0.60rem' }, color: 'primary.main' }}>
+                            Kauan Cleuton
+                            <br />
+                            Software Developer FullStack
+                            <br />
+                            <Link href="https://instagram.com/kauan.cleuton" target="_blank" passHref style={{ color: 'primary.main', textDecoration: 'none', fontWeight: 'bold' }}>
+                                @kauan.cleuton
+                            </Link>
+                        </Typography>
+                    </Grid>
                     {/* Seção de Copyright */}
                     <Grid item xs={12}>
                         <Box sx={{ textAlign: 'center', borderTop: '1px solid', borderColor: 'primary.main', pt: 2 }}>

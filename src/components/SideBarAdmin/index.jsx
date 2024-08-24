@@ -1,6 +1,6 @@
-import React, { useState } from 'react';
+import React from 'react';
 import Link from 'next/link';
-import { Drawer, Box, Grid, IconButton, Typography } from '@mui/material';
+import { Box, Grid, Typography } from '@mui/material';
 import DashboardIcon from '@mui/icons-material/Dashboard';
 import AdminPanelSettingsIcon from '@mui/icons-material/AdminPanelSettings';
 import PeopleIcon from '@mui/icons-material/People';
@@ -8,12 +8,11 @@ import CategoryIcon from '@mui/icons-material/Category';
 import ShoppingCartIcon from '@mui/icons-material/ShoppingCart';
 import InventoryIcon from '@mui/icons-material/Inventory';
 import LocalShippingIcon from '@mui/icons-material/LocalShipping';
-import MenuIcon from '@mui/icons-material/Menu';
-
-const drawerWidth = 240;
+import AttachMoneyIcon from '@mui/icons-material/AttachMoney'; // Novo ícone para "Caixa"
 
 const routesComponent = [
     { title: "Dashboard", icon: <DashboardIcon sx={{ width: 20, height: 20 }} />, route: "/admin" },
+    { title: "Caixa", icon: <AttachMoneyIcon sx={{ width: 20, height: 20 }} />, route: "/admin/caixa" }, // Atualizado ícone e rota
     { title: "Administradores", icon: <AdminPanelSettingsIcon sx={{ width: 20, height: 20 }} />, route: "/admin/administradores" },
     { title: "Usuários", icon: <PeopleIcon sx={{ width: 20, height: 20 }} />, route: "/admin/usuarios" },
     { title: "Categorias", icon: <CategoryIcon sx={{ width: 20, height: 20 }} />, route: "/admin/categorias" },
@@ -23,37 +22,21 @@ const routesComponent = [
 ];
 
 const Sidebar = () => {
-    const [open, setOpen] = useState(false);
-
-    const handleDrawerToggle = () => {
-        setOpen(!open);
-    };
-
     return (
-        <Drawer
-            variant="permanent"
+        <Box
             sx={{
-                width: open ? drawerWidth : 60,
-                flexShrink: 0,
-                py: 3,
-                whiteSpace: 'nowrap',
-                boxSizing: 'border-box',
-                transition: 'width 0.3s',
-                '& .MuiDrawer-paper': {
-                    width: open ? drawerWidth : 60,
-                    boxSizing: 'border-box',
-                    backgroundColor: '#000000',
-                    color: '#FFFFFF'
-                },
+                width: '100%',
+                height: 'auto',
+                color: '#FFFFFF',
+                display: 'flex',
+                flexDirection: 'column',
+                boxShadow: 1,
+                borderRadius: '10px',
+                overflow: 'hidden',
             }}
         >
-            <Box sx={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', padding: 2 }}>
-                <IconButton onClick={handleDrawerToggle} sx={{ color: '#FF4D00', p: 0 }}>
-                    <MenuIcon />
-                </IconButton>
-            </Box>
-            <Box sx={{ overflow: 'auto', height: { lg: 'calc(100% - 64px)', } }}>
-                <Grid container direction="column">
+            <Grid container direction="column" spacing={2}>
+                <Grid item xs={12}>
                     {routesComponent.map((route, index) => (
                         <Link href={route.route} key={index} passHref>
                             <Grid
@@ -61,30 +44,33 @@ const Sidebar = () => {
                                 container
                                 alignItems="center"
                                 sx={{
-                                    padding: 2,
+                                    px: 2,
+                                    py: 1,
                                     cursor: 'pointer',
                                     textDecoration: 'none',
                                     color: '#FF4D00',
                                     transition: 'transform 0.2s',
+                                    borderBottom: index < routesComponent.length - 1 && "1px solid #e7e7e7",
                                     '&:hover': {
                                         transform: 'scale(1.05)',
+                                        transformOrigin: 'center', // Centraliza o efeito de scale
+                                        color: '#141414',
                                     },
+                                    overflow: 'hidden', // Previne transbordamento
                                 }}
                             >
                                 <Grid item>
                                     {route.icon}
                                 </Grid>
-                                {open && (
-                                    <Grid item sx={{ marginLeft: 2 }}>
-                                        <Typography>{route.title}</Typography>
-                                    </Grid>
-                                )}
+                                <Grid item sx={{ marginLeft: 2 }}>
+                                    <Typography>{route.title}</Typography>
+                                </Grid>
                             </Grid>
                         </Link>
                     ))}
                 </Grid>
-            </Box>
-        </Drawer>
+            </Grid>
+        </Box>
     );
 };
 
