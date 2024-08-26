@@ -36,7 +36,7 @@ const Sidebar = () => {
             }}
         >
             <Grid container direction="column" spacing={2}>
-                <Grid item xs={12}>
+                <Grid item xs={12} >
                     {routesComponent.map((route, index) => (
                         <Link href={route.route} key={index} passHref>
                             <Grid

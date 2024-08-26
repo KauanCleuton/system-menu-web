@@ -1,30 +1,50 @@
+"use client"
 import Sidebar from "@/components/SideBarAdmin"
-
-const { Box, Container, Grid, Paper } = require("@mui/material")
+import { Box, Container, Grid, Paper, useTheme } from "@mui/material"
 
 
 const Layout = ({ children }) => {
+    const theme = useTheme()
+
     return (
-        <Box sx={{
-            width: "100vw",
-            height: "100vh",
-            py: 10,
-        }}>
-            <Container maxWidth="xl" sx={{
-                py: 6
+        <Box
+            sx={{
+                width: "100%",
+                height: 'auto',
+                py: 12,
+                display: "flex",
+                mb: 5
             }}>
-                <Grid container spacing={2} >
-                    <Grid item lg={3} px={3}>
-                        <Sidebar />
-                    </Grid>
-                    <Grid item xs={12} lg={9} >
-                        <Box component={Paper} elevation={1} sx={{
+            <Container maxWidth="xl">
+                <Grid container spacing={4}>
+                    <Grid item xs={12} lg={3} md={12}>
+                        <Box sx={{
+                            // maxWidth: "320px",
                             width: "100%",
-                            p: 2
+                            // height: "900px",
+                            display: { lg: "flex", md: "flex", sm: "flex", xs: "none" },
+                            // background: theme.palette.primary.main,
+
                         }}>
-                            <Grid container >
-                                {children}
+                            <Grid item xs={12} >
+                                <Sidebar />
                             </Grid>
+                        </Box>
+                    </Grid>
+                    <Grid item xs={12} lg={9} md={12}>
+                        <Box
+                            sx={{
+                                width: "100%",
+                                display: "flex",
+                                // bgcolor: { lg: "#09e653", xs: "transparent" },
+                                height: { lg: "900px", xs: "auto" },
+                                // px: { lg: '40px', xs: '0px' },
+                                borderRadius: '10px',
+                                boxShadow: 2,
+                            }}
+                        >
+
+                            {children}
                         </Box>
                     </Grid>
                 </Grid>
