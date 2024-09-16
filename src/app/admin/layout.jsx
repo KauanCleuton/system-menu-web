@@ -38,7 +38,7 @@ const Layout = ({ children }) => {
                                 display: "flex",
                                 // bgcolor: { lg: "#09e653", xs: "transparent" },
                                 height: { lg: "900px", xs: "auto" },
-                                // px: { lg: '40px', xs: '0px' },
+                                p: 2,
                                 borderRadius: '10px',
                                 boxShadow: 2,
                             }}

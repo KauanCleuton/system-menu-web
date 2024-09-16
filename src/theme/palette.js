@@ -3,6 +3,7 @@ const palette = {
       main: '#FF4D00',
       light: 'rgba(238,238,238,0.933)',
       headerText: 'rgba(255, 255, 255, 1)',
+      white: "#fff"
     },
     secondary: {
       main: '#000',
@@ -18,11 +19,11 @@ const palette = {
     orange: { main: '#ff9b30' },
     background: {
       header: '#ff9b30',
-      bgAmareloSaber: "#FFB606",
+      bgAmareloPrimary: "#FFB606",
       bgIconFacebook:"linear-gradient(180deg, #18ACFE 0%, #0163E0 99.7%)",
       bgIconApple: "#283544",
       bgLogin:"linear-gradient(132.03deg, #FF4D00 12.31%, #024796 90.86%)", 
-      bgAzulSaber: "#FF4D00"
+      bgPrimary: "#FF4D00"
     },
     texta: {
       main: 'rgba( 0, 0, 0, 0.7)',
