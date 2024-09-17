@@ -1,38 +1,68 @@
-"use client"
+"use client";
 import React from 'react';
 import { Formik, Form, Field, ErrorMessage } from 'formik';
 import * as Yup from 'yup';
-import { TextField, Button, Grid, FormControl, FormHelperText, Typography, Box } from '@mui/material';
+import InputMask from 'react-input-mask';
+import { TextField, Button, Grid, FormControl, FormHelperText, Typography, Box, InputAdornment } from '@mui/material';
 import Link from 'next/link';
+import { PhoneIphoneOutlined } from '@mui/icons-material';
+import { useDispatch } from 'react-redux';
+import AdminService from '@/service/admin.service';
+import { useRouter } from 'next/navigation';
+import { SET_ALERT } from '@/store/actions';
 
 // Validação com Yup
 const validationSchema = Yup.object({
     name: Yup.string().required('Nome é obrigatório'),
     phone: Yup.string()
         .required('Telefone é obrigatório')
-        .matches(/^\d+$/, 'Telefone deve conter apenas números'),
+        .matches(/^\(\d{2}\) \d{4,5}-\d{4}$/, 'Telefone inválido. Deve estar no formato correto'),
     senha: Yup.string()
         .required('Senha é obrigatória')
         .min(6, 'Senha deve ter pelo menos 6 caracteres'),
 });
 
-const AddNewAdmin = ({ handleSubmit, initialValues }) => {
+const AdminSv = new AdminService()
+const AddNewAdmin = () => {
+    const router = useRouter()
+    const dispatch = useDispatch()
+    const formatPhoneNumber = (phone) => {
+        return phone.replace(/\D/g, '');
+    };
+    const handleSubmit = async (values) => {
+        const newValues = {
+            phone: formatPhoneNumber(values.phone),
+            ...values
+        }
+        try {
+            const response = await AdminSv.createNewAdmin(newValues)
+            console.log(response.message)
+            dispatch({type: SET_ALERT, message: response.message, severity: "success", type: "user"})
+            setTimeout(() => {
+                router.push("/admin/administradores")
+            }, 3000)
+        } catch (error) {
+            console.error("Error ao criar novo administrador!", error)
+            dispatch({type: SET_ALERT, message: error.message, severity: "error", type: "user"})
+        }
+    }
+
     return (
         <Grid container spacing={2} direction='column' py={1}>
-            <Grid item >
+            <Grid item>
                 <Typography variant='h2' sx={{ color: "#000", textAlign: "center" }}>
                     Adicionar Novo Administrador
                 </Typography>
             </Grid>
-            <Grid item >
+            <Grid item>
                 <Formik
-                    initialValues={initialValues}
+                    initialValues={{ name: '', phone: '', senha: '' }}
                     validationSchema={validationSchema}
                     onSubmit={(values) => {
                         handleSubmit(values);
                     }}
                 >
-                    {({ handleChange, handleBlur, values, touched, errors }) => (
+                    {({ handleChange, handleBlur, values, touched, errors, setFieldValue }) => (
                         <Form>
                             <Grid container spacing={3}>
                                 {/* Nome */}
@@ -60,7 +90,7 @@ const AddNewAdmin = ({ handleSubmit, initialValues }) => {
                                                         },
                                                         "& .MuiOutlinedInput-root": {
                                                             "&:hover fieldset": {
-                                                                borderColor: "#ec500d", // Cor da borda ao passar o mouse
+                                                                borderColor: "#ec500d",
                                                             },
                                                         },
                                                     }}
@@ -75,31 +105,44 @@ const AddNewAdmin = ({ handleSubmit, initialValues }) => {
                                     <FormControl fullWidth>
                                         <Field name="phone">
                                             {({ field }) => (
-                                                <TextField
-                                                    {...field}
-                                                    label="Telefone"
-                                                    variant="outlined"
-                                                    margin="normal"
-                                                    fullWidth
-                                                    error={touched.phone && Boolean(errors.phone)}
-                                                    helperText={<ErrorMessage name="phone" component={FormHelperText} />}
-                                                    sx={{
-                                                        "& .MuiInputBase-input": {
-                                                            color: "#000",
-                                                        },
-                                                        "& .MuiFormLabel-root": {
-                                                            color: "#000",
-                                                        },
-                                                        "& .MuiFormHelperText-root": {
-                                                            color: "#d32f2f",
-                                                        },
-                                                        "& .MuiOutlinedInput-root": {
-                                                            "&:hover fieldset": {
-                                                                borderColor: "#ec500d", // Cor da borda ao passar o mouse
-                                                            },
-                                                        },
-                                                    }}
-                                                />
+                                                <InputMask
+                                                    mask="(99) 99999-9999"
+                                                    value={field.value}
+                                                    onChange={(e) => setFieldValue('phone', e.target.value)} // Certifique-se de passar o valor correto para o Formik
+                                                    onBlur={handleBlur}
+                                                >
+                                                    {() => (
+                                                        <TextField
+                                                            label="Número de Telefone"
+                                                            variant="outlined"
+                                                            margin="normal"
+                                                            fullWidth
+                                                            error={touched.phone && Boolean(errors.phone)}
+                                                            helperText={touched.phone && errors.phone ? errors.phone : ''}
+                                                            InputProps={{
+                                                                endAdornment: (
+                                                                    <InputAdornment position="end">
+                                                                        <PhoneIphoneOutlined sx={{ color: "#FFF", width: 17, height: 17 }} />
+                                                                    </InputAdornment>
+                                                                ),
+                                                                inputProps: {
+                                                                    style: { color: "#000" },
+                                                                },
+                                                            }}
+                                                            sx={{
+                                                                "& .MuiInputBase-input": {
+                                                                    color: "#000",
+                                                                },
+                                                                "& .MuiFormLabel-root": {
+                                                                    color: "#000",
+                                                                },
+                                                                "& .MuiFormHelperText-root": {
+                                                                    color: "#d32f2f",
+                                                                },
+                                                            }}
+                                                        />
+                                                    )}
+                                                </InputMask>
                                             )}
                                         </Field>
                                     </FormControl>
@@ -131,7 +174,7 @@ const AddNewAdmin = ({ handleSubmit, initialValues }) => {
                                                         },
                                                         "& .MuiOutlinedInput-root": {
                                                             "&:hover fieldset": {
-                                                                borderColor: "#ec500d", // Cor da borda ao passar o mouse
+                                                                borderColor: "#ec500d",
                                                             },
                                                         },
                                                     }}
@@ -142,7 +185,7 @@ const AddNewAdmin = ({ handleSubmit, initialValues }) => {
                                 </Grid>
 
                                 {/* Botão de Enviar */}
-                                <Grid item xs={12} >
+                                <Grid item xs={12}>
                                     <Box sx={{
                                         width: '100%',
                                         display: 'flex',

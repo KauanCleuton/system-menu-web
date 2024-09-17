@@ -1,6 +1,6 @@
 import React from 'react';
 import Link from 'next/link';
-import { Box, Grid, Typography } from '@mui/material';
+import { Box, Grid, Typography, useTheme } from '@mui/material';
 import DashboardIcon from '@mui/icons-material/Dashboard';
 import AdminPanelSettingsIcon from '@mui/icons-material/AdminPanelSettings';
 import PeopleIcon from '@mui/icons-material/People';
@@ -9,6 +9,7 @@ import ShoppingCartIcon from '@mui/icons-material/ShoppingCart';
 import InventoryIcon from '@mui/icons-material/Inventory';
 import LocalShippingIcon from '@mui/icons-material/LocalShipping';
 import AttachMoneyIcon from '@mui/icons-material/AttachMoney'; // Novo ícone para "Caixa"
+import { usePathname } from 'next/navigation';
 
 const routesComponent = [
     { title: "Dashboard", icon: <DashboardIcon sx={{ width: 20, height: 20 }} />, route: "/admin" },
@@ -22,6 +23,9 @@ const routesComponent = [
 ];
 
 const Sidebar = () => {
+    const theme = useTheme()
+    const path = usePathname()
+
     return (
         <Box
             sx={{
@@ -48,7 +52,8 @@ const Sidebar = () => {
                                     py: 1,
                                     cursor: 'pointer',
                                     textDecoration: 'none',
-                                    color: '#FF4D00',
+                                    color: path === route.route ? theme.palette.secondary.main : theme.palette.primary.main,
+                                    fontWeight: path === route.route ? 700 : 500,
                                     transition: 'transform 0.2s',
                                     borderBottom: index < routesComponent.length - 1 && "1px solid #e7e7e7",
                                     '&:hover': {
