@@ -19,7 +19,7 @@ const Administradores = () => {
     const theme = useTheme();
     const limit = 10;
     const [page, setPage] = useState(1);
-
+    const [name, setName] = useState("")
 
     const getData = async () => {
         try {
@@ -87,6 +87,27 @@ const Administradores = () => {
         getData()
     }, [])
 
+    const handleChangeValue = (event) => {
+        const { name, value } = event.target
+        setName(value)
+    }
+
+    const handleSearchByName = async () => {
+        let user = []
+        try {
+            setLoading(true)
+            const searchUser = await AdminSv.getSearchUserByName(name)
+            // user.push(searchUser)
+            setData(searchUse)
+            console.log(searchUser)
+        } catch (error) {
+            console.error(error)
+        }
+        finally {
+            setLoading(false)
+        }
+    }
+
     return (
         <Grid container spacing={2} direction='column'> {/* Ajuste no espaçamento geral */}
             <Grid item >
@@ -94,9 +115,11 @@ const Administradores = () => {
                     <Grid item lg={8} xs={12}>
                         <TextField
                             id="search-admin"
-                            label="Buscar Admin"
-                            placeholder="Buscar Admin"
+                            label="Buscar Admin pelo nome"
+                            placeholder="Buscar Admin pelo nome"
                             variant="outlined"
+                            value={name}
+                            onChange={(e) => handleChangeValue(e)}
                             fullWidth
                             sx={{
                                 "& .MuiInputBase-input": {
@@ -133,7 +156,7 @@ const Administradores = () => {
                         >
                             <Button
                                 variant="contained"
-
+                                onClick={handleSearchByName}
                                 sx={{
                                     color: theme.palette.secondary.white,
                                     bgcolor: theme.palette.primary.main,

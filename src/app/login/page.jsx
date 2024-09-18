@@ -20,15 +20,17 @@ const Login = () => {
         <Box sx={{
             width: "100%",
             bgcolor: "#343434ac",
-            height: '100vh',
+            height: 'auto',
             display: 'flex',
             justifyContent: 'center',
             alignItems: 'center',
-            py: 5
+            py: 10
         }}>
 
 
-            <Container fixed>
+            <Container fixed sx={{
+                py: 8
+            }}>
                 <Box sx={{
                     width: "100%",
                     display: 'flex',

@@ -20,6 +20,12 @@ class AdminService extends ServiceBase {
     getUserData() {
         return this.get("/user")
     }
+    getUserDataById(id) {
+        return this.get(`/user/${id}`)
+    }
+    getSearchUserByName(name) {
+        return this.get(`/search/user/${name}`)
+    }
     getAddressByPhone(phone) {
         return this.get(`/address/${phone}`)
     }
@@ -29,14 +35,17 @@ class AdminService extends ServiceBase {
     putBackAdminById(id) {
         return this.put(`/user/back-admin/${id}`)
     }
-    putUpdateUserPhoto() {
-        return this.put("/user/photo")
+    putUpdateUserPhoto(payload) {
+        return this.put("/user/photo", payload)
     }
     putUpdateUserPassword(id) {
         return this.put(`/user/${id}/password`)
     }
-    putUpdateUser(id) {
-        return this.put(`/user/${id}`)
+    putUpdateUser(id, payload) {
+        return this.put(`/user/${id}`, payload)
+    }
+    putUpdateUserAdmin(id, payload) {
+        return this.put(`/admin/${id}`, payload)
     }
     deleteAdminById(id) {
         return this.delete(`/admin/${id}`)

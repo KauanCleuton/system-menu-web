@@ -1,11 +1,11 @@
 "use client";
-import React from 'react';
+import React, { useState } from 'react';
 import { Formik, Form, Field, ErrorMessage } from 'formik';
 import * as Yup from 'yup';
 import InputMask from 'react-input-mask';
-import { TextField, Button, Grid, FormControl, FormHelperText, Typography, Box, InputAdornment } from '@mui/material';
+import { TextField, Button, Grid, FormControl, FormHelperText, Typography, Box, InputAdornment, IconButton, useTheme } from '@mui/material';
 import Link from 'next/link';
-import { PhoneIphoneOutlined } from '@mui/icons-material';
+import { PhoneIphoneOutlined, Visibility, VisibilityOff } from '@mui/icons-material';
 import { useDispatch } from 'react-redux';
 import AdminService from '@/service/admin.service';
 import { useRouter } from 'next/navigation';
@@ -24,6 +24,8 @@ const validationSchema = Yup.object({
 
 const AdminSv = new AdminService()
 const AddNewAdmin = () => {
+    const theme = useTheme()
+    const [showPassword, setShowPassword] = useState(false)
     const router = useRouter()
     const dispatch = useDispatch()
     const formatPhoneNumber = (phone) => {
@@ -47,10 +49,14 @@ const AddNewAdmin = () => {
         }
     }
 
+    const handleShowPassword = () => {
+        setShowPassword(!showPassword)
+    }
+
     return (
         <Grid container spacing={2} direction='column' py={1}>
             <Grid item>
-                <Typography variant='h2' sx={{ color: "#000", textAlign: "center" }}>
+                <Typography variant='h2' sx={{ color: "#000", textAlign: "center", fontSize: {lg: '40px', md: '34px', sm: '30px', xs: '25px'} }}>
                     Adicionar Novo Administrador
                 </Typography>
             </Grid>
@@ -156,10 +162,21 @@ const AddNewAdmin = () => {
                                                 <TextField
                                                     {...field}
                                                     label="Senha"
-                                                    type="password"
+                                                    type={showPassword ? 'text' : "password"}
                                                     variant="outlined"
                                                     margin="normal"
                                                     fullWidth
+                                                    InputProps={{
+                                                        endAdornment: (
+                                                            <InputAdornment position='end' >
+                                                                <IconButton onClick={handleShowPassword} sx={{
+                                                                    color: theme.palette.primary.main
+                                                                }}>
+                                                                    {showPassword ? <Visibility sx={{width: 20, height: 20}} /> : <VisibilityOff sx={{width: 20, height: 20}} />}
+                                                                </IconButton>
+                                                            </InputAdornment>
+                                                        )
+                                                    }}
                                                     error={touched.senha && Boolean(errors.senha)}
                                                     helperText={<ErrorMessage name="senha" component={FormHelperText} />}
                                                     sx={{
