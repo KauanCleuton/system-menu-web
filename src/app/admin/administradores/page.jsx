@@ -98,7 +98,7 @@ const Administradores = () => {
             setLoading(true)
             const searchUser = await AdminSv.getSearchUserByName(name)
             // user.push(searchUser)
-            setData(searchUse)
+            setData(searchUser)
             console.log(searchUser)
         } catch (error) {
             console.error(error)
