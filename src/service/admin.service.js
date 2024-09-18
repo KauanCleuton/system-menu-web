@@ -2,7 +2,7 @@ import { default as ServiceBase } from "./service.base";
 
 class AdminService extends ServiceBase {
     constructor() {
-        super('noAuth');
+        super('user');
     }
 
     createNewAdmin(payload) {
