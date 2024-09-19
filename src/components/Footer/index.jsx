@@ -10,7 +10,7 @@ const Footer = () => {
     };
 
     return (
-        <Box sx={{ width: "100%", bgcolor: 'secondary.main', color: 'primary.main', py: 2 }}>
+        <Box sx={{ width: "100vw", bgcolor: 'secondary.main', color: 'primary.main', py: 2 }}>
             <Container fixed>
                 <Grid container spacing={{lg: 4, xs: 2}}>
                     {/* Seção de Logotipo */}

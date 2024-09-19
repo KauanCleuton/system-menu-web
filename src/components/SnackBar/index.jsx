@@ -10,6 +10,7 @@ import LockOpenIcon from '@mui/icons-material/LockOpen';
 import KeyIcon from '@mui/icons-material/Key'
 import { useDispatch, useSelector } from 'react-redux';
 import { CLOSE_ALERT, hideAlert } from '@/store/actions';
+import { CategoryOutlined } from '@mui/icons-material';
 
 const SnackBar = () => {
     const dispatch = useDispatch();
@@ -19,7 +20,7 @@ const SnackBar = () => {
         if (reason === 'clickaway') {
             return;
         }
-        dispatch({type: CLOSE_ALERT});
+        dispatch({ type: CLOSE_ALERT });
     };
 
     const getIcon = () => {
@@ -28,6 +29,8 @@ const SnackBar = () => {
                 return <PersonIcon sx={{ color: '#FF4D00' }} />;
             case 'key':
                 return <KeyIcon sx={{ color: '#FF4D00' }} />;
+            case 'category':
+                return <CategoryOutlined sx={{ color: '#FF4D00' }} />;
             case 'file':
                 return <InsertDriveFileIcon sx={{ color: '#FF4D00' }} />;
             case 'error':

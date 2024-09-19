@@ -9,11 +9,12 @@ const Layout = ({ children }) => {
     return (
         <Box
             sx={{
-                width: "100%",
+                width: "100vw",
                 height: 'auto',
                 py: 12,
                 display: "flex",
-                mb: 5
+                mb: 5,
+                paddingRight: '14px'
             }}>
             <Container maxWidth="xl">
                 <Grid container spacing={4}>
@@ -37,7 +38,7 @@ const Layout = ({ children }) => {
                                 width: "100%",
                                 display: "flex",
                                 // bgcolor: { lg: "#09e653", xs: "transparent" },
-                                height: { lg: "900px", xs: "auto" },
+                                height: { lg: "auto", xs: "auto" },
                                 p: 2,
                                 borderRadius: '10px',
                                 boxShadow: 2,

@@ -2,7 +2,7 @@ import React from 'react';
 import { Formik, Form, Field, ErrorMessage } from 'formik';
 import * as Yup from 'yup';
 import InputMask from 'react-input-mask';
-import { TextField, Button, Box, Grid, FormControl, FormHelperText, InputAdornment } from '@mui/material';
+import { TextField, Button, Box, Grid, FormControl, FormHelperText, InputAdornment, useTheme } from '@mui/material';
 import { PhoneIphoneOutlined } from '@mui/icons-material';
 
 // Validação do Formik
@@ -13,6 +13,7 @@ const validationSchema = Yup.object({
 });
 
 const PhoneNumberInput = ({ onFetchAddress }) => {
+  const theme = useTheme()
   return (
     <Formik
       initialValues={{ phone: '' }}
@@ -51,18 +52,18 @@ const PhoneNumberInput = ({ onFetchAddress }) => {
                               </InputAdornment>
                             ),
                             inputProps: {
-                              style: { color: "#000" } // Cor do texto ajustada
+                              style: { color: theme.palette.secondary.main }
                             }
                           }}
                           sx={{
                             "& .MuiInputBase-input": {
-                              color: "#000", // Cor do texto ajustada
+                              color: theme.palette.secondary.main,
                             },
                             "& .MuiFormLabel-root": {
-                              color: "#000", // Cor do rótulo ajustada
+                              color: theme.palette.secondary.main,
                             },
                             "& .MuiFormHelperText-root": {
-                              color: "#d32f2f" // Cor do texto de ajuda
+                              color: theme.palette.primary.main
                             }
                           }}
                         />
@@ -78,16 +79,16 @@ const PhoneNumberInput = ({ onFetchAddress }) => {
                   type="submit"
                   variant="contained"
                   sx={{
-                    bgcolor: "#ec500d",
+                    bgcolor: theme.palette.primary.main,
                     borderRadius: '5px',
                     textTransform: 'inherit',
                     fontSize: '18px',
                     fontWeight: 400,
                     color: "#fff",
-                    border: `1px solid #FF4D00`,
+                    border: `1px solid ${theme.palette.primary.main}`,
                     ":hover": {
                       bgcolor: "transparent",
-                      color: "#FF4D00"
+                      color: theme.palette.primary.main
                     },
                   }}
                 >

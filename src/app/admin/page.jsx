@@ -70,7 +70,7 @@ const Dashboard = () => {
     };
 
     return (
-        <Box sx={{ height: '900px', overflow: 'auto', width: '100%', py: 2 }}>
+        <Box sx={{ height: '900px', overflow: 'auto', width: '100vw', py: 2 }}>
             <Grid container px={2}>
                 <Grid item xs={12}>
                     <Grid container spacing={2}>
