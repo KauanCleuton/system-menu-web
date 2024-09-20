@@ -3,7 +3,8 @@ const palette = {
       main: '#FF4D00',
       light: 'rgba(238,238,238,0.933)',
       headerText: 'rgba(255, 255, 255, 1)',
-      white: "#fff"
+      white: "#fff",
+      logo: "/img/logo.svg"
     },
     secondary: {
       main: '#000',

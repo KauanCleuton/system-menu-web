@@ -11,55 +11,51 @@ import KeyIcon from '@mui/icons-material/Key'
 import { useDispatch, useSelector } from 'react-redux';
 import { CLOSE_ALERT, hideAlert } from '@/store/actions';
 import { CategoryOutlined } from '@mui/icons-material';
+import { useTheme } from '@mui/material';
 
-const SnackBar = () => {
-    const dispatch = useDispatch();
-    const { open, message, severity, type } = useSelector(state => state.alert);
-
-    const handleClose = (event, reason) => {
-        if (reason === 'clickaway') {
-            return;
-        }
-        dispatch({ type: CLOSE_ALERT });
-    };
+const SnackBar = ({ open, onClose, message, severity, type }) => {
+    const theme = useTheme()
 
     const getIcon = () => {
         switch (type) {
             case 'user':
-                return <PersonIcon sx={{ color: '#FF4D00' }} />;
+                return <PersonIcon sx={{ color: theme.palette.primary.main }} />;
             case 'key':
-                return <KeyIcon sx={{ color: '#FF4D00' }} />;
+                return <KeyIcon sx={{ color: theme.palette.primary.main }} />;
             case 'category':
-                return <CategoryOutlined sx={{ color: '#FF4D00' }} />;
+                return <CategoryOutlined sx={{ color: theme.palette.primary.main }} />;
             case 'file':
-                return <InsertDriveFileIcon sx={{ color: '#FF4D00' }} />;
+                return <InsertDriveFileIcon sx={{ color: theme.palette.primary.main }} />;
             case 'error':
-                return <LockIcon sx={{ color: '#FF4D00' }} />;
+                return <LockIcon sx={{ color: theme.palette.primary.main }} />;
             case 'success':
-                return <LockOpenIcon sx={{ color: '#FF4D00' }} />;
+                return <LockOpenIcon sx={{ color: theme.palette.primary.main }} />;
             default:
                 return null;
         }
     };
 
     return (
-        <Snackbar open={open} autoHideDuration={3000} onClose={handleClose}>
+        <Snackbar 
+        open={open} 
+        autoHideDuration={6000} 
+        onClose={onClose}>
             <Alert
                 variant='filled'
-                onClose={handleClose}
+                onClose={onClose}
                 severity={severity === "success" ? "success" : "error"}
                 icon={getIcon()}
                 action={
-                    <IconButton size="small" aria-label="close" color="inherit" onClick={handleClose}>
-                        <CloseIcon fontSize="small" sx={{ color: '#FF4D00' }} />
+                    <IconButton size="small" aria-label="close" color="inherit" onClick={onClose}>
+                        <CloseIcon fontSize="small" sx={{ color: theme.palette.primary.main }} />
                     </IconButton>
                 }
                 sx={{
                     fontSize: 15,
                     bgcolor: '#141414',
-                    color: '#FF4D00',
+                    color: theme.palette.primary.main,
                     '& .MuiAlert-icon': {
-                        color: '#FF4D00',
+                        color: theme.palette.primary.main,
                     },
                 }}
             >

@@ -1,32 +1,51 @@
 "use client";
-
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useRef } from 'react';
 import { Container, Paper, Typography, Button, Grid } from '@mui/material';
-import customAxios from '@/service/middleware'; // Certifique-se de que este axios personalizado está configurado corretamente
+import customAxios from '@/service/middleware';
 import { isLoggedIn } from '@/utils/auth';
 import { useRouter } from 'next/navigation';
 
 const OrderList = () => {
     const [orders, setOrders] = useState([]);
+    const [audioLoaded, setAudioLoaded] = useState(false);
     const router = useRouter();
+    const audioRef = useRef(null);
 
     useEffect(() => {
         if (!isLoggedIn()) {
-            router.push('/');
+            // router.push('/');
+            console.log("213")
         } else {
             fetchOrders();
 
-            const eventSource = new EventSource(`${process.env.NEXT_PUBLIC_BASE_URL}/events`);
+            // Carrega o áudio quando o componente é montado
+            const audio = new Audio('/audio-newOrder.mp3');
+            audioRef.current = audio;
+
+            audio.oncanplaythrough = () => {
+                setAudioLoaded(true);
+            };
+
+            // Conecta ao Server-Sent Events
+            const eventSource = new EventSource(`${process.env.NEXT_PUBLIC_BASE_URL}/events/admin`);
             eventSource.onmessage = (event) => {
                 const newOrder = JSON.parse(event.data);
                 setOrders((prevOrders) => [...prevOrders, newOrder]);
+                handlePlaySound()
+                if (audioLoaded) {
+                    audioRef.current.play().catch((error) => {
+                        console.error('Erro ao tocar o som de notificação:', error);
+                    });
+                } else {
+                    console.error('Áudio não carregado corretamente');
+                }
             };
 
             return () => {
                 eventSource.close();
             };
         }
-    }, [router]);
+    }, [router, audioLoaded]);
 
     const fetchOrders = async () => {
         const accessToken = sessionStorage.getItem("accessToken");
@@ -52,6 +71,16 @@ const OrderList = () => {
             );
         } catch (error) {
             console.error('Error updating order status:', error);
+        }
+    };
+
+    const handlePlaySound = () => {
+        if (audioLoaded && audioRef.current) {
+            audioRef.current.play().catch((error) => {
+                console.error('Erro ao tocar o som manualmente:', error);
+            });
+        } else {
+            console.error('Áudio não está carregado ainda.');
         }
     };
 
@@ -100,6 +129,14 @@ const OrderList = () => {
                     </Grid>
                 </Paper>
             ))}
+            <Button 
+                variant="contained" 
+                color="secondary" 
+                onClick={handlePlaySound}
+                disabled={!audioLoaded}
+            >
+                Test Notification Sound
+            </Button>
         </Container>
     );
 };

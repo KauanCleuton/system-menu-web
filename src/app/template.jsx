@@ -10,23 +10,24 @@ import Header from '@/components/Header';
 import { isLoggedIn } from '@/utils/auth';
 import theme from '@/theme';
 import store from '@/store';
-import SnackBar from '@/components/SnackBar';
 import Footer from '@/components/Footer';
+import SnackBar from '@/components/SnackBar';
 
 export default function Template({ children, pageProps }) {
+  console.log(pageProps)
   const Session = () => {
     const dispatch = useDispatch();
     const alert = useSelector((state) => state.alert);
     useEffect(() => {
-      if(!isLoggedIn()) {
-        sessionStorage.removeItem("accessToken")
-        sessionStorage.removeItem("refreshToken")
-      }
       dispatch({ type: SET_LOGIN_DATA });
-      dispatch({ type: SET_ALERT, message: 'Seja Bem-vindo!', severity: "success", type: "user" });
     }, []);
     return (
       <SnackBar
+        open={alert.open}
+        onClose={() => dispatch({ type: CLOSE_ALERT })}
+        message={alert.message}
+        severity={alert.severity}
+        type={alert.type}
       />
     );
   };

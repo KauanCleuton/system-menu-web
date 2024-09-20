@@ -50,13 +50,14 @@ const AuthLogin = ({ modal, setMode }) => {
 
       const response = await login(formattedValues);
       const { accessToken, refreshToken, role, message } = response.data;
+      console.log(message)
       sessionStorage.setItem("accessToken", accessToken);
       sessionStorage.setItem("refreshToken", refreshToken);
       sessionStorage.setItem("role", role)
       console.log(response.data, '11')
       if (role === "ADMIN") {
         router.push("/admin");
-        dispatch(showAlert(message, "success", "user"))
+        dispatch({ type: SET_ALERT, message: message, severity: "success", type: "user" })
       }
       console.log(response, 123232939239291392n)
       dispatch({ type: SET_ALERT, message: message, severity: "success", type: "user" })
@@ -66,7 +67,7 @@ const AuthLogin = ({ modal, setMode }) => {
       }
       closeModal();
     } catch (error) {
-      dispatch(showAlert(error.message, "error", "key"))
+      dispatch({ type: SET_ALERT, message: 'Erro ao fazer login! Tente Novamente', severity: "error", type: "user" })
       console.error("Erro ao fazer login!", error);
     } finally {
       setSubmitting(false);

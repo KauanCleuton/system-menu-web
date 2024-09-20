@@ -5,7 +5,7 @@ import { Formik, Form, ErrorMessage } from "formik";
 import ReactInputMask from 'react-input-mask';
 import * as Yup from 'yup';
 import { login, Signup } from '@/service/auth.service';
-import { showAlert } from '@/store/actions';
+import { SET_ALERT, showAlert } from '@/store/actions';
 import { useDispatch } from 'react-redux';
 
 const numberMask = '(99) 99999-9999';
@@ -29,9 +29,9 @@ const AuthRegister = ({ setMode }) => {
             const response = await Signup(formattedValues);
             console.log(response.data);
             setMode("login");
-            dispatch(showAlert(response.data.message, "success", "user"))
+            dispatch({ type: SET_ALERT, message: 'Usuário Cadastrado!', severity: "success", type: "user" })
         } catch (error) {
-            dispatch(showAlert(error.message, "error", "key"))
+            dispatch({ type: SET_ALERT, message: 'Erro ao cadastrar usuário! Tente novamente', severity: "error", type: "user" })
             console.error("Erro ao registrar usuário!", error);
         } finally {
             setSubmitting(false);

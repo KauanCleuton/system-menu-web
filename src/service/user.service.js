@@ -2,10 +2,6 @@ import customAxios from "./middleware";
 import ServiceBase from "./service.base";
 
 
-class UserSv extends ServiceBase {
-
-}
-
 class UserNoAuthSv extends ServiceBase {
     constructor() {
         super("user")
@@ -21,7 +17,4 @@ class UserNoAuthSv extends ServiceBase {
 
 
 
-export default {
-    UserSv,
-    UserNoAuthSv
-}
+export default UserNoAuthSv

@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { AppBar, Toolbar, IconButton, Grid, Box, Container, Menu, MenuItem, Avatar, useScrollTrigger, Modal, Typography } from '@mui/material';
+import { AppBar, Toolbar, IconButton, Grid, Box, Container, Menu, MenuItem, Avatar, useScrollTrigger, Modal, Typography, useTheme } from '@mui/material';
 import { useDispatch, useSelector } from 'react-redux';
 import BadgeCart from '../BadgeCart';
 import { usePathname, useRouter } from 'next/navigation';
@@ -14,6 +14,7 @@ import UserMenu from '../MenuProfile';
 import SnackBar from '../SnackBar';
 
 const Header = () => {
+    const theme = useTheme()
     const totalItems = useSelector(state => state.cart.totalItems);
     const path = usePathname();
     const trigger = useScrollTrigger({ disableHysteresis: true, threshold: 0 });
@@ -97,7 +98,7 @@ const router = useRouter()
                                             }}
                                         >
                                             <Image
-                                                src="/img/logo.svg"
+                                                src={theme.palette.primary.logo}
                                                 alt="Logo do Site"
                                                 layout='fill'
                                                 style={{ objectFit: "cover" }}
