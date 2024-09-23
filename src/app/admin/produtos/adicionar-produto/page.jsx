@@ -1,58 +1,71 @@
 "use client";
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { Formik, Form, Field, ErrorMessage } from 'formik';
 import * as Yup from 'yup';
 import InputMask from 'react-input-mask';
-import { TextField, Button, Grid, FormControl, FormHelperText, Typography, Box, InputAdornment, IconButton, useTheme, Autocomplete } from '@mui/material';
+import { TextField, Button, Grid, FormControl, FormHelperText, Typography, Box, useTheme, Autocomplete } from '@mui/material';
 import Link from 'next/link';
-import { Visibility, VisibilityOff } from '@mui/icons-material';
 import { useDispatch } from 'react-redux';
-import AdminService from '@/service/admin.service';
-import { useRouter } from 'next/navigation';
-import { SET_ALERT } from '@/store/actions';
-import Image from 'next/image';
 import ProductsSv from '@/service/productsAdmin.service';
+import Image from 'next/image';
+import CategoryService from '@/service/categories.service';
+import { SET_ALERT } from '@/store/actions';
+import { useRouter } from 'next/navigation';
+import Loading from '@/components/Loading';
 
-// Validação com Yup
+
 const validationSchema = Yup.object({
     category_id: Yup.string().required('Categoria é obrigatória'),
     title: Yup.string().required('Título é obrigatório'),
     description: Yup.string().required('Descrição é obrigatória'),
     price: Yup.number().required('Preço é obrigatório').min(0, 'Preço deve ser maior que 0'),
-    file_url: Yup.string().required('Arquivo é obrigatório'),
+    file_url: Yup.string().nullable(),
 });
 
-const categories = [
-    { id: '1', name: 'Categoria 1' },
-    { id: '2', name: 'Categoria 2' },
-    { id: '3', name: 'Categoria 3' },
-];
-
-const ProductSv = new ProductsSv()
-
+const ProductSv = new ProductsSv();
+const CategorySv = new CategoryService()
 const AddNewAdmin = () => {
+    const [loading, setLoading] = useState(false)
     const theme = useTheme();
-    const router = useRouter();
     const dispatch = useDispatch();
+    const router = useRouter()
     const [fileBase64, setFileBase64] = useState('');
-
+    const [categories, setCategories] = useState([])
     const handleSubmit = async (values) => {
         const newValues = {
             ...values,
-            file_url: fileBase64,
+            file_url: fileBase64.split(",")[1],
         };
+        console.log(newValues, '293192392');
         try {
+            setLoading(true)
             const response = await ProductSv.postCreateNewProduct(newValues)
-            console.log(response.message);
-            dispatch({ type: SET_ALERT, message: response.message, severity: 'success', type: 'category' });
+            dispatch({ type: SET_ALERT, message: 'Produto adicionado com sucesso!', severity: 'success', type: 'category' });
             setTimeout(() => {
-                router.push('/admin/administradores');
+                router.push('/admin/produtos');
             }, 3000);
         } catch (error) {
             console.error('Error ao criar novo administrador!', error);
-            dispatch({ type: SET_ALERT, message: error.message, severity: 'error', type: 'category' });
+            dispatch({ type: SET_ALERT, message: 'Erro ao adicionar novo produto!', severity: 'error', type: 'category' });
+        }
+        finally {
+            setLoading(false)
         }
     };
+
+    const getData = async () => {
+        try {
+            const category = await CategorySv.getAllCategories()
+            setCategories(category)
+            console.log(category, '9239123929239')
+        } catch (error) {
+            console.error(error)
+        }
+    } 
+
+    useEffect(() => {
+        getData()
+    }, [])
 
     const handleFileChange = (event) => {
         const file = event.target.files[0];
@@ -65,11 +78,8 @@ const AddNewAdmin = () => {
         }
     };
 
-    return (
-        <Box sx={{
-            width: '100%',
-            height: 'auto'
-        }}>
+    return loading ? <Loading /> : (
+        <Box sx={{ width: '100%', height: 'auto' }}>
             <Grid container spacing={2} direction='column' py={1}>
                 <Grid item xs={12}>
                     <Typography
@@ -83,23 +93,18 @@ const AddNewAdmin = () => {
                         Adicionar Novo Administrador
                     </Typography>
                 </Grid>
-                <Grid item xs={12} >
-                    <Box sx={{
-                        width: '100%',
-                        display: 'flex',
-                        justifyContent: 'center'
-                    }}>
-                        <Box sx={{
-                            position: 'relative',
-                            width: 200,
-                            height: 200,
-                            borderRadius: '8px',
-                            boxShadow: 1,
-                            // bgcolor: '#141414',
-                        }}>
-                            <Image alt='Imagem do Produto' src={fileBase64} layout='fill' style={{
-                                objectFit: 'contain'
-                            }} />
+                <Grid item xs={12}>
+                    <Box sx={{ width: '100%', display: 'flex', justifyContent: 'center' }}>
+                        <Box
+                            sx={{
+                                position: 'relative',
+                                width: 200,
+                                height: 200,
+                                borderRadius: '8px',
+                                boxShadow: 1,
+                            }}
+                        >
+                            <Image alt='Imagem do Produto' src={fileBase64} layout='fill' style={{ objectFit: 'contain' }} />
                         </Box>
                     </Box>
                 </Grid>
@@ -114,7 +119,7 @@ const AddNewAdmin = () => {
                         {({ handleChange, handleBlur, values, touched, errors, setFieldValue }) => (
                             <Form>
                                 <Grid container spacing={3}>
-                                    {/* Categoria */}
+                                    {/* Upload de Arquivo */}
                                     <Grid item xs={12}>
                                         <FormControl fullWidth>
                                             <TextField
@@ -123,7 +128,6 @@ const AddNewAdmin = () => {
                                                 margin="normal"
                                                 fullWidth
                                                 onChange={handleFileChange}
-                                                error={touched.file_url && Boolean(errors.file_url)}
                                                 helperText={<ErrorMessage name="file_url" component={FormHelperText} />}
                                                 sx={{
                                                     "& .MuiInputBase-input": { color: '#000' },
@@ -133,15 +137,18 @@ const AddNewAdmin = () => {
                                             />
                                         </FormControl>
                                     </Grid>
+                                    {/* Categoria */}
                                     <Grid item xs={12} lg={6} md={6} sm={12}>
                                         <FormControl fullWidth>
                                             <Field name="category_id">
                                                 {({ field }) => (
                                                     <Autocomplete
-                                                        value={categories.find(option => option.id === field.value) || null}
+                                                        value={categories.find(option => option.idCategory === field.value) || null}
                                                         options={categories}
                                                         getOptionLabel={(option) => option.name}
-                                                        onChange={(event, value) => setFieldValue('category_id', value?.id || '')}
+                                                        onChange={(event, value) => {
+                                                            setFieldValue('category_id', value ? value.idCategory : '');
+                                                        }}
                                                         renderInput={(params) => (
                                                             <TextField
                                                                 {...params}
@@ -151,19 +158,34 @@ const AddNewAdmin = () => {
                                                                 error={touched.category_id && Boolean(errors.category_id)}
                                                                 helperText={<ErrorMessage name="category_id" component={FormHelperText} />}
                                                                 sx={{
-                                                                    "& .MuiInputBase-input": { color: '#000' },
-                                                                    "& .MuiFormLabel-root": { color: '#000' },
+                                                                    "& .MuiInputBase-input": { color: theme.palette.primary.main },
+                                                                    "& .MuiFormLabel-root": { color: theme.palette.primary.main },
                                                                     "& .MuiFormHelperText-root": { color: '#d32f2f' },
                                                                 }}
                                                             />
                                                         )}
+                                                        renderOption={(props, option) => (
+                                                            <Box {...props} key={option.idCategory}>
+                                                                <Typography color={theme.palette.primary.main}>
+                                                                    {option.name}
+                                                                </Typography>
+                                                            </Box>
+                                                        )}
+                                                        sx={{
+                                                            '& .MuiAutocomplete-option': {
+                                                                backgroundColor: '#fff',
+                                                                color: theme.palette.primary.main,
+                                                            },
+                                                            '& .MuiAutocomplete-option.Mui-focused': {
+                                                                backgroundColor: '#ec500d',
+                                                                color: '#fff',
+                                                            },
+                                                        }}
                                                     />
                                                 )}
                                             </Field>
-
                                         </FormControl>
                                     </Grid>
-
                                     {/* Título */}
                                     <Grid item xs={12} lg={6} md={6} sm={12}>
                                         <FormControl fullWidth>
@@ -178,8 +200,8 @@ const AddNewAdmin = () => {
                                                         error={touched.title && Boolean(errors.title)}
                                                         helperText={<ErrorMessage name="title" component={FormHelperText} />}
                                                         sx={{
-                                                            "& .MuiInputBase-input": { color: '#000' },
-                                                            "& .MuiFormLabel-root": { color: '#000' },
+                                                            "& .MuiInputBase-input": { color: theme.palette.primary.main },
+                                                            "& .MuiFormLabel-root": { color: theme.palette.primary.main },
                                                             "& .MuiFormHelperText-root": { color: '#d32f2f' },
                                                         }}
                                                     />
@@ -187,7 +209,6 @@ const AddNewAdmin = () => {
                                             </Field>
                                         </FormControl>
                                     </Grid>
-
                                     {/* Descrição */}
                                     <Grid item xs={12} lg={6} md={6} sm={12}>
                                         <FormControl fullWidth>
@@ -202,8 +223,8 @@ const AddNewAdmin = () => {
                                                         error={touched.description && Boolean(errors.description)}
                                                         helperText={<ErrorMessage name="description" component={FormHelperText} />}
                                                         sx={{
-                                                            "& .MuiInputBase-input": { color: '#000' },
-                                                            "& .MuiFormLabel-root": { color: '#000' },
+                                                            "& .MuiInputBase-input": { color: theme.palette.primary.main },
+                                                            "& .MuiFormLabel-root": { color: theme.palette.primary.main },
                                                             "& .MuiFormHelperText-root": { color: '#d32f2f' },
                                                         }}
                                                     />
@@ -211,7 +232,6 @@ const AddNewAdmin = () => {
                                             </Field>
                                         </FormControl>
                                     </Grid>
-
                                     {/* Preço */}
                                     <Grid item xs={12} lg={6} md={6} sm={12}>
                                         <FormControl fullWidth>
@@ -227,8 +247,8 @@ const AddNewAdmin = () => {
                                                         error={touched.price && Boolean(errors.price)}
                                                         helperText={<ErrorMessage name="price" component={FormHelperText} />}
                                                         sx={{
-                                                            "& .MuiInputBase-input": { color: '#000' },
-                                                            "& .MuiFormLabel-root": { color: '#000' },
+                                                            "& .MuiInputBase-input": { color: theme.palette.primary.main },
+                                                            "& .MuiFormLabel-root": { color: theme.palette.primary.main },
                                                             "& .MuiFormHelperText-root": { color: '#d32f2f' },
                                                         }}
                                                     />
@@ -236,10 +256,6 @@ const AddNewAdmin = () => {
                                             </Field>
                                         </FormControl>
                                     </Grid>
-
-                                    {/* Upload de Arquivo */}
-
-
                                     {/* Botão de Enviar */}
                                     <Grid item xs={12}>
                                         <Box
@@ -247,49 +263,25 @@ const AddNewAdmin = () => {
                                                 width: '100%',
                                                 display: 'flex',
                                                 justifyContent: 'space-between',
+                                                flexDirection: "row-reverse",
                                             }}
                                         >
                                             <Button
                                                 variant="contained"
-                                                LinkComponent={Link}
-                                                href="/admin/administradores"
-                                                sx={{
-                                                    bgcolor: '#ec500d',
-                                                    borderRadius: '5px',
-                                                    textTransform: 'inherit',
-                                                    fontSize: '18px',
-                                                    fontWeight: 400,
-                                                    color: '#fff',
-                                                    border: `1px solid #FF4D00`,
-                                                    ':hover': {
-                                                        bgcolor: 'transparent',
-                                                        color: '#FF4D00',
-                                                        border: `1px solid #FF4D00`,
-                                                    },
-                                                }}
-                                            >
-                                                Voltar
-                                            </Button>
-                                            <Button
+                                                color="primary"
                                                 type="submit"
-                                                variant="contained"
                                                 sx={{
-                                                    bgcolor: '#ec500d',
-                                                    borderRadius: '5px',
-                                                    textTransform: 'inherit',
-                                                    fontSize: '18px',
-                                                    fontWeight: 400,
-                                                    color: '#fff',
-                                                    border: `1px solid #FF4D00`,
-                                                    ':hover': {
-                                                        bgcolor: 'transparent',
-                                                        color: '#FF4D00',
-                                                        border: `1px solid #FF4D00`,
+                                                    backgroundColor: theme.palette.primary.main,
+                                                    '&:hover': {
+                                                        backgroundColor: theme.palette.primary.dark,
                                                     },
                                                 }}
                                             >
                                                 Adicionar
                                             </Button>
+                                            <Link href='/admin/produtos' passHref>
+                                                <Button variant="outlined">Voltar</Button>
+                                            </Link>
                                         </Box>
                                     </Grid>
                                 </Grid>

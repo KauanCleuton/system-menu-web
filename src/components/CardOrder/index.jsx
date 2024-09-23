@@ -2,9 +2,9 @@ import React from 'react';
 import { Grid, Typography, Button, Box, useTheme } from "@mui/material";
 import RouteIcon from '@mui/icons-material/Route'; // ícone de rota
 
-const CardOrder = ({ data, handleRouterOrder }) => {
+const CardOrder = ({ data, handleRouterOrder, setData }) => {
     const theme = useTheme()
-    const { User, address, total_price, status, created_at} = data;
+    const { User, address, total_price, status, created_at, phone} = data;
     console.log(data, '921391239219')
 
     return (
@@ -41,7 +41,13 @@ const CardOrder = ({ data, handleRouterOrder }) => {
                     <Button
                         variant="contained"
                         color="primary"
-                        onClick={() => handleRouterOrder()}
+                        onClick={() => {
+                            setData({
+                                name: User.name,
+                                phone: phone
+                            })
+                            handleRouterOrder()
+                        }}
                         startIcon={<RouteIcon />}
                     >
                         Finalizar Pedido

@@ -37,15 +37,7 @@ const Dashboard = () => {
         try {
             setLoading(true);
             const response = await OrdSv.getOrder();
-
-            if (response.length > 0) {
-                const { name, phone } = response[0];
-                setData({
-                    name: name || data.name,
-                    phone: phone || data.phone
-                });
-            }
-
+            console.log(response.data, '12939292')
             setOrders(response);
         } catch (error) {
             console.error('Error fetching orders:', error);
@@ -56,6 +48,7 @@ const Dashboard = () => {
     console.log(orders, '21312939219321923992')
 
     const handleRouterOrder = async (id) => {
+        
         try {
             setLoading(true);
             const response = await OrdSv.putRouterOrder(id, data);
@@ -68,6 +61,7 @@ const Dashboard = () => {
             fetchOrders()
         }
     };
+
 
     return (
         <Box sx={{ height: '900px', overflow: 'auto', width: '100vw', py: 2 }}>
@@ -84,7 +78,7 @@ const Dashboard = () => {
                             :
                             orders?.map((order, index) => (
                                 <Grid item xs={12} key={index}>
-                                    <CardOrder data={order} handleRouterOrder={() => handleRouterOrder(order.idPedidos)} />
+                                    <CardOrder setData={setData} data={order} handleRouterOrder={() => handleRouterOrder(order.idPedidos)} />
                                 </Grid>
                             ))
                         }

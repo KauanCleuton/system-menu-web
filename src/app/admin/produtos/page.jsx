@@ -1,20 +1,54 @@
 "use client";
 import Loading from "@/app/loading";
 import Paginator from "@/components/Paginator";
+import TableProducts from "@/components/TableProducts";
 import TableUsersByRole from "@/components/TableUsersByRole";
 import AdminService from "@/service/admin.service";
+import ProductsSv from "@/service/productsAdmin.service";
 import { SET_ALERT } from "@/store/actions";
-import { AdminPanelSettings, InventoryOutlined, PersonAddOutlined, PersonSearchOutlined } from "@mui/icons-material";
+import { AdminPanelSettings, Inventory, PersonAddOutlined, PersonSearchOutlined } from "@mui/icons-material";
 import { Box, Button, Divider, Grid, Paper, TextField, Typography, useTheme } from "@mui/material";
 import Link from "next/link";
 import { useEffect, useState } from "react";
 import { useDispatch } from "react-redux";
 
-
+const ProductSv = new ProductsSv()
 const Produtos = () => {
     const theme = useTheme()
     const [data, setData] = useState([])
     const [loading, setLoading] = useState(false)
+    const limit = 10;
+    const [page, setPage] = useState(1);
+    const dispatch = useDispatch()
+    const getData = async () => {
+        try {
+            setLoading(true)
+            const produtos = await ProductSv.getAllProducts()
+            setData(produtos)
+            console.log(produtos)
+            dispatch({type: SET_ALERT, message: produtos.length > 0 ? produtos.length : produtos.message, severity: 'success', type: 'category'})
+        } catch (error) {
+            console.error("Erro ao buscar produtos", error)
+        }
+        finally {
+            setLoading(false)
+        }
+    }
+ 
+    const handleToggle = async (id) => {
+        try {
+          const response = await ProductSv.patchProductsById(id);
+          dispatch({type: SET_ALERT, message: response.message, severity: 'success', type: 'user'})
+        } catch (error) {
+          console.error('Erro ao atualizar a visibilidade do produto', error);
+        }
+      };
+    
+
+    useEffect(() => {
+        getData()
+    }, [])
+
     return (
         <Box sx={{
             width: '100%',
@@ -80,7 +114,7 @@ const Produtos = () => {
                                     }}
                                 >
                                     Buscar
-                                    <InventoryOutlined sx={{ ml: 1, width: 20, height: 20 }} />
+                                    <Inventory sx={{ ml: 1, width: 20, height: 20 }} />
                                 </Button>
                                 <Button
                                     variant="contained"
@@ -99,8 +133,8 @@ const Produtos = () => {
                                         },
                                     }}
                                 >
-                                    Novo Admin
-                                    <InventoryOutlined sx={{ ml: 1, width: 20, height: 20 }} />
+                                    Novo Produto
+                                    <Inventory sx={{ ml: 1, width: 20, height: 20 }} />
                                 </Button>
                             </Box>
                         </Grid>
@@ -120,7 +154,7 @@ const Produtos = () => {
                                         borderRadius: "6px 6px 0 0"
                                     }} >
                                         <Grid container alignItems={"center"} justifyContent="space-between">
-                                            <Grid item sx={{ display: { lg: 'block', md: 'block', sm: 'none', xs: 'none' } }} >
+                                            {/* <Grid item sx={{ display: { lg: 'block', md: 'block', sm: 'none', xs: 'none' } }} >
                                                 <Box sx={{
                                                     width: "100%",
                                                     display: "flex",
@@ -136,8 +170,8 @@ const Produtos = () => {
                                                         ID
                                                     </Typography>
                                                 </Box>
-                                            </Grid>
-                                            <Grid item >
+                                            </Grid> */}
+                                            <Grid item xs={2} lg={2} md={2} sm={2} >
                                                 <Box sx={{
                                                     width: "100%",
                                                     display: "flex",
@@ -154,7 +188,7 @@ const Produtos = () => {
                                                     </Typography>
                                                 </Box>
                                             </Grid>
-                                            <Grid item >
+                                            <Grid item xs={2} lg={2} md={2} sm={2} >
                                                 <Box sx={{
                                                     width: "100%",
                                                     display: "flex",
@@ -171,7 +205,7 @@ const Produtos = () => {
                                                     </Typography>
                                                 </Box>
                                             </Grid>
-                                            <Grid item >
+                                            <Grid item xs={2} lg={2} md={2} sm={2} >
                                                 <Box sx={{
                                                     width: "100%",
                                                     display: "flex",
@@ -188,7 +222,7 @@ const Produtos = () => {
                                                     </Typography>
                                                 </Box>
                                             </Grid>
-                                            <Grid item >
+                                            <Grid item xs={2} lg={2} md={2} sm={2} >
                                                 <Box sx={{
                                                     width: "100%",
                                                     display: "flex",
@@ -205,7 +239,7 @@ const Produtos = () => {
                                                     </Typography>
                                                 </Box>
                                             </Grid>
-                                            <Grid item >
+                                            <Grid item xs={2} lg={2} md={2} sm={2} >
                                                 <Box sx={{
                                                     width: "100%",
                                                     display: "flex",
@@ -222,7 +256,7 @@ const Produtos = () => {
                                                     </Typography>
                                                 </Box>
                                             </Grid>
-                                            <Grid item >
+                                            <Grid item xs={2} lg={2} md={2} sm={2} >
                                                 <Box sx={{
                                                     width: "100%",
                                                     display: "flex",
@@ -260,7 +294,7 @@ const Produtos = () => {
                                         {data.length > 0 && (
                                             data.slice((page - 1) * limit, page * limit).map((item, index) => (
                                                 <Box key={index}  >
-                                                    <TableUsersByRole data={item} onAdminOrUserAction={handleBackAdminById} onDelete={handleDeleteAdminById} />
+                                                    <TableProducts data={item} toggleVisible={handleToggle} />
                                                     {index < data.slice((page - 1) * limit, page * limit).length - 1 && (
                                                         <Divider sx={{ borderColor: "#e7e7e7", borderBottomWidth: 1 }} />
                                                     )}
