@@ -29,9 +29,9 @@ const AuthRegister = ({ setMode }) => {
             const response = await Signup(formattedValues);
             console.log(response.data);
             setMode("login");
-            dispatch({ type: SET_ALERT, message: 'Usuário Cadastrado!', severity: "success", type: "user" })
+            dispatch({ type: SET_ALERT, message: 'Usuário Cadastrado!', severity: "success", alertType: "user" })
         } catch (error) {
-            dispatch({ type: SET_ALERT, message: 'Erro ao cadastrar usuário! Tente novamente', severity: "error", type: "user" })
+            dispatch({ type: SET_ALERT, message: 'Erro ao cadastrar usuário! Tente novamente', severity: "error", alertType: "user" })
             console.error("Erro ao registrar usuário!", error);
         } finally {
             setSubmitting(false);

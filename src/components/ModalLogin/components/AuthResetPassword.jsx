@@ -4,15 +4,27 @@ import { MailOutline } from "@mui/icons-material";
 import customAxios from "@/service/middleware";
 import { showAlert } from "@/store/actions";
 import { useDispatch } from "react-redux";
+import { ForgotPassword } from "@/service/auth.service";
 
 const AuthForgotPassword = ({ setMode, setPhone }) => {
-  const [phoneForgot, setPhoneForgot] = useState("");
+  const [phoneForgot, setPhoneForgot] = useState({
+    phone: ''
+  });
   const dispatch = useDispatch();
+
+  const formatPhoneNumber = (phone) => {
+    return phone.replace(/\D/g, '');
+};
+
 
   const handleSubmit = async (event) => {
     event.preventDefault();
+    console.log(phoneForgot)
+    const phoneUser = {
+      phone: formatPhoneNumber(phoneForgot.phone)
+    }
     try {
-      const response = await customAxios.post('/forgotPassword', { phone: phoneForgot });
+      const response = await ForgotPassword(phoneUser)
       console.log(response.data);
       if (response.data) {
         dispatch(showAlert(response.data.message, "success", "user"));
@@ -33,9 +45,9 @@ const AuthForgotPassword = ({ setMode, setPhone }) => {
           autoComplete="phone"
           autoFocus
           placeholder="Número de Telefone"
-          value={phoneForgot}
+          value={phoneForgot.phone}
           onChange={(e) => {
-            setPhoneForgot(e.target.value);
+            setPhoneForgot((state) => ({...state, phone: e.target.value}));
             setPhone(e.target.value);
           }}
           startAdornment={

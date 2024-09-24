@@ -27,7 +27,7 @@ const Administradores = () => {
             const response = await AdminSv.getAllAdmins()
             console.log(response)
             setData(response)
-            dispatch({ type: SET_ALERT, message: `${response.length} administradores cadastrados!` })
+            dispatch({ type: SET_ALERT, message: `${response.length} administradores cadastrados!`, alertType: 'admin' })
         } catch (error) {
             console.error("Error ao buscar administradores", error)
         }
@@ -43,7 +43,7 @@ const Administradores = () => {
                 type: SET_ALERT,
                 message: response.message,
                 severity: 'success',
-                type: 'user'
+                alertType: 'admin'
             })
         } catch (error) {
             console.error("Erro ao remover papel de administrador.", error)
@@ -51,7 +51,7 @@ const Administradores = () => {
                 type: SET_ALERT,
                 message: error.message || 'Erro ao remover papel de administrador.',
                 severity: 'error',
-                type: 'user'
+                alertType: 'admin'
             })
         }
         finally {
@@ -67,7 +67,7 @@ const Administradores = () => {
                 type: SET_ALERT,
                 message: response.message,
                 severity: 'success',
-                type: 'user'
+                alertType: 'admin'
             })
         } catch (error) {
             console.error("Erro ao deletar administrador.", error)
@@ -75,7 +75,7 @@ const Administradores = () => {
                 type: SET_ALERT,
                 message: error.message || 'Erro ao deletar administrador.',
                 severity: 'error',
-                type: 'user'
+                alertType: 'admin'
             })
         }
         finally {

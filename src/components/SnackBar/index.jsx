@@ -10,7 +10,7 @@ import LockOpenIcon from '@mui/icons-material/LockOpen';
 import KeyIcon from '@mui/icons-material/Key'
 import { useDispatch, useSelector } from 'react-redux';
 import { CLOSE_ALERT, hideAlert } from '@/store/actions';
-import { CategoryOutlined } from '@mui/icons-material';
+import { AdminPanelSettings, CategoryOutlined, Inventory2Outlined } from '@mui/icons-material';
 import { useTheme } from '@mui/material';
 
 const SnackBar = ({ open, onClose, message, severity, type }) => {
@@ -22,6 +22,10 @@ const SnackBar = ({ open, onClose, message, severity, type }) => {
                 return <PersonIcon sx={{ color: theme.palette.primary.main }} />;
             case 'key':
                 return <KeyIcon sx={{ color: theme.palette.primary.main }} />;
+            case 'admin':
+                return <AdminPanelSettings sx={{ color: theme.palette.primary.main }} />;
+            case 'product':
+                return <Inventory2Outlined sx={{ color: theme.palette.primary.main }} />;
             case 'category':
                 return <CategoryOutlined sx={{ color: theme.palette.primary.main }} />;
             case 'file':
@@ -36,10 +40,10 @@ const SnackBar = ({ open, onClose, message, severity, type }) => {
     };
 
     return (
-        <Snackbar 
-        open={open} 
-        autoHideDuration={6000} 
-        onClose={onClose}>
+        <Snackbar
+            open={open}
+            autoHideDuration={6000}
+            onClose={onClose}>
             <Alert
                 variant='filled'
                 onClose={onClose}

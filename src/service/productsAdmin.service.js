@@ -29,7 +29,7 @@ class ProductsSv extends ServiceBase {
     deleteProductById(id) {
         return this.delete(`/product/${id}`)
     }
-    patchProductsById(id) {
+    editVisibleProductsById(id) {
         return this.patch(`/products/${id}/visibility`)
     }
     

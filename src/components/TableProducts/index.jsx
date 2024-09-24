@@ -1,6 +1,6 @@
 import { rubik } from "@/theme"
 import { Add, CloseOutlined, Delete, Edit } from "@mui/icons-material"
-import { Box, Divider, FormControlLabel, Grid, IconButton, Switch, Typography, useTheme } from "@mui/material"
+import { Box, Divider, FormControlLabel, Grid, IconButton, Switch, Typography, useMediaQuery, useTheme } from "@mui/material"
 import Image from "next/image"
 import Link from "next/link"
 
@@ -9,7 +9,7 @@ import Link from "next/link"
 
 const TableProducts = ({ data, onDelete, onAdminOrUserAction, toggleVisible }) => {
     const theme = useTheme()
-
+    const isSmallScreen = useMediaQuery(theme => theme.breakpoints.down('sm'));
     const formatPhoneNumber = (phoneNumber) => {
         const cleaned = ('' + phoneNumber).replace(/\D/g, '');
         const match = cleaned.match(/^(\d{2})(\d{5})(\d{4})$/);
@@ -31,8 +31,6 @@ const TableProducts = ({ data, onDelete, onAdminOrUserAction, toggleVisible }) =
                             <Typography
                                 variant="body1"
                                 sx={{
-
-                                    fontSize: { lg: '12px', xs: '10px' },
                                     fontWeight: 700,
                                     color: theme.palette.text.secondary
                                 }}
@@ -67,9 +65,13 @@ const TableProducts = ({ data, onDelete, onAdminOrUserAction, toggleVisible }) =
                             <Typography
                                 variant="body1"
                                 sx={{
-
                                     fontWeight: 700,
-                                    color: theme.palette.text.secondary
+                                    color: theme.palette.text.secondary,
+                                    wordBreak: 'break-all',      
+                                    overflowWrap: 'break-word', 
+                                    whiteSpace: 'normal',
+                                    width: '9ch',
+                                    textAlign: 'center'
                                 }}
                             >
                                 {data.title}
@@ -85,10 +87,13 @@ const TableProducts = ({ data, onDelete, onAdminOrUserAction, toggleVisible }) =
                             <Typography
                                 variant="body1"
                                 sx={{
-
-                                    fontSize: { lg: '12px', xs: '10px' },
                                     fontWeight: 700,
-                                    color: theme.palette.text.secondary
+                                    color: theme.palette.text.secondary,
+                                    wordBreak: 'break-all',      
+                                    overflowWrap: 'break-word', 
+                                    whiteSpace: 'normal',
+                                    width: '12ch',
+                                    textAlign: "center"
                                 }}
                             >
                                 {data.description}
@@ -104,8 +109,6 @@ const TableProducts = ({ data, onDelete, onAdminOrUserAction, toggleVisible }) =
                             <Typography
                                 variant="body1"
                                 sx={{
-
-                                    fontSize: { lg: '12px', xs: '10px' },
                                     fontWeight: 700,
                                     color: theme.palette.text.secondary
                                 }}
@@ -123,8 +126,6 @@ const TableProducts = ({ data, onDelete, onAdminOrUserAction, toggleVisible }) =
                             <Typography
                                 variant="body1"
                                 sx={{
-
-                                    fontSize: { lg: '12px', xs: '10px' },
                                     fontWeight: 700,
                                     color: theme.palette.text.secondary
                                 }}
@@ -138,23 +139,23 @@ const TableProducts = ({ data, onDelete, onAdminOrUserAction, toggleVisible }) =
                             <Grid item xs={4}>
                                 <IconButton LinkComponent={Link} href={`/admin/produtos/${data.idProducts}`}>
                                     <Edit color="action" sx={{
-                                        width: { lg: 25, xs: 12 }, height: { lg: 25, xs: 12 },
+                                        width: { lg: 25, xs: 20 }, height: { lg: 25, xs: 20 },
                                         color: theme.palette.background.bgAmareloPrimary
                                     }} />
                                 </IconButton>
                             </Grid>
                             <Grid item xs={4}>
-                                <IconButton onClick={() => onDelete(data.idUser)}>
+                                <IconButton onClick={() => onDelete(data.idProducts)}>
                                     <Delete color="action" sx={{
-                                        width: { lg: 25, xs: 12 },
-                                        height: { lg: 25, xs: 12 },
+                                        width: { lg: 25, xs: 20 },
+                                        height: { lg: 25, xs: 20 },
                                         color: theme.palette.error.main
                                     }} />
                                 </IconButton>
                             </Grid>
                             <Grid item xs={4}>
                                 <FormControlLabel
-                                    control={<Switch checked={data.isVisible} onChange={() => toggleVisible(data.idProducts)} />}
+                                    control={<Switch size={isSmallScreen ? 'small' : 'large'}  checked={data.isVisible} onChange={() => toggleVisible(data.idProducts)} />}
                                     label={data.isVisible ? 'Visível' : 'Invisível'}
                                 />
                             </Grid>

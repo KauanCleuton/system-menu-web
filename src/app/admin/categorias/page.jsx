@@ -48,7 +48,7 @@ const ProductCategory = () => {
                 type: SET_ALERT,
                 message: response?.message || "Categoria deletada com sucesso!",
                 severity: 'success',
-                type: 'category'
+                alertType: 'category'
             })
         } catch (error) {
             console.error("Erro ao deletar administrador.", error)
@@ -56,7 +56,7 @@ const ProductCategory = () => {
                 type: SET_ALERT,
                 message: error.message || 'Erro ao deletar administrador.',
                 severity: 'error',
-                type: 'category'
+                alertType: 'category'
             })
         }
         finally {
@@ -69,12 +69,12 @@ const ProductCategory = () => {
         try {
             const response = await CategorySv.putCategoryById(idCategory, values);
             console.log(response.message);
-            dispatch({ type: SET_ALERT, message: response.message, severity: "success", type: "category" });
+            dispatch({ type: SET_ALERT, message: response.message, severity: "success", alertType: "category" });
             setOpenModal(false)
             setLoading(true)
         } catch (error) {
             console.error("Error ao editar novo uma categoria", error);
-            dispatch({ type: SET_ALERT, message: error.message, severity: "error", type: "category" });
+            dispatch({ type: SET_ALERT, message: error.message, severity: "error", alertType: "category" });
         }
         finally {
             setLoading(false)
@@ -85,12 +85,12 @@ const ProductCategory = () => {
         try {
             const response = await CategorySv.postCreateCategory(values);
             console.log(response.message);
-            dispatch({ type: SET_ALERT, message: response.message, severity: "success", type: "category" });
+            dispatch({ type: SET_ALERT, message: response.message, severity: "success", alertType: "category" });
             setOpenModal(false)
             setLoading(true)
         } catch (error) {
             console.error("Error ao editar novo uma categoria", error);
-            dispatch({ type: SET_ALERT, message: error.message, severity: "error", type: "category" });
+            dispatch({ type: SET_ALERT, message: error.message, severity: "error", alertType: "category" });
         }
         finally {
             setLoading(false)

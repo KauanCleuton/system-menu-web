@@ -17,7 +17,8 @@ const Produtos = () => {
     const theme = useTheme()
     const [data, setData] = useState([])
     const [loading, setLoading] = useState(false)
-    const limit = 10;
+    const limit = 4;
+    const [name, setName] = useState("")
     const [page, setPage] = useState(1);
     const dispatch = useDispatch()
     const getData = async () => {
@@ -26,7 +27,7 @@ const Produtos = () => {
             const produtos = await ProductSv.getAllProducts()
             setData(produtos)
             console.log(produtos)
-            dispatch({type: SET_ALERT, message: produtos.length > 0 ? produtos.length : produtos.message, severity: 'success', type: 'category'})
+            dispatch({ type: SET_ALERT, message: produtos.length > 0 ? `${produtos.length} produtos cadastrados!` : 'Nenhum produto cadastrado!', severity: 'success', alertType: 'product' })
         } catch (error) {
             console.error("Erro ao buscar produtos", error)
         }
@@ -34,20 +35,82 @@ const Produtos = () => {
             setLoading(false)
         }
     }
- 
-    const handleToggle = async (id) => {
+
+    const toggleVisible = async (id) => {
         try {
-          const response = await ProductSv.patchProductsById(id);
-          dispatch({type: SET_ALERT, message: response.message, severity: 'success', type: 'user'})
+            setData((prevProducts) =>
+                prevProducts.map((product) =>
+                    product.idProducts === id
+                        ? { ...product, isVisible: !product.isVisible }
+                        : product
+                )
+            );
+
+            const response = await ProductSv.editVisibleProductsById(id);
+            console.log(response, '23821382183821388')
+            dispatch({
+                type: SET_ALERT,
+                message: response.isVisible ? 'Produto visível no menu' : 'Produto oculto no menu',
+                severity: 'success',
+                alertType: 'product',
+            });
         } catch (error) {
-          console.error('Erro ao atualizar a visibilidade do produto', error);
+            setData((prevProducts) =>
+                prevProducts.map((product) =>
+                    product.idProducts === id
+                        ? { ...product, isVisible: !product.isVisible }
+                        : product
+                )
+            );
+            console.error('Erro ao atualizar a visibilidade do produto', error);
         }
-      };
-    
+    };
+
 
     useEffect(() => {
         getData()
     }, [])
+
+
+    const handleSearchByName = async () => {
+        try {
+            setLoading(true)
+            const searchProduct = await ProductSv.getProductsByName(name)
+            setData(searchProduct)
+            console.log(searchProduct)
+        } catch (error) {
+            console.error(error)
+        }
+        finally {
+            setLoading(false)
+        }
+    }
+
+    const handleDeleteProductById = async (id) => {
+        try {
+            setLoading(true)
+            const response = await ProductSv.deleteProductById(id)
+            console.log(response)
+            dispatch({
+                type: SET_ALERT,
+                message: 'Produto deletado com sucesso!',
+                severity: 'success',
+                alertType: 'product'
+            })
+        } catch (error) {
+            console.error("Erro ao deletar administrador.", error)
+            dispatch({
+                type: SET_ALERT,
+                message: error.message || 'Erro ao deletar administrador.',
+                severity: 'error',
+                alertType: 'product'
+            })
+        }
+        finally {
+            setLoading(false)
+            getData()
+        }
+    }
 
     return (
         <Box sx={{
@@ -64,6 +127,7 @@ const Produtos = () => {
                                 placeholder="Buscar Admin pelo nome"
                                 variant="outlined"
                                 value={name}
+                                onChange={(e) => setName(e.target.value)}
                                 fullWidth
                                 sx={{
                                     "& .MuiInputBase-input": {
@@ -111,7 +175,9 @@ const Produtos = () => {
                                             bgcolor: "transparent",
                                             color: theme.palette.primary.main,
                                         },
+                                        px: 3
                                     }}
+                                    onClick={handleSearchByName}
                                 >
                                     Buscar
                                     <Inventory sx={{ ml: 1, width: 20, height: 20 }} />
@@ -175,7 +241,7 @@ const Produtos = () => {
                                                 <Box sx={{
                                                     width: "100%",
                                                     display: "flex",
-                                                    justifyContent: { lg: "center", xs: 'flex-start' }
+                                                    justifyContent: 'center'
                                                 }}>
                                                     <Typography variant="h5"
                                                         sx={{
@@ -260,7 +326,7 @@ const Produtos = () => {
                                                 <Box sx={{
                                                     width: "100%",
                                                     display: "flex",
-                                                    justifyContent: { lg: "center", md: 'center', sm: 'flex-end', xs: 'flex-end' }
+                                                    justifyContent: 'center'
                                                 }}>
                                                     <Typography variant="h5"
                                                         sx={{
@@ -294,7 +360,7 @@ const Produtos = () => {
                                         {data.length > 0 && (
                                             data.slice((page - 1) * limit, page * limit).map((item, index) => (
                                                 <Box key={index}  >
-                                                    <TableProducts data={item} toggleVisible={handleToggle} />
+                                                    <TableProducts data={item} toggleVisible={toggleVisible} onDelete={handleDeleteProductById} />
                                                     {index < data.slice((page - 1) * limit, page * limit).length - 1 && (
                                                         <Divider sx={{ borderColor: "#e7e7e7", borderBottomWidth: 1 }} />
                                                     )}

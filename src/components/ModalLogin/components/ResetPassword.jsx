@@ -5,6 +5,7 @@ import axios from "axios";
 import { useDispatch } from "react-redux";
 import { showAlert } from "@/store/actions";
 import customAxios from "@/service/middleware";
+import { ResetPasswordUser } from "@/service/auth.service";
 
 const ResetPassword = ({ setMode, phone }) => {
   const [newPassword, setNewPassword] = useState("");
@@ -13,7 +14,7 @@ const ResetPassword = ({ setMode, phone }) => {
   const handleSubmit = async (event) => {
     event.preventDefault();
     try {
-      const response = await customAxios.put('/resetPassword', { phone, newPassword });
+      const response = await ResetPasswordUser(newPassword)
       console.log(response.data)
       if (response.data) {
         dispatch(showAlert(response.data.message, "success", "user"))

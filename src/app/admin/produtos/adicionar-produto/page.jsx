@@ -36,11 +36,12 @@ const AddNewAdmin = () => {
             ...values,
             file_url: fileBase64.split(",")[1],
         };
+        
         console.log(newValues, '293192392');
         try {
             setLoading(true)
             const response = await ProductSv.postCreateNewProduct(newValues)
-            dispatch({ type: SET_ALERT, message: 'Produto adicionado com sucesso!', severity: 'success', type: 'category' });
+            dispatch({ type: SET_ALERT, message: 'Produto adicionado com sucesso!', severity: 'success', alertType: 'category' });
             setTimeout(() => {
                 router.push('/admin/produtos');
             }, 3000);

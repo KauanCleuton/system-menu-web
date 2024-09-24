@@ -39,13 +39,13 @@ const AddNewAdmin = () => {
         try {
             const response = await AdminSv.createNewAdmin(newValues)
             console.log(response.message)
-            dispatch({type: SET_ALERT, message: response.message, severity: "success", type: "user"})
+            dispatch({type: SET_ALERT, message: response.message, severity: "success", alertType: "admin"})
             setTimeout(() => {
                 router.push("/admin/administradores")
             }, 3000)
         } catch (error) {
             console.error("Error ao criar novo administrador!", error)
-            dispatch({type: SET_ALERT, message: error.message, severity: "error", type: "user"})
+            dispatch({type: SET_ALERT, message: error.message, severity: "error", alertType: "admin"})
         }
     }
 

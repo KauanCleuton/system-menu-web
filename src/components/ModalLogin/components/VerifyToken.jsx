@@ -3,6 +3,7 @@ import { useState, useRef } from "react";
 import customAxios from "@/service/middleware";
 import { showAlert } from "@/store/actions";
 import { useDispatch } from "react-redux";
+import { VerifyTokenUser } from "@/service/auth.service";
 
 const VerifyToken = ({ setMode }) => {
   const [token, setToken] = useState(Array(6).fill(""));
@@ -13,7 +14,7 @@ const VerifyToken = ({ setMode }) => {
     event.preventDefault();
     try {
       const tokenStr = token.join("");
-      const response = await customAxios.post('/verifyToken', { token: tokenStr });
+      const response = await VerifyTokenUser(tokenStr)
       console.log(response.data);
       if (response.data.valid) {
         setMode('resetPassword');

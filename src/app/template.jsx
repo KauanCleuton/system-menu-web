@@ -27,7 +27,7 @@ export default function Template({ children, pageProps }) {
         onClose={() => dispatch({ type: CLOSE_ALERT })}
         message={alert.message}
         severity={alert.severity}
-        type={alert.type}
+        type={alert.alertType}
       />
     );
   };

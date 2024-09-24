@@ -56,10 +56,10 @@ const Dashboard = () => {
         try {
             setLoading(true);
             const response = await OrdSv.putRouterOrder(id, newValues);
-            dispatch({ type: SET_ALERT, message: response.message, severity: "success" });
+            dispatch({ type: SET_ALERT, message: response.message, severity: "success", alertType: 'user' });
         } catch (error) {
             console.error('Error', error);
-            dispatch({ type: SET_ALERT, message: 'Erro ao finalizar pedido!', severity: "error" });
+            dispatch({ type: SET_ALERT, message: 'Erro ao finalizar pedido!', severity: "error", alertType: 'user' });
         } finally {
             setLoading(false);
             fetchOrders()
