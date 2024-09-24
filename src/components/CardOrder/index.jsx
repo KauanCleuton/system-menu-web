@@ -41,13 +41,7 @@ const CardOrder = ({ data, handleRouterOrder, setData }) => {
                     <Button
                         variant="contained"
                         color="primary"
-                        onClick={() => {
-                            setData({
-                                name: User.name,
-                                phone: phone
-                            })
-                            handleRouterOrder()
-                        }}
+                        onClick={handleRouterOrder}
                         startIcon={<RouteIcon />}
                     >
                         Finalizar Pedido

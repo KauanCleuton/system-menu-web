@@ -14,7 +14,7 @@ import { useRouter } from 'next/navigation';
 import Finalizado from '@/components/Finalizado';
 import { isLoggedIn } from '@/utils/auth';
 
-const UserSv = new userService.UserNoAuthSv();
+const UserSv = new userService();
 
 const Checkout = () => {
   const dispatch = useDispatch()

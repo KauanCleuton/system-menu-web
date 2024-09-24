@@ -47,11 +47,15 @@ const Dashboard = () => {
     };
     console.log(orders, '21312939219321923992')
 
-    const handleRouterOrder = async (id) => {
-        
+    const handleRouterOrder = async (id, name, phone) => {
+        console.log(id, name,phone) 
+        const newValues = {
+            name,
+            phone
+        }       
         try {
             setLoading(true);
-            const response = await OrdSv.putRouterOrder(id, data);
+            const response = await OrdSv.putRouterOrder(id, newValues);
             dispatch({ type: SET_ALERT, message: response.message, severity: "success" });
         } catch (error) {
             console.error('Error', error);
@@ -78,7 +82,7 @@ const Dashboard = () => {
                             :
                             orders?.map((order, index) => (
                                 <Grid item xs={12} key={index}>
-                                    <CardOrder setData={setData} data={order} handleRouterOrder={() => handleRouterOrder(order.idPedidos)} />
+                                    <CardOrder setData={setData} data={order} handleRouterOrder={() => handleRouterOrder(order.idPedidos, order.User.name, order.phone)} />
                                 </Grid>
                             ))
                         }
