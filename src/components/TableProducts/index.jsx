@@ -113,7 +113,7 @@ const TableProducts = ({ data, onDelete, onAdminOrUserAction, toggleVisible }) =
                                     color: theme.palette.text.secondary
                                 }}
                             >
-                                {parseInt(data.price).toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' })}
+                                {parseFloat(data.price).toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' })}
                             </Typography>
                         </Box>
                     </Grid>

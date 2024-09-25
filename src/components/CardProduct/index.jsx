@@ -42,7 +42,7 @@ const CardProduct = ({ data, onDelete, toggleVisible }) => {
                 </Grid>
                 <Grid item>
                     <Typography variant="body1" color='secondary' textAlign='center' >
-                        Preço: {parseInt(data.price).toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' })}
+                        Preço: {parseFloat(data.price).toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' })}
                     </Typography>
                 </Grid>
                 <Grid item>
