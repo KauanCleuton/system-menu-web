@@ -1,6 +1,6 @@
 "use client";
 import React, { useEffect, useState, useRef } from 'react';
-import { Container, Paper, Typography, Button, Grid } from '@mui/material';
+import { Container, Paper, Typography, Button, Grid, Box } from '@mui/material';
 import customAxios from '@/service/middleware';
 import { isLoggedIn } from '@/utils/auth';
 import { useRouter } from 'next/navigation';
@@ -85,59 +85,65 @@ const OrderList = () => {
     };
 
     return (
-        <Container fixed sx={{ py: 7 }}>
-            <Typography variant="h4" gutterBottom>
-                Orders
-            </Typography>
-            {orders.map((order) => (
-                <Paper key={order.id} style={{ padding: 16, marginBottom: 16 }}>
-                    <Grid container spacing={2}>
-                        <Grid item xs={12}>
-                            <Typography sx={{ color: "red" }} variant="h6">
-                                Order #{order.id}
-                            </Typography>
+        <Box sx={{
+            width: '100%',
+            height: "100%",
+            py: 3,
+        }}>
+            <Container fixed sx={{ py: 7, paddingBottom: "120px" }}>
+                <Typography variant="h4" gutterBottom>
+                    Orders
+                </Typography>
+                {orders.map((order) => (
+                    <Paper key={order.id} style={{ padding: 16, marginBottom: 16 }}>
+                        <Grid container spacing={2}>
+                            <Grid item xs={12}>
+                                <Typography sx={{ color: "red" }} variant="h6">
+                                    Order #{order.id}
+                                </Typography>
+                            </Grid>
+                            <Grid item xs={12} sm={6}>
+                                <Typography sx={{ color: "red" }}>
+                                    Title: {order.title}
+                                </Typography>
+                            </Grid>
+                            <Grid item xs={12} sm={6}>
+                                <Typography sx={{ color: "red" }}>
+                                    Total Price: ${order.total_price}
+                                </Typography>
+                            </Grid>
+                            <Grid item xs={12}>
+                                <Typography sx={{ color: "red" }}>
+                                    Observation: {order.observation}
+                                </Typography>
+                            </Grid>
+                            <Grid item xs={12}>
+                                <Typography sx={{ color: "red" }}>
+                                    Status: {order.status}
+                                </Typography>
+                            </Grid>
+                            <Grid item xs={12}>
+                                <Button
+                                    variant="contained"
+                                    color="primary"
+                                    onClick={() => updateOrderStatus(order.id, 'completed')}
+                                >
+                                    Mark as Completed
+                                </Button>
+                            </Grid>
                         </Grid>
-                        <Grid item xs={12} sm={6}>
-                            <Typography sx={{ color: "red" }}>
-                                Title: {order.title}
-                            </Typography>
-                        </Grid>
-                        <Grid item xs={12} sm={6}>
-                            <Typography sx={{ color: "red" }}>
-                                Total Price: ${order.total_price}
-                            </Typography>
-                        </Grid>
-                        <Grid item xs={12}>
-                            <Typography sx={{ color: "red" }}>
-                                Observation: {order.observation}
-                            </Typography>
-                        </Grid>
-                        <Grid item xs={12}>
-                            <Typography sx={{ color: "red" }}>
-                                Status: {order.status}
-                            </Typography>
-                        </Grid>
-                        <Grid item xs={12}>
-                            <Button
-                                variant="contained"
-                                color="primary"
-                                onClick={() => updateOrderStatus(order.id, 'completed')}
-                            >
-                                Mark as Completed
-                            </Button>
-                        </Grid>
-                    </Grid>
-                </Paper>
-            ))}
-            <Button 
-                variant="contained" 
-                color="secondary" 
-                onClick={handlePlaySound}
-                disabled={!audioLoaded}
-            >
-                Test Notification Sound
-            </Button>
-        </Container>
+                    </Paper>
+                ))}
+                <Button
+                    variant="contained"
+                    color="secondary"
+                    onClick={handlePlaySound}
+                    disabled={!audioLoaded}
+                >
+                    Test Notification Sound
+                </Button>
+            </Container>
+        </Box>
     );
 };
 

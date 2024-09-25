@@ -123,13 +123,13 @@ const MiddleSection = () => {
         <Box
             sx={{
                 width: "100vw",
-                height: "auto",
+                height: "100%",
                 display: "flex",
                 justifyContent: "center",
                 py: 2,
             }}
         >
-            <Container fixed sx={{ py: '46px'}}>
+            <Container fixed sx={{ py: '46px', paddingBottom: '60px'}}>
                 <Grid container spacing={'34px'}>
                     <Grid item xs={12} >
                         <Box sx={{

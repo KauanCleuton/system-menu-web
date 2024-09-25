@@ -70,7 +70,7 @@ const Menu = () => {
                 onClose={handleClose}
                 aria-labelledby="modal-modal-title"
                 aria-describedby="modal-modal-description"
-                sx={{ overflowY: 'scroll' }}
+                sx={{ width: "100vw" }}
             >
                 <ModalAddItemCart
                     item={selectedItem}

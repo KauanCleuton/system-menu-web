@@ -27,7 +27,7 @@ const ModalAddItemCart = () => {
     };
 
     return (
-        <Grid container justifyContent="center" alignItems="center" sx={{ minHeight: 'calc(100vh - 68px)' }}>
+        <Grid container justifyContent="center" alignItems="center" sx={{ height: "100vh" }}>
             <Grid item >
                 <AuthCard>
                     <Grid container alignItems="center" justifyContent="center" spacing={2}>

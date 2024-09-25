@@ -1,8 +1,10 @@
 "use client";
 import Loading from "@/app/loading";
+import CardProduct from "@/components/CardProduct";
 import Paginator from "@/components/Paginator";
 import TableProducts from "@/components/TableProducts";
 import TableUsersByRole from "@/components/TableUsersByRole";
+import VerticalToggleButtons from "@/components/ToggleButton";
 import AdminService from "@/service/admin.service";
 import ProductsSv from "@/service/productsAdmin.service";
 import { SET_ALERT } from "@/store/actions";
@@ -21,6 +23,12 @@ const Produtos = () => {
     const [name, setName] = useState("")
     const [page, setPage] = useState(1);
     const dispatch = useDispatch()
+    const [view, setView] = useState('list');
+
+    const handleChange = (event, nextView) => {
+        setView(nextView || view);
+    };
+
     const getData = async () => {
         try {
             setLoading(true)
@@ -206,181 +214,97 @@ const Produtos = () => {
                         </Grid>
                     </Grid>
                 </Grid>
-
+                <Grid item xs={12} >
+                    <Box sx={{
+                        width: '100%',
+                        height: '100%',
+                        display: 'flex',
+                        justifyContent: "flex-end"
+                    }}>
+                        <VerticalToggleButtons handleChange={handleChange} view={view} />
+                    </Box>
+                </Grid>
                 <Grid item xs={12}>
-                    <Grid container spacing={7}>
-                        <Grid item xs={12} >
-                            <Grid container component={Paper} elevation={1}>
-                                <Grid item xs={12}>
-                                    <Box sx={{
-                                        width: '100%',
-                                        py: 2,
-                                        px: 1,
-                                        bgcolor: theme.palette.secondary.main,
-                                        borderRadius: "6px 6px 0 0"
-                                    }} >
-                                        <Grid container alignItems={"center"} justifyContent="space-between">
-                                            {/* <Grid item sx={{ display: { lg: 'block', md: 'block', sm: 'none', xs: 'none' } }} >
-                                                <Box sx={{
-                                                    width: "100%",
-                                                    display: "flex",
-                                                    justifyContent: "center"
-                                                }}>
-                                                    <Typography variant="h5"
-                                                        sx={{
-                                                            color: theme.palette.primary.main,
-                                                            fontSize: { lg: '18px', xs: '14px' },
-                                                            fontWeight: "400",
-                                                        }}
-                                                    >
-                                                        ID
-                                                    </Typography>
-                                                </Box>
-                                            </Grid> */}
-                                            <Grid item xs={2} lg={2} md={2} sm={2} >
-                                                <Box sx={{
-                                                    width: "100%",
-                                                    display: "flex",
-                                                    justifyContent: 'center'
-                                                }}>
-                                                    <Typography variant="h5"
-                                                        sx={{
-                                                            color: theme.palette.primary.main,
-                                                            fontSize: { lg: '18px', xs: '14px' },
-                                                            fontWeight: "400",
-                                                        }}
-                                                    >
-                                                        Imagem
-                                                    </Typography>
-                                                </Box>
+                    <Grid container spacing={0} p={2}>
+                        {view === 'list' ? (
+                            <Grid item xs={12}>
+                                <Grid container component={Paper} elevation={1}>
+                                    <Grid item xs={12}>
+                                        <Box
+                                            sx={{
+                                                width: '100%',
+                                                py: 2,
+                                                px: 1,
+                                                bgcolor: theme.palette.secondary.main,
+                                                borderRadius: '6px 6px 0 0',
+                                            }}
+                                        >
+                                            <Grid container alignItems="center" justifyContent="space-between">
+                                                {['Imagem', 'Título', 'Descrição', 'Preço', 'Categoria', 'Ações'].map((header, index) => (
+                                                    <Grid key={index} item xs={2}>
+                                                        <Box sx={{ display: 'flex', justifyContent: 'center' }}>
+                                                            <Typography
+                                                                variant="h5"
+                                                                sx={{
+                                                                    color: theme.palette.primary.main,
+                                                                    fontSize: { lg: '18px', xs: '14px' },
+                                                                    fontWeight: '400',
+                                                                }}
+                                                            >
+                                                                {header}
+                                                            </Typography>
+                                                        </Box>
+                                                    </Grid>
+                                                ))}
                                             </Grid>
-                                            <Grid item xs={2} lg={2} md={2} sm={2} >
-                                                <Box sx={{
-                                                    width: "100%",
-                                                    display: "flex",
-                                                    justifyContent: "center"
-                                                }}>
-                                                    <Typography variant="h5"
-                                                        sx={{
-                                                            color: theme.palette.primary.main,
-                                                            fontSize: { lg: '18px', xs: '14px' },
-                                                            fontWeight: "400",
-                                                        }}
-                                                    >
-                                                        Título
-                                                    </Typography>
-                                                </Box>
-                                            </Grid>
-                                            <Grid item xs={2} lg={2} md={2} sm={2} >
-                                                <Box sx={{
-                                                    width: "100%",
-                                                    display: "flex",
-                                                    justifyContent: "center"
-                                                }}>
-                                                    <Typography variant="h5"
-                                                        sx={{
-                                                            color: theme.palette.primary.main,
-                                                            fontSize: { lg: '18px', xs: '14px' },
-                                                            fontWeight: "400",
-                                                        }}
-                                                    >
-                                                        Descrição
-                                                    </Typography>
-                                                </Box>
-                                            </Grid>
-                                            <Grid item xs={2} lg={2} md={2} sm={2} >
-                                                <Box sx={{
-                                                    width: "100%",
-                                                    display: "flex",
-                                                    justifyContent: "center"
-                                                }}>
-                                                    <Typography variant="h5"
-                                                        sx={{
-                                                            color: theme.palette.primary.main,
-                                                            fontSize: { lg: '18px', xs: '14px' },
-                                                            fontWeight: "400",
-                                                        }}
-                                                    >
-                                                        Preço
-                                                    </Typography>
-                                                </Box>
-                                            </Grid>
-                                            <Grid item xs={2} lg={2} md={2} sm={2} >
-                                                <Box sx={{
-                                                    width: "100%",
-                                                    display: "flex",
-                                                    justifyContent: "center"
-                                                }}>
-                                                    <Typography variant="h5"
-                                                        sx={{
-                                                            color: theme.palette.primary.main,
-                                                            fontSize: { lg: '18px', xs: '14px' },
-                                                            fontWeight: "400",
-                                                        }}
-                                                    >
-                                                        Categoria
-                                                    </Typography>
-                                                </Box>
-                                            </Grid>
-                                            <Grid item xs={2} lg={2} md={2} sm={2} >
-                                                <Box sx={{
-                                                    width: "100%",
-                                                    display: "flex",
-                                                    justifyContent: 'center'
-                                                }}>
-                                                    <Typography variant="h5"
-                                                        sx={{
-                                                            color: theme.palette.primary.main,
-                                                            fontSize: { lg: '18px', xs: '14px' },
-                                                            fontWeight: "400",
-                                                        }}
-                                                    >
-                                                        Ações
-                                                    </Typography>
-                                                </Box>
-                                            </Grid>
-                                        </Grid>
-                                    </Box>
-                                </Grid>
-
-                                {loading ? (
-                                    <Grid item xs={12} >
-                                        <Box sx={{
-                                            width: '100%',
-                                            height: '400px',
-                                            display: "flex",
-                                            justifyContent: 'center',
-                                            alignItems: 'center'
-                                        }}>
-                                            <Loading />
                                         </Box>
                                     </Grid>
-                                ) :
-                                    <Grid item xs={12} border="1px solid #000" sx={{ borderRadius: '0 0 5px 5px' }}>
-                                        {data.length > 0 && (
-                                            data.slice((page - 1) * limit, page * limit).map((item, index) => (
-                                                <Box key={index}  >
-                                                    <TableProducts data={item} toggleVisible={toggleVisible} onDelete={handleDeleteProductById} />
-                                                    {index < data.slice((page - 1) * limit, page * limit).length - 1 && (
-                                                        <Divider sx={{ borderColor: "#e7e7e7", borderBottomWidth: 1 }} />
-                                                    )}
-                                                </Box>
-                                            ))
-                                        )}
-                                    </Grid>
-                                }
+
+                                    {loading ? (
+                                        <Grid item xs={12}>
+                                            <Box sx={{ width: '100%', height: '400px', display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
+                                                <Loading />
+                                            </Box>
+                                        </Grid>
+                                    ) : (
+                                        <Grid item xs={12} sx={{ borderRadius: '0 0 5px 5px' }}>
+                                            {data.length > 0 &&
+                                                data.slice((page - 1) * limit, page * limit).map((item, index) => (
+                                                    <Box key={index}>
+                                                        <TableProducts data={item} onDelete={handleDeleteProductById} toggleVisible={toggleVisible} />
+                                                        {index < data.slice((page - 1) * limit, page * limit).length - 1 && (
+                                                            <Divider sx={{ borderColor: '#e7e7e7', borderBottomWidth: 1 }} />
+                                                        )}
+                                                    </Box>
+                                                ))}
+                                        </Grid>
+                                    )}
+                                </Grid>
                             </Grid>
-                        </Grid>
-                        <Grid item xs={12}>
+                        ) : loading ? (
+                            <Grid item xs={12}>
+                                <Box sx={{ width: '100%', height: '400px', display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
+                                    <Loading />
+                                </Box>
+                            </Grid>
+                        ) : (
+                            <Grid item xs={12}>
+                                <Grid container spacing={4}>
+                                    {data.length > 0 &&
+                                        data.slice((page - 1) * limit, page * limit).map((item, index) => (
+                                            <Grid key={index} item xs={12} sm={6} md={6} lg={4} sx={{ borderRadius: '0 0 5px 5px' }}>
+                                                <CardProduct data={item} onDelete={handleDeleteProductById} toggleVisible={toggleVisible} />
+                                            </Grid>
+                                        ))}
+                                </Grid>
+                            </Grid>
+                        )}
+
+                        <Grid item xs={12} mt={4}>
                             <Grid container>
                                 {data.length > 0 && (
                                     <Grid item xs={12}>
-                                        <Paginator
-                                            count={data.length}
-                                            limit={limit}
-                                            setPage={setPage}
-                                            page={page}
-                                        />
+                                        <Paginator count={data.length} limit={limit} setPage={setPage} page={page} />
                                     </Grid>
                                 )}
                             </Grid>

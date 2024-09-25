@@ -14,7 +14,7 @@ const Footer = () => {
             <Container fixed>
                 <Grid container spacing={{lg: 4, xs: 2}}>
                     {/* Seção de Logotipo */}
-                    <Grid item xs={12} md={2} sx={{ display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
+                    <Grid item xs={6} md={2} sx={{ display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
                         <Box sx={{ width: {lg: '120px', xs: '80px'}, height: {lg: '120px', xs: '80px'}, position: 'relative' }}>
                             <Image
                                 alt="Logotipo da Vishi Delivery"
@@ -26,7 +26,7 @@ const Footer = () => {
                     </Grid>
 
                     {/* Seção de Informações de Contato */}
-                    <Grid item xs={12} md={3}>
+                    <Grid item xs={6} md={3}>
                         <Box sx={{ display: 'flex', flexDirection: 'column', alignItems: { lg: 'flex-start', xs: 'center' } }} >
                             <Typography variant="h6" sx={{ mb: 2, fontSize: {lg: '0.875rem', xs: '0.775rem'}, fontWeight: 'bold' }}>
                                 Contato
@@ -48,7 +48,7 @@ const Footer = () => {
                     </Grid>
 
                     {/* Seção de Redes Sociais */}
-                    <Grid item xs={12} md={3}>
+                    <Grid item xs={6} md={3}>
                         <Box sx={{ display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
                             <Typography variant="h6" sx={{ mb: 2, fontSize: {lg: '0.875rem', xs: '0.775rem'}, fontWeight: 'bold' }}>
                                 Siga-nos
@@ -82,7 +82,7 @@ const Footer = () => {
                         </Box>
                     </Grid>
 
-                    <Grid item xs={12} lg={3} sx={{ textAlign: 'center'}}>
+                    <Grid item xs={6} lg={3} sx={{ textAlign: 'center'}}>
                         <Typography variant="h6" sx={{ mb: 1, fontSize: { lg: '0.875rem', xs: '0.775rem' }, fontWeight: 'bold' }}>
                             Desenvolvido Por
                         </Typography>
