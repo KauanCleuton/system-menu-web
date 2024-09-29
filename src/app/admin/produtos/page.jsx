@@ -49,7 +49,7 @@ const Produtos = () => {
             setData((prevProducts) =>
                 prevProducts.map((product) =>
                     product.idProducts === id
-                        ? { ...product, isVisible: !product.isVisible }
+                        ? { ...product, isVisible: product.isVisible === 'VISIBLE' ? true : false }
                         : product
                 )
             );
@@ -58,7 +58,7 @@ const Produtos = () => {
             console.log(response, '23821382183821388')
             dispatch({
                 type: SET_ALERT,
-                message: response.isVisible ? 'Produto visível no menu' : 'Produto oculto no menu',
+                message: response.isVisible === 'VISIBLE' ? 'Produto visível no menu' : 'Produto oculto no menu',
                 severity: 'success',
                 alertType: 'product',
             });
@@ -66,7 +66,7 @@ const Produtos = () => {
             setData((prevProducts) =>
                 prevProducts.map((product) =>
                     product.idProducts === id
-                        ? { ...product, isVisible: !product.isVisible }
+                        ? { ...product, isVisible: product.isVisible === 'VISIBLE' ? true : false }
                         : product
                 )
             );
