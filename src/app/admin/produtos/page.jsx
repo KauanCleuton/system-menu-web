@@ -4,6 +4,7 @@ import CardProduct from "@/components/CardProduct";
 import Paginator from "@/components/Paginator";
 import TableProducts from "@/components/TableProducts";
 import TableUsersByRole from "@/components/TableUsersByRole";
+import ViewToggleButtons from "@/components/ToggleButton";
 import VerticalToggleButtons from "@/components/ToggleButton";
 import AdminService from "@/service/admin.service";
 import ProductsSv from "@/service/productsAdmin.service";
@@ -19,13 +20,13 @@ const Produtos = () => {
     const theme = useTheme()
     const [data, setData] = useState([])
     const [loading, setLoading] = useState(false)
-    const limit = 4;
+    const limit = 6;
     const [name, setName] = useState("")
     const [page, setPage] = useState(1);
     const dispatch = useDispatch()
     const [view, setView] = useState('list');
 
-    const handleChange = (event, nextView) => {
+    const handleChange = (nextView) => {
         setView(nextView || view);
     };
 
@@ -49,7 +50,7 @@ const Produtos = () => {
             setData((prevProducts) =>
                 prevProducts.map((product) =>
                     product.idProducts === id
-                        ? { ...product, isVisible: product.isVisible === 'VISIBLE' ? true : false }
+                        ? { ...product, isVisible: !product.isVisible }
                         : product
                 )
             );
@@ -58,7 +59,7 @@ const Produtos = () => {
             console.log(response, '23821382183821388')
             dispatch({
                 type: SET_ALERT,
-                message: response.isVisible === 'VISIBLE' ? 'Produto visível no menu' : 'Produto oculto no menu',
+                message: response.isVisible ? 'Produto visível no menu' : 'Produto oculto no menu',
                 severity: 'success',
                 alertType: 'product',
             });
@@ -66,7 +67,7 @@ const Produtos = () => {
             setData((prevProducts) =>
                 prevProducts.map((product) =>
                     product.idProducts === id
-                        ? { ...product, isVisible: product.isVisible === 'VISIBLE' ? true : false }
+                        ? { ...product, isVisible: !product.isVisible }
                         : product
                 )
             );
@@ -123,9 +124,10 @@ const Produtos = () => {
     return (
         <Box sx={{
             width: '100%',
-            height: 'auto'
+            height: '100%',
+            p: 2,
         }}>
-            <Grid container spacing={2} >
+            <Grid container spacing={4} >
                 <Grid item xs={12}>
                     <Grid container spacing={1} alignItems="center">
                         <Grid item lg={8} xs={12}>
@@ -166,7 +168,7 @@ const Produtos = () => {
                                 sx={{
                                     width: "100%",
                                     display: "flex",
-                                    justifyContent: "center",
+                                    justifyContent: {xs: 'center', lg: 'flex-end'},
                                     gap: 2
                                 }}
                             >
@@ -221,11 +223,11 @@ const Produtos = () => {
                         display: 'flex',
                         justifyContent: "flex-end"
                     }}>
-                        <VerticalToggleButtons handleChange={handleChange} view={view} />
+                        <ViewToggleButtons handleChange={handleChange} view={view} />
                     </Box>
                 </Grid>
                 <Grid item xs={12}>
-                    <Grid container spacing={0} p={2}>
+                    <Grid container spacing={0} p={0}>
                         {view === 'list' ? (
                             <Grid item xs={12}>
                                 <Grid container component={Paper} elevation={1}>

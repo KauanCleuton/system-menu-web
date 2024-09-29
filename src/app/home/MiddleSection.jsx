@@ -151,8 +151,9 @@ const MiddleSection = () => {
                     </Grid>
 
                     <Grid item xs={12} sx={{
-                        // height: { lg: 900, md: 900, sm: 700, xs: 'auto' },
-                        overflow: "auto"
+                        height: '100%',
+                        overflow: "auto",
+                        paddingBottom: '50px'
                     }}>
                         <Menu
                         />
