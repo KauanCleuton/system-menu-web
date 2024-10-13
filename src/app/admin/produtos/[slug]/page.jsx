@@ -72,7 +72,7 @@ const EditProduct = () => {
 
     useEffect(() => {
         getData();
-    }, []);
+    }, [slug]);
 
     const handleFileChange = (event) => {
         const file = event.target.files[0];

@@ -4,8 +4,11 @@ import { useDispatch, useSelector } from "react-redux";
 import ModalAddItemCart from "../ModalCart";
 import { closeModal } from "@/store/modalSlice";
 import { useEffect, useState } from "react";
-import productsService from "@/service/products.service";
 import Loading from "../Loading";
+import ProductsService from "@/service/products.service";
+
+
+const productSv = new ProductsService()
 
 const Menu = () => {
     const dispatch = useDispatch();
@@ -20,7 +23,7 @@ const Menu = () => {
     const fetchProducts = async () => {
         try {
             setLoading(true);
-            const response = await productsService.getProducts();
+            const response = await productSv.getProducts();
             if (response.data && response.data) {
                 setCategories(response.data);
             } else {

@@ -56,7 +56,8 @@ const Produtos = () => {
             );
 
             const response = await ProductSv.editVisibleProductsById(id);
-            console.log(response, '23821382183821388')
+            console.log(response, '23821382183821388');
+
             dispatch({
                 type: SET_ALERT,
                 message: response.isVisible ? 'Produto visível no menu' : 'Produto oculto no menu',
@@ -168,7 +169,7 @@ const Produtos = () => {
                                 sx={{
                                     width: "100%",
                                     display: "flex",
-                                    justifyContent: {xs: 'center', lg: 'flex-end'},
+                                    justifyContent: { xs: 'center', lg: 'flex-end' },
                                     gap: 2
                                 }}
                             >

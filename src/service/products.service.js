@@ -1,6 +1,6 @@
 import customAxios from "./middleware";
 
-class Products {
+class ProductsService {
     getProducts() {
         return customAxios.get("/products")
     }
@@ -94,4 +94,4 @@ class Products {
     }
 }
 
-export default new Products();
+export default ProductsService;
