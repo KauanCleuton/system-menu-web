@@ -6,7 +6,6 @@ import { useState, useEffect } from 'react';
 import Link from "next/link";
 import { clearCart } from "@/store/cartSlice";
 import { useRouter } from "next/navigation";
-import { isLoggedIn } from "@/utils/auth";
 import Loading from "../loading";
 
 const Cart = () => {
@@ -17,11 +16,7 @@ const Cart = () => {
     const [hydrated, setHydrated] = useState(false);
 
     useEffect(() => {
-        if (!isLoggedIn()) {
-            router.push("/");
-        } else {
             setHydrated(true);
-        }
     }, [items.length, router]);
 
     const handleClearCart = () => {

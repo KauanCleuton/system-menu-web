@@ -13,7 +13,7 @@ import { usePathname } from 'next/navigation';
 
 const routesComponent = [
     { title: "Dashboard", icon: <DashboardIcon sx={{ width: 20, height: 20 }} />, route: "/admin" },
-    { title: "Caixa", icon: <AttachMoneyIcon sx={{ width: 20, height: 20 }} />, route: "/admin/caixa" }, // Atualizado ícone e rota
+    { title: "Caixa", icon: <AttachMoneyIcon sx={{ width: 20, height: 20 }} />, route: "/admin/caixa" }, 
     { title: "Administradores", icon: <AdminPanelSettingsIcon sx={{ width: 20, height: 20 }} />, route: "/admin/administradores" },
     { title: "Usuários", icon: <PeopleIcon sx={{ width: 20, height: 20 }} />, route: "/admin/usuarios" },
     { title: "Categorias", icon: <CategoryIcon sx={{ width: 20, height: 20 }} />, route: "/admin/categorias" },

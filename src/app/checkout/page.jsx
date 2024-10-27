@@ -12,7 +12,6 @@ import { SET_ALERT } from '@/store/actions';
 import { clearCart } from '@/store/cartSlice';
 import { useRouter } from 'next/navigation';
 import Finalizado from '@/components/Finalizado';
-import { isLoggedIn } from '@/utils/auth';
 
 const UserSv = new userService();
 
@@ -53,20 +52,17 @@ const Checkout = () => {
       console.log(data, 231321)
       setAddress(data);
       setInitialValues(data);
-      // handleNext();
       setMode(true);
     } catch (error) {
       console.error('Erro ao buscar o endereço:', error);
-      if (isLoggedIn()) {
-        setInitialValues({
-          road: '',
-          house_number: '',
-          neighborhood: '',
-          city: '',
-          complement: '',
-        });
-        setMode(true);
-      }
+      setInitialValues({
+        road: '',
+        house_number: '',
+        neighborhood: '',
+        city: '',
+        complement: '',
+      });
+      setMode(true);
     }
   };
 
@@ -159,8 +155,8 @@ const Checkout = () => {
 
   console.log(data)
   return (
-    <Box sx={{ width: '100%', height: "100%", py: 13 }}>
-      <Container fixed sx={{paddingBottom: "90px"}}>
+    <Box sx={{ width: '100%', height: "100vh", py: 13 }}>
+      <Container fixed sx={{ paddingBottom: "90px" }}>
         <Grid container spacing={3}>
           <Grid item xs={12}>
             <Box sx={{ bgcolor: '#fff', p: 2 }}>

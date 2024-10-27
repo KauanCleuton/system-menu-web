@@ -4,7 +4,7 @@ import ServiceBase from "./service.base";
 
 class UserNoAuthSv extends ServiceBase {
     constructor() {
-        super("user")
+        super("noAuth")
     }
     getAddress(phone) {
         console.log(phone, '11312j3j213j21j')
