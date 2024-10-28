@@ -3,7 +3,7 @@ import React, { useEffect, useState } from 'react';
 import { Formik, Form, Field, ErrorMessage } from 'formik';
 import * as Yup from 'yup';
 import InputMask from 'react-input-mask';
-import { TextField, Button, Grid, FormControl, FormHelperText, Typography, Box, useTheme, Autocomplete } from '@mui/material';
+import { TextField, Button, Grid, FormControl, FormHelperText, Typography, Box, useTheme, Autocomplete, Modal } from '@mui/material';
 import Link from 'next/link';
 import { useDispatch } from 'react-redux';
 import ProductsSv from '@/service/productsAdmin.service';
@@ -12,6 +12,8 @@ import CategoryService from '@/service/categories.service';
 import { SET_ALERT } from '@/store/actions';
 import { useRouter } from 'next/navigation';
 import Loading from '@/components/Loading';
+import CategoryComponent from '@/components/CategoryComponent';
+import ButtonOption from '@/components/ButtonOption';
 
 
 const validationSchema = Yup.object({
@@ -26,11 +28,13 @@ const ProductSv = new ProductsSv();
 const CategorySv = new CategoryService()
 const AddNewAdmin = () => {
     const [loading, setLoading] = useState(false)
+    
     const theme = useTheme();
     const dispatch = useDispatch();
     const router = useRouter()
     const [fileBase64, setFileBase64] = useState('');
     const [categories, setCategories] = useState([])
+    const [openModal, setOpenModal] = useState(false)
     const handleSubmit = async (values) => {
         const newValues = {
             ...values,
@@ -68,6 +72,13 @@ const AddNewAdmin = () => {
         getData()
     }, [])
 
+    const handleOpenModalCreate = () => {
+        setOpenModal(true)
+    }
+    const handleCloseModal = () => {
+        setOpenModal(false)
+    }
+
     const handleFileChange = (event) => {
         const file = event.target.files[0];
         if (file) {
@@ -79,8 +90,39 @@ const AddNewAdmin = () => {
         }
     };
 
+    const handleSubmitCreateCategory = async (values) => {
+        try {
+            const response = await CategorySv.postCreateCategory(values);
+            console.log(response.message);
+            dispatch({ type: SET_ALERT, message: response.message, severity: "success", alertType: "category" });
+            setOpenModal(false)
+            setLoading(true)
+        } catch (error) {
+            console.error("Error ao editar novo uma categoria", error);
+            dispatch({ type: SET_ALERT, message: error.message, severity: "error", alertType: "category" });
+        }
+        finally {
+            setLoading(false)
+            getData()
+        }
+    };
+
     return loading ? <Loading /> : (
-        <Box sx={{ width: '100%', height: 'auto' }}>
+        <>
+             <Modal
+                open={openModal}
+                onClose={handleCloseModal}
+                aria-labelledby="modal-modal-title"
+                aria-describedby="modal-modal-description"
+
+            >
+                <CategoryComponent
+                    functionStates={'create'}
+                    onClose={handleCloseModal}
+                    onSubmit={handleSubmitCreateCategory}
+                />
+            </Modal>
+            <Box sx={{ width: '100%', height: 'auto' }}>
             <Grid container spacing={2} direction='column' py={1}>
                 <Grid item xs={12}>
                     <Typography
@@ -150,6 +192,7 @@ const AddNewAdmin = () => {
                                                         onChange={(event, value) => {
                                                             setFieldValue('category_id', value ? value.idCategory : '');
                                                         }}
+                                                        noOptionsText={<ButtonOption title="Criar Categoria" handleOpen={handleOpenModalCreate} />}
                                                         renderInput={(params) => (
                                                             <TextField
                                                                 {...params}
@@ -292,6 +335,8 @@ const AddNewAdmin = () => {
                 </Grid>
             </Grid>
         </Box>
+        </>
+        
     );
 };
 
