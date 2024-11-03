@@ -55,7 +55,7 @@ const TableUsersByRole = ({ data, onDelete, onAdminOrUserAction }) => {
                                     color: theme.palette.text.secondary
                                 }}
                             >
-                                {data.name}
+                                {data.name ? data.name : 'Sem nome'}
                             </Typography>
                         </Box>
                     </Grid>
@@ -125,7 +125,7 @@ const TableUsersByRole = ({ data, onDelete, onAdminOrUserAction }) => {
                                         }} />
                                     </IconButton>
                                 ) : (
-                                    <IconButton onClick={() => onAdminOrUserAction(data.id)}>
+                                    <IconButton onClick={() => onAdminOrUserAction(data.idUser)}>
                                         <CloseOutlined sx={{ width: {lg: 25, xs: 12}, height: {lg: 25, xs: 12}, color: theme.palette.primary.main }} color="action" />
                                     </IconButton>
                                 )}

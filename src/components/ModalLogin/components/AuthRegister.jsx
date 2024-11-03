@@ -5,8 +5,9 @@ import { Formik, Form, ErrorMessage } from "formik";
 import ReactInputMask from 'react-input-mask';
 import * as Yup from 'yup';
 import { login, Signup } from '@/service/auth.service';
-import { SET_ALERT, showAlert } from '@/store/actions';
+import { SET_ALERT, SET_LOGIN_DATA, SET_LOGIN_MENU, showAlert } from '@/store/actions';
 import { useDispatch } from 'react-redux';
+import { useRouter } from 'next/navigation';
 
 const numberMask = '(99) 99999-9999';
 
@@ -17,27 +18,40 @@ const AuthRegister = ({ setMode }) => {
     const togglePasswordVisibility = () => {
         setShowPassword(!showPassword);
     };
+    const router = useRouter()
 
-    const handleRegisterUser = async (values, { setSubmitting }) => {
+    const handleSubmit = async (values, { setSubmitting }) => {
         try {
-            // Remover caracteres não numéricos do telefone
             const formattedValues = {
                 ...values,
                 phone: values.phone.replace(/\D/g, ''),
             };
 
+
             const response = await Signup(formattedValues);
-            console.log(response.data);
-            setMode("login");
-            dispatch({ type: SET_ALERT, message: 'Usuário Cadastrado!', severity: "success", alertType: "user" })
+
+
+            const { accessToken, refreshToken, role, message } = response.data.data;
+            console.log(accessToken, refreshToken, role, message)
+            sessionStorage.setItem("accessToken", accessToken);
+            sessionStorage.setItem("refreshToken", refreshToken);
+            sessionStorage.setItem("role", role)
+            console.log(response.data, '11')
+            console.log(response, 123232939239291392n)
+            dispatch({ type: SET_ALERT, message: message, severity: "success", alertType: "user" })
+            dispatch({ type: SET_LOGIN_DATA })
+            closeModal();
         } catch (error) {
-            dispatch({ type: SET_ALERT, message: 'Erro ao cadastrar usuário! Tente novamente', severity: "error", alertType: "user" })
-            console.error("Erro ao registrar usuário!", error);
+            dispatch({ type: SET_ALERT, message: 'Erro ao fazer login! Tente Novamente', severity: "error", alertType: "user" })
+            console.error("Erro ao fazer login!", error);
         } finally {
             setSubmitting(false);
         }
     };
 
+    const closeModal = () => {
+        dispatch({ type: SET_LOGIN_MENU, opened: false });
+    };
     const validationSchema = Yup.object().shape({
         name: Yup.string().required('Campo obrigatório'),
         phone: Yup.string().required('Campo obrigatório'),
@@ -45,7 +59,7 @@ const AuthRegister = ({ setMode }) => {
     });
 
     return (
-        <Grid container justifyContent="center" alignItems="center" spacing={{ xs: 1, md: 3 }} sx={{ mb: { lg: 0, xs: 4 } }}>
+        <Grid container justifyContent="center" alignItems="center" spacing={{ xs: 1, md: 3 }} sx={{ mb: { lg: 2, xs: 4 } }}>
             <Grid item xs={12}>
                 <Typography variant="titleLogin" fontWeight="400" lineHeight={"40px"} sx={{ color: '#FF4D00' }}>
                     Cadastrar
@@ -55,7 +69,7 @@ const AuthRegister = ({ setMode }) => {
                 <Formik
                     initialValues={{ name: '', phone: '', senha: '' }}
                     validationSchema={validationSchema}
-                    onSubmit={handleRegisterUser}
+                    onSubmit={handleSubmit}
                 >
                     {({ values, handleChange, handleBlur }) => (
                         <Form>
@@ -197,7 +211,7 @@ const AuthRegister = ({ setMode }) => {
                                     </Grid>
                                 </Grid>
                                 <Grid item xs={12}>
-                                    <Box sx={{ width: "100%"}}>
+                                    <Box sx={{ width: "100%" }}>
                                         <Button
                                             type="submit"
                                             variant="contained"

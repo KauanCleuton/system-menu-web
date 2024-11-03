@@ -22,7 +22,7 @@ const Header = () => {
     const [anchorEl, setAnchorEl] = useState(null);
     const loginMenuOpened = useSelector(state => state.login.opened);
     const dispatch = useDispatch();
-const router = useRouter()
+    const router = useRouter()
     const handleLeftDrawerToggle = () => {
         dispatch({ type: SET_LOGIN_MENU, opened: true, mode: 'login' });
     };
@@ -32,7 +32,7 @@ const router = useRouter()
     const handleLogout = () => {
         sessionStorage.removeItem("accessToken");
         sessionStorage.removeItem("refreshToken");
-        window.location.reload();
+        router.push("/")
     };
 
     // const fetchUserData = async () => {
@@ -120,7 +120,7 @@ const router = useRouter()
                                                         alt={userData?.name || "User Avatar"}
                                                         sx={{ width: 40, height: 40, mr: 1 }}
                                                     />
-                                                    <Typography variant='body1' sx={{ color: '#fff', display: {xs: "none", lg: "block",md: "block", sm: "block"} }}>
+                                                    <Typography variant='body1' sx={{ color: '#fff', display: { xs: "none", lg: "block", md: "block", sm: "block" } }}>
                                                         {userData?.name}
                                                     </Typography>
                                                 </IconButton>

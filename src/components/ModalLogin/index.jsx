@@ -23,7 +23,7 @@ const ModalLogin = () => {
     const closeModal = () => dispatch({ type: SET_LOGIN_MENU, opened: false });
     const [phone, setPhone] = useState("")
     return (
-        <Grid container justifyContent="center" alignItems="center" sx={{ minHeight: 'calc(100vh - 68px)' }}>
+        <Grid container justifyContent="center" alignItems="center" sx={{ minHeight: 'calc(100vh - 68px)',  }}>
             <Grid item  >
                 <AuthCard >
                     <Grid container alignItems="center" justifyContent="center">

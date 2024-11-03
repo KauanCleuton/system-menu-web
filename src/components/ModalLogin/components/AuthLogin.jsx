@@ -65,7 +65,7 @@ const AuthLogin = ({ modal, setMode }) => {
       dispatch({ type: SET_ALERT, message: message, severity: "success", alertType: "user" })
       dispatch({ type: SET_LOGIN_DATA })
       if (path === '/login') {
-        router.push("/")
+        router.replace("/")
       }
       closeModal();
     } catch (error) {

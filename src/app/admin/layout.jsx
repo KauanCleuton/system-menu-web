@@ -40,7 +40,7 @@ const Layout = ({ children }) => {
                                 display: "flex",
                                 // bgcolor: { lg: "#09e653", xs: "transparent" },
                                 height: '100%',
-                                p: 2,
+                                p: {xs: 2, lg: 2},
                                 borderRadius: '10px',
                                 boxShadow: 2,
                             }}

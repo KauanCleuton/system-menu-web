@@ -46,8 +46,8 @@ const TableProducts = ({ data, onDelete, onAdminOrUserAction, toggleVisible }) =
                             justifyContent: { lg: "center", xs: 'center' }
                         }}>
                             <Box sx={{
-                                width: 70,
-                                height: 70,
+                                width: {xs: 35, lg: 70},
+                                height: {xs: 35, lg: 70},
                                 position: 'relative'
                             }}>
                                 <Image src={data.file_url} alt="Imagem do produto" layout="fill" style={{
@@ -71,7 +71,9 @@ const TableProducts = ({ data, onDelete, onAdminOrUserAction, toggleVisible }) =
                                     overflowWrap: 'break-word', 
                                     whiteSpace: 'normal',
                                     width: '9ch',
-                                    textAlign: 'center'
+                                    textAlign: 'center',
+fontSize: {xs: 10, lg: 16}
+
                                 }}
                             >
                                 {data.title}
@@ -93,7 +95,9 @@ const TableProducts = ({ data, onDelete, onAdminOrUserAction, toggleVisible }) =
                                     overflowWrap: 'break-word', 
                                     whiteSpace: 'normal',
                                     width: '12ch',
-                                    textAlign: "center"
+                                    textAlign: "center",
+fontSize: {xs: 10, lg: 16}
+
                                 }}
                             >
                                 {data.description}
@@ -110,7 +114,9 @@ const TableProducts = ({ data, onDelete, onAdminOrUserAction, toggleVisible }) =
                                 variant="body1"
                                 sx={{
                                     fontWeight: 700,
-                                    color: theme.palette.text.secondary
+                                    color: theme.palette.text.secondary,
+fontSize: {xs: 10, lg: 16}
+
                                 }}
                             >
                                 {parseFloat(data.price).toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' })}
@@ -127,7 +133,9 @@ const TableProducts = ({ data, onDelete, onAdminOrUserAction, toggleVisible }) =
                                 variant="body1"
                                 sx={{
                                     fontWeight: 700,
-                                    color: theme.palette.text.secondary
+                                    color: theme.palette.text.secondary,
+fontSize: {xs: 10, lg: 16}
+
                                 }}
                             >
                                 {data.Category.name}
@@ -135,7 +143,7 @@ const TableProducts = ({ data, onDelete, onAdminOrUserAction, toggleVisible }) =
                         </Box>
                     </Grid>
                     <Grid item xs={2} lg={2} md={2} sm={2}>
-                        <Grid container direction='row' >
+                        <Grid container direction='row' justifyContent='center' alignItems='center' >
                             <Grid item xs={4}>
                                 <IconButton LinkComponent={Link} href={`/admin/produtos/${data.idProducts}`}>
                                     <Edit color="action" sx={{
@@ -156,7 +164,7 @@ const TableProducts = ({ data, onDelete, onAdminOrUserAction, toggleVisible }) =
                             <Grid item xs={4}>
                                 <FormControlLabel
                                     control={<Switch size={isSmallScreen ? 'small' : 'large'}  checked={data.isVisible} onChange={() => toggleVisible(data.idProducts)} />}
-                                    label={data.isVisible ? 'Visível' : 'Invisível'}
+                                    // label={data.isVisible ? 'Visível' : 'Invisível'}
                                 />
                             </Grid>
                         </Grid>

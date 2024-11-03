@@ -47,6 +47,17 @@ const OrderList = () => {
         }
     }, [router, audioLoaded]);
 
+    const handlePlaySound = () => {
+        if (audioLoaded && audioRef.current) {
+            audioRef.current.play().catch((error) => {
+                console.error('Erro ao tocar o som manualmente:', error);
+            });
+        } else {
+            console.error('Áudio não está carregado ainda.');
+        }
+    };
+
+
     const fetchOrders = async () => {
         const accessToken = sessionStorage.getItem("accessToken");
         try {
@@ -74,15 +85,6 @@ const OrderList = () => {
         }
     };
 
-    const handlePlaySound = () => {
-        if (audioLoaded && audioRef.current) {
-            audioRef.current.play().catch((error) => {
-                console.error('Erro ao tocar o som manualmente:', error);
-            });
-        } else {
-            console.error('Áudio não está carregado ainda.');
-        }
-    };
 
     return (
         <Box sx={{

@@ -83,6 +83,7 @@ const Administradores = () => {
             getData()
         }
     }
+    
     useEffect(() => {
         getData()
     }, [])

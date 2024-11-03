@@ -9,7 +9,7 @@ import VerticalToggleButtons from "@/components/ToggleButton";
 import AdminService from "@/service/admin.service";
 import ProductsSv from "@/service/productsAdmin.service";
 import { SET_ALERT } from "@/store/actions";
-import { AdminPanelSettings, Inventory, PersonAddOutlined, PersonSearchOutlined } from "@mui/icons-material";
+import { AdminPanelSettings, ControlPoint, Inventory, PersonAddOutlined, PersonSearchOutlined, SearchOffOutlined, SearchOutlined } from "@mui/icons-material";
 import { Box, Button, Divider, Grid, Paper, TextField, Typography, useTheme } from "@mui/material";
 import Link from "next/link";
 import { useEffect, useState } from "react";
@@ -126,7 +126,7 @@ const Produtos = () => {
         <Box sx={{
             width: '100%',
             height: '100%',
-            p: 2,
+            p: 2
         }}>
             <Grid container spacing={4} >
                 <Grid item xs={12}>
@@ -186,12 +186,12 @@ const Produtos = () => {
                                             bgcolor: "transparent",
                                             color: theme.palette.primary.main,
                                         },
-                                        px: 3
+                                        // px: 3
                                     }}
                                     onClick={handleSearchByName}
                                 >
                                     Buscar
-                                    <Inventory sx={{ ml: 1, width: 20, height: 20 }} />
+                                    <SearchOutlined sx={{ ml: 1,width: 20, height: 20 }} />
                                 </Button>
                                 <Button
                                     variant="contained"
@@ -211,7 +211,7 @@ const Produtos = () => {
                                     }}
                                 >
                                     Novo Produto
-                                    <Inventory sx={{ ml: 1, width: 20, height: 20 }} />
+                                    <ControlPoint sx={{ ml: 1, width: 20, height: 20 }} />
                                 </Button>
                             </Box>
                         </Grid>
@@ -320,4 +320,3 @@ const Produtos = () => {
 };
 
 export default Produtos;
-
