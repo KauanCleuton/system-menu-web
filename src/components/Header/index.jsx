@@ -115,12 +115,24 @@ const Header = () => {
                                         {isLoggedIn() ? (
                                             <>
                                                 <IconButton onClick={handleOpenMenu}>
-                                                    <Avatar
-                                                        src={userData?.photo_url || "https://github.com/KauanCleuton.png"}
-                                                        alt={userData?.name || "User Avatar"}
-                                                        sx={{ width: 40, height: 40, mr: 1 }}
-                                                    />
-                                                    <Typography variant='body1' sx={{ color: '#fff', display: { xs: "none", lg: "block", md: "block", sm: "block" } }}>
+                                                    {userData?.photo_url ? (
+                                                        <Avatar
+                                                            src={userData?.photo_url}
+                                                            alt={userData?.name || "User Avatar"}
+                                                            sx={{ width: 40, height: 40, mr: 1 }}
+                                                        />
+                                                    ) : (
+                                                        <Avatar
+                                                            alt={userData?.name || "User Avatar"}
+                                                            sx={{ width: 40, height: 40, mr: 1 }}
+                                                        >
+                                                        {userData?.name ? userData.name.charAt(0).toUpperCase() : null}
+                                                        </Avatar>
+                                                    )}
+                                                    <Typography
+                                                        variant='body1'
+                                                        sx={{ color: '#fff', display: { xs: "none", lg: "block", md: "block", sm: "block" } }}
+                                                    >
                                                         {userData?.name}
                                                     </Typography>
                                                 </IconButton>

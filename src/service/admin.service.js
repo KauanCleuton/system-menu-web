@@ -1,4 +1,4 @@
-import { default as ServiceBase } from "./service.base";
+import ServiceBase from "./service.base";
 
 class AdminService extends ServiceBase {
     constructor() {
