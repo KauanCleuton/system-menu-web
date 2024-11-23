@@ -1,4 +1,4 @@
-const { default: ServiceBase } = require("./service.base");
+import ServiceBase from "./service.base"
 
 
 class ProductsSv extends ServiceBase {

@@ -20,6 +20,7 @@
     "@react-pdf/renderer": "^3.4.4",
     "@reduxjs/toolkit": "^2.2.5",
     "axios": "^1.7.2",
+    "caniuse-lite": "^1.0.30001683",
     "cross-env": "^7.0.3",
     "date-fns": "^3.6.0",
     "formik": "^2.4.6",
@@ -27,6 +28,7 @@
     "jspdf-autotable": "^3.8.2",
     "jwt-decode": "^4.0.0",
     "next": "^14.2.13",
+    "punycode": "^2.3.1",
     "react": "^18.3.1",
     "react-countdown-circle-timer": "^3.2.1",
     "react-credit-cards-2": "^1.0.2",
@@ -36,10 +38,11 @@
     "redux": "^5.0.1",
     "sharp": "^0.33.4",
     "styled-components": "^6.1.11",
+    "uri-js": "^4.4.1",
     "yup": "^1.4.0"
   },
   "devDependencies": {
-    "eslint": "^8",
-    "eslint-config-next": "14.2.3"
+    "eslint": "^8.57.1",
+    "eslint-config-next": "^15.0.3"
   }
 }
