@@ -23,8 +23,8 @@ const TableTransactions = ({ data, onDelete }) => {
                 <Grid container spacing={2} alignItems="center">
                     {/* Data */}
                     <Grid item xs={2} sx={{ display: 'flex', justifyContent: 'center' }}>
-                        <Typography variant="body1" sx={{ fontWeight: 700, textAlign: 'center', color: theme.palette.text.secondary, fontSize: { xs: 10, lg: 16 } }}>
-                            {new Date(data.createdAt).toDateString()}
+                        <Typography variant="body1" sx={{ fontWeight: 700, textAlign: 'center', color: theme.palette.text.secondary }}>
+                            {new Date(data.createdAt).toLocaleDateString()}
                         </Typography>
                     </Grid>
 
@@ -51,7 +51,7 @@ const TableTransactions = ({ data, onDelete }) => {
 
                     {/* Amount */}
                     <Grid item xs={2} sx={{ display: 'flex', justifyContent: 'center' }}>
-                        <Typography variant="body1" sx={{ fontWeight: 700, color: theme.palette.text.secondary, fontSize: { xs: 10, lg: 16 } }}>
+                        <Typography variant="body1" sx={{ fontWeight: 700, color: theme.palette.text.secondary }}>
                             {parseFloat(data.amount).toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' })}
                         </Typography>
                     </Grid>
@@ -60,7 +60,7 @@ const TableTransactions = ({ data, onDelete }) => {
                     <Grid item xs={2} sx={{ display: 'flex', justifyContent: 'center' }}>
                         <Grid container direction="row" justifyContent="center" alignItems="center" spacing={1}>
                             <Grid item>
-                                <IconButton LinkComponent={Link} href={`/admin/transactions/${data.idProducts}`}>
+                                <IconButton LinkComponent={Link} href={`/admin/transactions/${data.idCaixa}`}>
                                     <Edit color="action" sx={{ width: { lg: 25, xs: 20 }, height: { lg: 25, xs: 20 }, color: theme.palette.background.bgAmareloPrimary }} />
                                 </IconButton>
                             </Grid>
