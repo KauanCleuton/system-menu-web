@@ -1,45 +1,64 @@
-import React from 'react';
-import { Box, Grid, Typography, Button } from '@mui/material';
-import { PDFDownloadLink, Document, Page, Text, View } from '@react-pdf/renderer';
-import { useSelector } from 'react-redux';
-
-// Simulação do documento PDF
-const PDFDocument = ({ data }) => (
-  <Document>
-    <Page size="A4" style={{ padding: 20 }}>
-      <View style={{ marginBottom: 20 }}>
-        <Text style={{ fontSize: 18, fontWeight: 'bold' }}>Resumo do Pedido</Text>
-        <Text>{`Endereço: ${data?.address.road}, ${data?.address.house_number}, ${data?.address.neighborhood}, ${data?.address.city}, ${data?.address.complement}`}</Text>
-        <Text>{`Data: ${new Date().toLocaleDateString()}`}</Text>
-      </View>
-      <View>
-        {data?.orderItems.map((item, index) => (
-          <View key={index} style={{ marginBottom: 10 }}>
-            <Text>{`Produto: ${item.title}`}</Text>
-            <Text>{`Quantidade: ${item.quantity}`}</Text>
-            <Text>{`Preço: ${item.price}`}</Text>
-          </View>
-        ))}
-        <Text style={{ fontSize: 16, fontWeight: 'bold' }}>{`Total: ${data?.total_price}`}</Text>
-      </View>
-    </Page>
-  </Document>
-);
+import React from "react";
+import {
+  Box,
+  Grid,
+  Typography,
+  Button,
+  FormControl,
+  FormHelperText,
+  InputLabel,
+  OutlinedInput,
+  TextField,
+} from "@mui/material";
+import { useSelector } from "react-redux";
+import { Formik, Form } from "formik";
+import * as Yup from "yup";
 
 const CheckoutPreviewAndEdit = ({ data, handleFinalize }) => {
-  // Função para gerar mensagem para o WhatsApp
-  const nameUser = useSelector(state => state.login.data.name);
-  const phone = useSelector(state => state.login.data.phone);
+  const nameUser = useSelector((state) => state.login.data.name);
+  const phone = useSelector((state) => state.login.data.phone);
+
+  // Função para converter arquivo em Base64
+  const fileToBase64 = (file) => {
+    return new Promise((resolve, reject) => {
+      const reader = new FileReader();
+      reader.onload = () => resolve(reader.result);
+      reader.onerror = (error) => reject(error);
+      reader.readAsDataURL(file);
+    });
+  };
 
   const generateWhatsAppMessage = () => {
     const address = `${data?.address.road}, ${data?.address.house_number}, ${data?.address.neighborhood}, ${data?.address.city}, ${data?.address.complement}`;
-    const items = data?.orderItems.map(item =>
-      `Produto: ${item.title}, Quantidade: ${item.quantity}, Preço: ${Number(item.price).toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' })}`
-    ).join('%0A');
-    const total = `Total: ${parseInt(data?.total_price).toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' })}`;
+    const items = data?.orderItems
+      .map(
+        (item) =>
+          `Produto: ${item.title}, Quantidade: ${item.quantity}, Preço: ${Number(item.price).toLocaleString("pt-BR", {
+            style: "currency",
+            currency: "BRL",
+          })}`
+      )
+      .join("%0A");
+    const total = `Total: ${parseInt(data?.total_price).toLocaleString("pt-BR", {
+      style: "currency",
+      currency: "BRL",
+    })}`;
 
     return `Olá,%20aqui%20estão%20os%20detalhes%20do%20meu%20pedido:%0A%0ANome:%20${nameUser}%0ATelefone:%20${phone}%0A%0AEndereço:%20${address}%0A%0A${items}%0A%0A${total}`;
   };
+
+  const validationSchema = Yup.object().shape({
+    file: Yup.mixed()
+      .nullable()
+      .test("fileSize", "O arquivo deve ter no máximo 2MB", (value) => {
+        if (!value) return true;
+        return value.size <= 2 * 1024 * 1024;
+      })
+      .test("fileType", "O arquivo deve ser JPG, PNG ou PDF", (value) => {
+        if (!value) return true;
+        return ["image/jpeg", "image/png", "application/pdf"].includes(value.type);
+      }),
+  });
 
   return (
     <Box sx={{ p: 2 }}>
@@ -47,6 +66,7 @@ const CheckoutPreviewAndEdit = ({ data, handleFinalize }) => {
         Visualizar Dados
       </Typography>
       <Grid container spacing={2}>
+        {/* Exibindo dados do pedido */}
         <Grid item xs={12} sm={6}>
           <Typography variant="body1" sx={{ color: "#000" }}>
             <strong>Nome:</strong> {nameUser}
@@ -55,7 +75,10 @@ const CheckoutPreviewAndEdit = ({ data, handleFinalize }) => {
             <strong>Telefone:</strong> {phone}
           </Typography>
           <Typography variant="body1" sx={{ color: "#000" }}>
-            <strong>Endereço:</strong> {data?.address ? `${data?.address.road}, ${data?.address.house_number}, ${data?.address.neighborhood}, ${data?.address.city}, ${data?.address.complement}` : 'Não disponível'}
+            <strong>Endereço:</strong>{" "}
+            {data?.address
+              ? `${data?.address.road}, ${data?.address.house_number}, ${data?.address.neighborhood}, ${data?.address.city}, ${data?.address.complement}`
+              : "Não disponível"}
           </Typography>
           <Typography variant="body1" sx={{ color: "#000" }}>
             <strong>Data:</strong> {new Date().toLocaleDateString()}
@@ -72,43 +95,87 @@ const CheckoutPreviewAndEdit = ({ data, handleFinalize }) => {
                 <strong>Observação:</strong> {item.observation}
               </Typography>
               <Typography variant="body1" sx={{ color: "#000" }}>
-                <strong>Preço:</strong> {parseInt(item.price).toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' })}
+                <strong>Preço:</strong>{" "}
+                {parseInt(item.price).toLocaleString("pt-BR", { style: "currency", currency: "BRL" })}
               </Typography>
             </Box>
           ))}
           <Typography variant="h6" color="secondary">
-            <strong>Total:</strong> {parseInt(data?.total_price).toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' })}
+            <strong>Total:</strong>{" "}
+            {parseInt(data?.total_price).toLocaleString("pt-BR", { style: "currency", currency: "BRL" })}
           </Typography>
-          <Button
-            variant="contained"
-            color="primary"
-            sx={{ mt: 2 }}
-            onClick={() => handleFinalize(data)}
-          >
-            Finalizar Compra
-          </Button>
-          <Button
-            variant="contained"
-            color="success"
-            sx={{ mt: 2, ml: 2 }}
-            component="a"
-            href={`https://wa.me/558592985693?text=${generateWhatsAppMessage()}`}
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Enviar para WhatsApp
-          </Button>
         </Grid>
-        {/* <Grid item xs={12} sm={6}>
-          <Box sx={{ border: '1px solid #ddd', borderRadius: 1, overflow: 'hidden', height: '80vh' }}>
-            <PDFDownloadLink
-              document={<PDFDocument data={data} />}
-              fileName="pedido.pdf"
-            >
-              {({ loading }) => (loading ? 'Carregando documento...' : 'Download PDF')}
-            </PDFDownloadLink>
-          </Box>
-        </Grid> */}
+
+        <Grid item xs={12}>
+          <Formik
+            initialValues={{ file: null }}
+            validationSchema={validationSchema}
+            onSubmit={() => handleFinalize(data)}
+          >
+            {({ setFieldValue, errors, touched, values }) => (
+              <Form>
+                <Grid container spacing={2}>
+                  <Grid item xs={12}>
+                    <FormControl fullWidth error={touched.file && Boolean(errors.file)}>
+                      <InputLabel htmlFor="file-input">Arquivo</InputLabel>
+                      <TextField
+                        id="file-input"
+                        type="file"
+                        inputProps={{ accept: "image/jpeg,image/png,application/pdf" }}
+                        onChange={async (e) => {
+                          const file = e.target.files[0] || null;
+                          setFieldValue("file", file);
+                          console.log("Arquivo carregado:", file);
+
+                          if (file) {
+                            try {
+                              const base64 = await fileToBase64(file);
+                              console.log("Arquivo em Base64:", base64);
+                            } catch (error) {
+                              console.error("Erro ao converter arquivo para Base64:", error);
+                            }
+                          }
+                        }}
+                        sx={{
+                          "& .MuiInputBase-input": { color: '#000' },
+                          "& .MuiFormLabel-root": { color: '#000' },
+                          "& .MuiFormHelperText-root": { color: '#d32f2f' },
+                        }}
+                        label="Arquivo"
+                      />
+                      {touched.file && errors.file && (
+                        <FormHelperText>{errors.file}</FormHelperText>
+                      )}
+                    </FormControl>
+                  </Grid>
+                  <Grid item xs={12}>
+                    <Grid container spacing={2} alignItems="center" justifyContent="flex-start">
+                      <Grid item>
+                        <Button variant="contained" color="primary" sx={{ mt: 2 }} type="submit">
+                          Finalizar Compra
+                        </Button>
+                      </Grid>
+
+                      <Grid item>
+                        <Button
+                          variant="contained"
+                          color="success"
+                          sx={{ mt: 2, ml: 2 }}
+                          component="a"
+                          href={`https://wa.me/558592985693?text=${generateWhatsAppMessage()}`}
+                          target="_blank"
+                          rel="noopener noreferrer"
+                        >
+                          Enviar para WhatsApp
+                        </Button>
+                      </Grid>
+                    </Grid>
+                  </Grid>
+                </Grid>
+              </Form>
+            )}
+          </Formik>
+        </Grid>
       </Grid>
     </Box>
   );
