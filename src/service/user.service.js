@@ -13,6 +13,13 @@ class UserNoAuthSv extends ServiceBase {
     createPedido(data) {
         return this.post("/create-pedido", data)
     }
+    postPixReceiptAnalysis(payload) {
+        return this.post("/comprovante", payload, {
+            headers: {
+                "Content-Type": "multipart/form-data",
+            },
+        })
+    }
 }
 
 

@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import {
   Box,
   Grid,
@@ -9,24 +9,26 @@ import {
   InputLabel,
   OutlinedInput,
   TextField,
+  useTheme,
 } from "@mui/material";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { Formik, Form } from "formik";
 import * as Yup from "yup";
+import UserNoAuthSv from "@/service/user.service";
+import CheckCircleIcon from "@mui/icons-material/CheckCircle";
+import ErrorIcon from "@mui/icons-material/Error";
+import { SET_ALERT } from "@/store/actions";
 
+
+const userSv = new UserNoAuthSv()
 const CheckoutPreviewAndEdit = ({ data, handleFinalize }) => {
   const nameUser = useSelector((state) => state.login.data.name);
   const phone = useSelector((state) => state.login.data.phone);
+  const [comprovante, setComprovante] = useState([])
+  const theme = useTheme()
+  const [loading, setLoading] = useState(false)
+  const dispatch = useDispatch()
 
-  // Função para converter arquivo em Base64
-  const fileToBase64 = (file) => {
-    return new Promise((resolve, reject) => {
-      const reader = new FileReader();
-      reader.onload = () => resolve(reader.result);
-      reader.onerror = (error) => reject(error);
-      reader.readAsDataURL(file);
-    });
-  };
 
   const generateWhatsAppMessage = () => {
     const address = `${data?.address.road}, ${data?.address.house_number}, ${data?.address.neighborhood}, ${data?.address.city}, ${data?.address.complement}`;
@@ -60,8 +62,40 @@ const CheckoutPreviewAndEdit = ({ data, handleFinalize }) => {
       }),
   });
 
+
+  const handleChangeForm = async (e) => {
+    const file = e.target.files[0] || null;
+    console.log("Arquivo carregado:", file);
+
+    if (file) {
+      const allowedTypes = ["image/jpeg", "image/png", "application/pdf"];
+      if (!allowedTypes.includes(file.type)) {
+        console.error("Tipo de arquivo não suportado:", file.type);
+        return;
+      }
+
+      try {
+        setLoading(true);
+        const formData = new FormData();
+        formData.append("image", file);
+        formData.append("valorPedido", data?.total_price)
+
+        const response = await userSv.postPixReceiptAnalysis(formData);
+        console.log("Resposta do servidor:", response);
+        setComprovante(response)
+        dispatch({ type: SET_ALERT, message: response.mensagem })
+      } catch (error) {
+        console.error("Erro ao enviar o arquivo:", error);
+        dispatch({ type: SET_ALERT, message: 'Erro ao análisar comprovante!', severity: 'error' })
+      } finally {
+        setLoading(false);
+      }
+    }
+  };
+
+
   return (
-    <Box sx={{ p: 2 }}>
+    <Box sx={{ p: 0 }}>
       <Typography variant="h3" gutterBottom color="primary">
         Visualizar Dados
       </Typography>
@@ -96,13 +130,13 @@ const CheckoutPreviewAndEdit = ({ data, handleFinalize }) => {
               </Typography>
               <Typography variant="body1" sx={{ color: "#000" }}>
                 <strong>Preço:</strong>{" "}
-                {parseInt(item.price).toLocaleString("pt-BR", { style: "currency", currency: "BRL" })}
+                {Number(item.price).toLocaleString("pt-BR", { style: "currency", currency: "BRL" })}
               </Typography>
             </Box>
           ))}
           <Typography variant="h6" color="secondary">
             <strong>Total:</strong>{" "}
-            {parseInt(data?.total_price).toLocaleString("pt-BR", { style: "currency", currency: "BRL" })}
+            {Number(data?.total_price).toLocaleString("pt-BR", { style: "currency", currency: "BRL" })}
           </Typography>
         </Grid>
 
@@ -116,38 +150,57 @@ const CheckoutPreviewAndEdit = ({ data, handleFinalize }) => {
               <Form>
                 <Grid container spacing={2}>
                   <Grid item xs={12}>
+                    <Typography variant="h6" color="secondary" fontWeight='bold'>
+                      Envie o comprovante
+                    </Typography>
+                  </Grid>
+
+                  <Grid item xs={12}>
                     <FormControl fullWidth error={touched.file && Boolean(errors.file)}>
                       <InputLabel htmlFor="file-input">Arquivo</InputLabel>
                       <TextField
                         id="file-input"
                         type="file"
                         inputProps={{ accept: "image/jpeg,image/png,application/pdf" }}
-                        onChange={async (e) => {
-                          const file = e.target.files[0] || null;
-                          setFieldValue("file", file);
-                          console.log("Arquivo carregado:", file);
-
-                          if (file) {
-                            try {
-                              const base64 = await fileToBase64(file);
-                              console.log("Arquivo em Base64:", base64);
-                            } catch (error) {
-                              console.error("Erro ao converter arquivo para Base64:", error);
-                            }
-                          }
-                        }}
+                        onChange={(e) => handleChangeForm(e)}
                         sx={{
-                          "& .MuiInputBase-input": { color: '#000' },
-                          "& .MuiFormLabel-root": { color: '#000' },
-                          "& .MuiFormHelperText-root": { color: '#d32f2f' },
+                          "& .MuiInputBase-input": { color: "#000" },
+                          "& .MuiFormLabel-root": { color: "#000" },
+                          "& .MuiFormHelperText-root": { color: "#d32f2f" },
                         }}
                         label="Arquivo"
+                        helperText={loading ? "Carregando arquivo..." : "Selecione um arquivo para upload"}
                       />
                       {touched.file && errors.file && (
                         <FormHelperText>{errors.file}</FormHelperText>
                       )}
                     </FormControl>
                   </Grid>
+                  {comprovante.status && (
+                    <Grid item xs={12}>
+                      <Typography
+                        variant="body1"
+                        sx={{
+                          display: "flex",
+                          alignItems: "center",
+                          color: comprovante.status === "valido"
+                            ? theme.palette.success.main
+                            : theme.palette.error.main,
+                          fontSize: 18,
+                        }}
+                      >
+                        {comprovante.status === "valido" ? (
+                          <>
+                            <CheckCircleIcon sx={{ marginRight: 1 }} /> Status: Válido
+                          </>
+                        ) : (
+                          <>
+                            <ErrorIcon sx={{ marginRight: 1 }} /> Status: Inválido
+                          </>
+                        )}
+                      </Typography>
+                    </Grid>
+                  )}
                   <Grid item xs={12}>
                     <Grid container spacing={2} alignItems="center" justifyContent="flex-start">
                       <Grid item>
@@ -160,7 +213,6 @@ const CheckoutPreviewAndEdit = ({ data, handleFinalize }) => {
                         <Button
                           variant="contained"
                           color="success"
-                          sx={{ mt: 2, ml: 2 }}
                           component="a"
                           href={`https://wa.me/558592985693?text=${generateWhatsAppMessage()}`}
                           target="_blank"

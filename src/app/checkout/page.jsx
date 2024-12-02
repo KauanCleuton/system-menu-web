@@ -164,7 +164,7 @@ const Checkout = () => {
             </Box>
           </Grid>
           <Grid item xs={12}>
-            <Box sx={{ bgcolor: '#fff', p: 2 }}>
+            <Box sx={{ bgcolor: '#fff', p: 0 }}>
               {getStepContent(activeStep)}
             </Box>
           </Grid>
