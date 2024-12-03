@@ -11,7 +11,11 @@ class UserNoAuthSv extends ServiceBase {
         return this.get(`/address/${phone}`)
     }
     createPedido(data) {
-        return this.post("/create-pedido", data)
+        return this.post("/create-pedido", data, {
+            headers: {
+                "Content-Type": "multipart/form-data",
+            },
+        })
     }
     postPixReceiptAnalysis(payload) {
         return this.post("/comprovante", payload, {
@@ -21,6 +25,8 @@ class UserNoAuthSv extends ServiceBase {
         })
     }
 }
+
+
 
 
 

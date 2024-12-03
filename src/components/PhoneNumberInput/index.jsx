@@ -7,25 +7,68 @@ import { PhoneIphoneOutlined } from '@mui/icons-material';
 
 // Validação do Formik
 const validationSchema = Yup.object({
+  name: Yup.string().required('O nome é obrigatório'),
   phone: Yup.string()
     .matches(/^\(\d{2}\) \d{4,5}-\d{4}$/, 'Número de telefone inválido')
     .required('Número de telefone é obrigatório'),
 });
 
-const PhoneNumberInput = ({ onFetchAddress }) => {
-  const theme = useTheme()
+const PhoneNumberInput = ({ onFetchAddress, setData }) => {
+  const theme = useTheme();
+
   return (
     <Formik
-      initialValues={{ phone: '' }}
+      initialValues={{ phone: '', name: '' }}
       validationSchema={validationSchema}
       onSubmit={(values) => {
         const cleanedPhone = values.phone.replace(/\D/g, '');
-        onFetchAddress(cleanedPhone);
+        setData((prevData) => ({
+          ...prevData,
+          phone: cleanedPhone,
+          name: values.name,
+        }));
+        onFetchAddress(cleanedPhone, values.name);
       }}
     >
-      {({ values, handleChange, handleBlur }) => (
+      {({ handleChange, handleBlur }) => (
         <Form>
           <Grid container spacing={2}>
+            <Grid item xs={12}>
+              <FormControl fullWidth>
+                <Field name="name">
+                  {({ field }) => (
+                    <TextField
+                      {...field}
+                      label="Nome"
+                      variant="outlined"
+                      margin="normal"
+                      fullWidth
+                      onChange={handleChange}
+                      onBlur={handleBlur}
+                      error={Boolean(field.touched && field.errors.name)}
+                      helperText={<ErrorMessage name="name" component={FormHelperText} />}
+                      InputProps={{
+                        inputProps: {
+                          style: { color: theme.palette.secondary.main },
+                        },
+                      }}
+                      sx={{
+                        "& .MuiInputBase-input": {
+                          color: theme.palette.secondary.main,
+                        },
+                        "& .MuiFormLabel-root": {
+                          color: theme.palette.secondary.main,
+                        },
+                        "& .MuiFormHelperText-root": {
+                          color: theme.palette.primary.main,
+                        },
+                      }}
+                    />
+                  )}
+                </Field>
+              </FormControl>
+            </Grid>
+
             <Grid item xs={12}>
               <FormControl fullWidth>
                 <Field name="phone">
@@ -52,8 +95,8 @@ const PhoneNumberInput = ({ onFetchAddress }) => {
                               </InputAdornment>
                             ),
                             inputProps: {
-                              style: { color: theme.palette.secondary.main }
-                            }
+                              style: { color: theme.palette.secondary.main },
+                            },
                           }}
                           sx={{
                             "& .MuiInputBase-input": {
@@ -63,8 +106,8 @@ const PhoneNumberInput = ({ onFetchAddress }) => {
                               color: theme.palette.secondary.main,
                             },
                             "& .MuiFormHelperText-root": {
-                              color: theme.palette.primary.main
-                            }
+                              color: theme.palette.primary.main,
+                            },
                           }}
                         />
                       )}
@@ -73,6 +116,7 @@ const PhoneNumberInput = ({ onFetchAddress }) => {
                 </Field>
               </FormControl>
             </Grid>
+
             <Grid item xs={12}>
               <Box sx={{ width: '100%', alignItems: "center", justifyContent: 'center', display: 'flex' }}>
                 <Button
@@ -88,7 +132,7 @@ const PhoneNumberInput = ({ onFetchAddress }) => {
                     border: `1px solid ${theme.palette.primary.main}`,
                     ":hover": {
                       bgcolor: "transparent",
-                      color: theme.palette.primary.main
+                      color: theme.palette.primary.main,
                     },
                   }}
                 >

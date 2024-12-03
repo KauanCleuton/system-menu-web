@@ -22,8 +22,6 @@ import { SET_ALERT } from "@/store/actions";
 
 const userSv = new UserNoAuthSv()
 const CheckoutPreviewAndEdit = ({ data, handleFinalize }) => {
-  const nameUser = useSelector((state) => state.login.data.name);
-  const phone = useSelector((state) => state.login.data.phone);
   const [comprovante, setComprovante] = useState([])
   const theme = useTheme()
   const [loading, setLoading] = useState(false)
@@ -46,18 +44,18 @@ const CheckoutPreviewAndEdit = ({ data, handleFinalize }) => {
       currency: "BRL",
     })}`;
 
-    return `Olá,%20aqui%20estão%20os%20detalhes%20do%20meu%20pedido:%0A%0ANome:%20${nameUser}%0ATelefone:%20${phone}%0A%0AEndereço:%20${address}%0A%0A${items}%0A%0A${total}`;
+    return `Olá,%20aqui%20estão%20os%20detalhes%20do%20meu%20pedido:%0A%0ANome:%20${data.name}%0ATelefone:%20${data.phone}%0A%0AEndereço:%20${address}%0A%0A${items}%0A%0A${total}`;
   };
 
   const validationSchema = Yup.object().shape({
     file: Yup.mixed()
-      .nullable()
+      .required("O comprovante é obrigatório")
       .test("fileSize", "O arquivo deve ter no máximo 2MB", (value) => {
-        if (!value) return true;
+        if (!value) return false;
         return value.size <= 2 * 1024 * 1024;
       })
       .test("fileType", "O arquivo deve ser JPG, PNG ou PDF", (value) => {
-        if (!value) return true;
+        if (!value) return false;
         return ["image/jpeg", "image/png", "application/pdf"].includes(value.type);
       }),
   });
@@ -103,10 +101,10 @@ const CheckoutPreviewAndEdit = ({ data, handleFinalize }) => {
         {/* Exibindo dados do pedido */}
         <Grid item xs={12} sm={6}>
           <Typography variant="body1" sx={{ color: "#000" }}>
-            <strong>Nome:</strong> {nameUser}
+            <strong>Nome:</strong> {data.name}
           </Typography>
           <Typography variant="body1" sx={{ color: "#000" }}>
-            <strong>Telefone:</strong> {phone}
+            <strong>Telefone:</strong> {data.phone}
           </Typography>
           <Typography variant="body1" sx={{ color: "#000" }}>
             <strong>Endereço:</strong>{" "}
@@ -144,7 +142,13 @@ const CheckoutPreviewAndEdit = ({ data, handleFinalize }) => {
           <Formik
             initialValues={{ file: null }}
             validationSchema={validationSchema}
-            onSubmit={() => handleFinalize(data)}
+            onSubmit={(values) => {
+              const finalData = {
+                ...data,
+                comprovante: values.file,
+              };
+              handleFinalize(finalData);
+            }}
           >
             {({ setFieldValue, errors, touched, values }) => (
               <Form>
@@ -162,13 +166,22 @@ const CheckoutPreviewAndEdit = ({ data, handleFinalize }) => {
                         id="file-input"
                         type="file"
                         inputProps={{ accept: "image/jpeg,image/png,application/pdf" }}
-                        onChange={(e) => handleChangeForm(e)}
+                        onChange={(e) => {
+                          const file = e.target.files[0];
+                          setFieldValue("file", file);
+                          handleChangeForm(e)
+                        }}
                         sx={{
                           "& .MuiInputBase-input": { color: "#000" },
                           "& .MuiFormLabel-root": { color: "#000" },
                           "& .MuiFormHelperText-root": { color: "#d32f2f" },
                         }}
                         label="Arquivo"
+                        InputProps={{
+                          sx: {
+                            flexShrink: 0,
+                          },
+                        }}
                         helperText={loading ? "Carregando arquivo..." : "Selecione um arquivo para upload"}
                       />
                       {touched.file && errors.file && (
@@ -204,7 +217,9 @@ const CheckoutPreviewAndEdit = ({ data, handleFinalize }) => {
                   <Grid item xs={12}>
                     <Grid container spacing={2} alignItems="center" justifyContent="flex-start">
                       <Grid item>
-                        <Button variant="contained" color="primary" sx={{ mt: 2 }} type="submit">
+                        <Button variant="contained" color="primary" type="submit" sx={{
+                          fontSize: 11
+                        }}>
                           Finalizar Compra
                         </Button>
                       </Grid>
@@ -217,6 +232,9 @@ const CheckoutPreviewAndEdit = ({ data, handleFinalize }) => {
                           href={`https://wa.me/558592985693?text=${generateWhatsAppMessage()}`}
                           target="_blank"
                           rel="noopener noreferrer"
+                          sx={{
+                            fontSize: 11
+                          }}
                         >
                           Enviar para WhatsApp
                         </Button>

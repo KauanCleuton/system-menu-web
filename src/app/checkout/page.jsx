@@ -28,13 +28,14 @@ const Checkout = () => {
   const [message, setMessage] = useState('')
   const router = useRouter()
   const [data, setData] = useState({
+    name: '',
     quantity: '',
     total_price: '',
     payment: '',
     address: '',
     orderItems: '',
     phone: '',
-    troco: ''  // Added troco field
+    troco: ''
   });
 
   const handleNext = () => {
@@ -45,19 +46,27 @@ const Checkout = () => {
     setActiveStep((prevStep) => prevStep - 1);
   };
 
-  const fetchAddress = async (phoneNumber) => {
+  const fetchAddress = async (phoneNumber, nameUser) => {
     try {
       setPhoneNumber(phoneNumber);
       const data = await UserSv.getAddress(phoneNumber);
       console.log(data, 231321)
       setAddress(data);
-      setInitialValues(data);
+      
       setMode(true);
+      setInitialValues({
+        house_number: Number(data.house_number),
+        road: data.road,
+        neighborhood: data.neighborhood,
+        city: data.city,
+        complement: data.complement,
+      });
+      
     } catch (error) {
       console.error('Erro ao buscar o endereço:', error);
       setInitialValues({
         road: '',
-        house_number: '',
+        house_number: 0,
         neighborhood: '',
         city: '',
         complement: '',
@@ -92,20 +101,31 @@ const Checkout = () => {
       troco: method === 'Dinheiro' ? troco : ''
     }));
   };
-
-  const handleFinalize = async () => {
+  const handleFinalize = async (dataForm) => {
     try {
-      const response = await UserSv.createPedido(data)
-      handleNext()
-      dispatch({ type: SET_ALERT, message: response.message, severity: 'error' })
-      setMessage('success')
+      const formData = new FormData();
+      formData.append("name", dataForm.name)
+      formData.append("quantity", dataForm.quantity);
+      formData.append("total_price", dataForm.total_price);
+      formData.append("payment", dataForm.payment);
+      formData.append("address", JSON.stringify(data.address));
+      formData.append("orderItems", JSON.stringify(data.orderItems));
+      formData.append("phone", dataForm.phone);
+      formData.append("troco", dataForm.troco);
+      if (dataForm.comprovante) {
+        formData.append("comprovante", dataForm.comprovante);
+      }
+      const response = await UserSv.createPedido(formData);
+      handleNext();
+      dispatch({ type: SET_ALERT, message: response.message, severity: "success" });
+      setMessage("success");
       dispatch(clearCart());
     } catch (error) {
-      console.error(error)
-      setMessage('error')
-      dispatch({ type: SET_ALERT, message: 'Erro ao finalizar compra', severity: 'error' })
+      console.error(error);
+      setMessage("error");
+      dispatch({ type: SET_ALERT, message: "Erro ao finalizar compra", severity: "error" });
     }
-  }
+  };
 
   const getStepContent = (step) => {
     switch (step) {
@@ -118,7 +138,7 @@ const Checkout = () => {
                 initialValues={initialValues}
               />
             ) : (
-              <PhoneNumberInput onFetchAddress={fetchAddress} />
+              <PhoneNumberInput onFetchAddress={fetchAddress} setData={setData} />
             )}
           </Grid>
         );
@@ -155,7 +175,7 @@ const Checkout = () => {
 
   console.log(data)
   return (
-    <Box sx={{ width: '100%', height: {xs: "100vh", md: 900}, py: 13 }}>
+    <Box sx={{ width: '100%', height: { xs: "100%", sm: "auto",md: 'auto',lg: 'auto' }, py: 13 }}>
       <Container fixed sx={{ paddingBottom: "90px" }}>
         <Grid container spacing={3}>
           <Grid item xs={12}>
