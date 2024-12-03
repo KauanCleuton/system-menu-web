@@ -34,7 +34,7 @@ const SeeProofPix = ({ data, open, close, index }) => {
         <Modal
             open={open}
             onClose={handleClose}
-            aria-labelledby="modal-modal-title"
+            aria-labelledby="modal-modal-title" 
             aria-describedby="modal-modal-description"
         >
             <Box sx={style}>
