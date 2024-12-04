@@ -33,16 +33,22 @@ const EditProduct = () => {
     const [fileBase64, setFileBase64] = useState('');
     const [categories, setCategories] = useState([]);
     const [productData, setProductData] = useState(null); // Armazena os dados do produto
+    const [file, setFile] = useState(null)
+
 
     const handleSubmit = async (values) => {
-        const newValues = {
-            ...values,
-            file_url: fileBase64.split(",")[1],
-        };
+        const form = new FormData()
+
 
         try {
+
+            form.append("file", file)
+            form.append("category_id", values.category_id)
+            form.append("title", values.title)
+            form.append("description", values.description)
+            form.append("price", values.price)
             setLoading(true);
-            await ProductSv.putEditProductById(slug, newValues);
+            await ProductSv.putEditProductById(slug, form);
             dispatch({ type: SET_ALERT, message: 'Produto editado com sucesso!', severity: 'success', alertType: 'product' });
             setTimeout(() => {
                 router.push('/admin/produtos');
@@ -76,6 +82,7 @@ const EditProduct = () => {
 
     const handleFileChange = (event) => {
         const file = event.target.files[0];
+        setFile(file)
         if (file) {
             const reader = new FileReader();
             reader.onloadend = () => {

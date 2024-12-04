@@ -12,13 +12,13 @@ class OrdersService extends ServiceBase {
     }
 
     getOrderById(id) {
-        return this.get(`/orders/${id}`)
+        return this.get(`/order/${id}`)
     }
     putOrderById(id) {
-        return this.put(`/orders/${id}`)
+        return this.put(`/order/${id}`)
     }
     deleteOrderById(id) {
-        return this.delete(`/orders/${id}`)
+        return this.delete(`/order/${id}`)
     }
     
 }

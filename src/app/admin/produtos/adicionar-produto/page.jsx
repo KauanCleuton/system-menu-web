@@ -35,16 +35,20 @@ const AddNewAdmin = () => {
     const [fileBase64, setFileBase64] = useState('');
     const [categories, setCategories] = useState([])
     const [openModal, setOpenModal] = useState(false)
+    const [file, setFile] = useState(null)
+    
     const handleSubmit = async (values) => {
-        const newValues = {
-            ...values,
-            file_url: fileBase64.split(",")[1],
-        };
+        const form = new FormData()
 
-        console.log(newValues, '293192392');
         try {
+            form.append("file", file)
+            form.append("category_id", values.category_id)
+            form.append("title", values.title)
+            form.append("description", values.description)
+            form.append("price", values.price)
+
             setLoading(true)
-            const response = await ProductSv.postCreateNewProduct(newValues)
+            const response = await ProductSv.postCreateNewProduct(form)
             dispatch({ type: SET_ALERT, message: 'Produto adicionado com sucesso!', severity: 'success', alertType: 'category' });
             setTimeout(() => {
                 router.push('/admin/produtos');
@@ -81,6 +85,7 @@ const AddNewAdmin = () => {
 
     const handleFileChange = (event) => {
         const file = event.target.files[0];
+        setFile(file)
         if (file) {
             const reader = new FileReader();
             reader.onloadend = () => {

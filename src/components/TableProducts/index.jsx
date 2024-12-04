@@ -50,7 +50,7 @@ const TableProducts = ({ data, onDelete, onAdminOrUserAction, toggleVisible }) =
                                 height: {xs: 35, lg: 70},
                                 position: 'relative'
                             }}>
-                                <Image src={data.file_url} alt="Imagem do produto" layout="fill" style={{
+                                <Image src={`${process.env.NEXT_PUBLIC_BASE_URL}${data.file_url}`} alt="Imagem do produto" layout="fill" style={{
                                     objectFit: 'contain',
                                 }} />
                             </Box>

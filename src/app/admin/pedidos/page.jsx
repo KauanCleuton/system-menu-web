@@ -26,7 +26,7 @@ const Orders = () => {
     const [data, setData] = useState([])
     const [loading, setLoading] = useState(false)
     const limit = 6;
-    const [name, setName] = useState("")
+    const [id, setId] = useState(null)
     const [page, setPage] = useState(1);
     const dispatch = useDispatch()
     const [audioLoaded, setAudioLoaded] = useState(false);
@@ -54,45 +54,41 @@ const Orders = () => {
     useEffect(() => {
         console.log("213")
         getData();
-
-        const audio = new Audio('/audio-newOrder.mp3');
-        audioRef.current = audio;
-
-        audio.oncanplaythrough = () => {
-            setAudioLoaded(true);
-        };
-
         const eventSource = new EventSource(`${process.env.NEXT_PUBLIC_BASE_URL}/events/admin`);
         eventSource.onmessage = (event) => {
             const newOrder = JSON.parse(event.data);
             setData((prevOrders) => [...prevOrders, newOrder]);
-            handlePlaySound()
-            if (audioLoaded) {
-                audioRef.current.play().catch((error) => {
-                    console.error('Erro ao tocar o som de notificação:', error);
-                });
-            } else {
-                console.error('Áudio não carregado corretamente');
-            }
-        };
 
+        };
         return () => {
             eventSource.close();
         };
-    }, [router, audioLoaded]);
+    }, []);
 
-    const handlePlaySound = () => {
-        if (audioLoaded && audioRef.current) {
-            audioRef.current.play().catch((error) => {
-                console.error('Erro ao tocar o som manualmente:', error);
-            });
-        } else {
-            console.error('Áudio não está carregado ainda.');
+
+    const handleSearchPedidoById = async () => {
+        let dataById = [];
+        try {
+            const response = await orderSv.getOrderById(id)
+            dataById.push(response)
+            setData(dataById);
+        } catch (error) {
+            console.log('Erro ao buscar pedido pelo id', error)
         }
-    };
+    }
 
-
-
+    const handleOrderPutById = async (idPedidos) => {
+        try {
+            setLoading(true)
+            const response = await orderSv.putOrderById(idPedidos)
+            getData()
+        } catch (error) {
+            console.log('Erro ao buscar pedido pelo id', error)
+        }
+        finally {
+            setLoading(false)
+        }
+    }
 
     const handleCloseModal = () => {
         setIsModalOpen(false);
@@ -120,8 +116,8 @@ const Orders = () => {
                                     label="Buscar Admin pelo nome"
                                     placeholder="Buscar Admin pelo nome"
                                     variant="outlined"
-                                    value={name}
-                                    onChange={(e) => setName(e.target.value)}
+                                    value={id}
+                                    onChange={(e) => setId(e.target.value)}
                                     fullWidth
                                     sx={{
                                         "& .MuiInputBase-input": {
@@ -171,7 +167,7 @@ const Orders = () => {
                                             },
                                             // px: 3
                                         }}
-                                    // onClick={handleSearchByName}
+                                        onClick={handleSearchPedidoById}
                                     >
                                         Buscar
                                         <SearchOutlinedIcon sx={{ ml: 1, width: 20, height: 20 }} />
@@ -244,7 +240,7 @@ const Orders = () => {
                                                     </TableHead>
 
                                                     <TableBody>
-                                                        {data.map((order, index) => (
+                                                        {data && data.map((order, index) => (
                                                             <TableRow key={index}>
                                                                 <TableCell
                                                                     sx={{
@@ -371,7 +367,7 @@ const Orders = () => {
                                                                     </IconButton>
                                                                     <IconButton
                                                                         color="warning"
-
+                                                                        onClick={() => handleOrderPutById(order.idPedidos)}
                                                                     >
                                                                         <LocalShipping />
                                                                     </IconButton>

@@ -15,6 +15,7 @@ const style = {
     boxShadow: 24,
     p: 2,
     borderRadius: 2,
+    border: `1px solid #fff`
 };
 
 const SeeProofPix = ({ data, open, close, index }) => {
@@ -48,7 +49,7 @@ const SeeProofPix = ({ data, open, close, index }) => {
                                 display: 'flex',
                             }}
                         >
-                            <Typography id="modal-modal-title" variant="h6">
+                            <Typography id="modal-modal-title" variant="h6" color="primary">
                                 Comprovante Pix
                             </Typography>
                             <IconButton onClick={handleClose} color="primary">
@@ -70,7 +71,7 @@ const SeeProofPix = ({ data, open, close, index }) => {
                                     <Box
                                         sx={{
                                             width: 250,
-                                            height: 250,
+                                            height: 450,
                                             position: 'relative',
                                         }}
                                     >
