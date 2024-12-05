@@ -22,7 +22,7 @@ const CartOptionCart = ({ item }) => {
             <Grid container >
                 <Grid item xs="auto">
                     <Box sx={{ position: "relative", width: { lg: '130px', md: '125px', sm: '120px', xs: '100px' }, height: { lg: '100%', md: '125px', sm: '120px', xs: '116px' } }}>
-                        <Image src={item.file_url} layout="fill" alt="Imagem do produto" style={{ objectFit: "cover", borderRadius: "5px 0 0 5px" }} />
+                        <Image src={`${process.env.NEXT_PUBLIC_BASE_URL}/uploads/produtos/${data.idProducts}`} layout="fill" alt="Imagem do produto" style={{ objectFit: "cover", borderRadius: "5px 0 0 5px" }} />
                     </Box>
                 </Grid>
                 <Grid item xs>
