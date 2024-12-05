@@ -10,7 +10,7 @@ import AdminService from "@/service/admin.service";
 import ProductsSv from "@/service/productsAdmin.service";
 import { SET_ALERT } from "@/store/actions";
 import { AdminPanelSettings, ControlPoint, Inventory, PersonAddOutlined, PersonSearchOutlined, SearchOffOutlined, SearchOutlined } from "@mui/icons-material";
-import { Box, Button, Divider, Grid, Paper, TextField, Typography, useTheme } from "@mui/material";
+import { Box, Button, Divider, Grid, Paper, Table, TableBody, TableCell, TableHead, TableRow, TextField, Typography, useTheme } from "@mui/material";
 import Link from "next/link";
 import { useEffect, useState } from "react";
 import { useDispatch } from "react-redux";
@@ -191,7 +191,7 @@ const Produtos = () => {
                                     onClick={handleSearchByName}
                                 >
                                     Buscar
-                                    <SearchOutlined sx={{ ml: 1,width: 20, height: 20 }} />
+                                    <SearchOutlined sx={{ ml: 1, width: 20, height: 20 }} />
                                 </Button>
                                 <Button
                                     variant="contained"
@@ -232,54 +232,30 @@ const Produtos = () => {
                         {view === 'list' ? (
                             <Grid item xs={12}>
                                 <Grid container component={Paper} elevation={1}>
-                                    <Grid item xs={12}>
-                                        <Box
-                                            sx={{
-                                                width: '100%',
-                                                py: 2,
-                                                px: 1,
-                                                bgcolor: theme.palette.secondary.main,
-                                                borderRadius: '6px 6px 0 0',
-                                            }}
-                                        >
-                                            <Grid container alignItems="center" justifyContent="space-between">
-                                                {['Imagem', 'Título', 'Descrição', 'Preço', 'Categoria', 'Ações'].map((header, index) => (
-                                                    <Grid key={index} item xs={2}>
-                                                        <Box sx={{ display: 'flex', justifyContent: 'center' }}>
-                                                            <Typography
-                                                                variant="h5"
-                                                                sx={{
-                                                                    color: theme.palette.primary.main,
-                                                                    fontSize: { lg: '18px', xs: '14px' },
-                                                                    fontWeight: '400',
-                                                                }}
-                                                            >
-                                                                {header}
-                                                            </Typography>
-                                                        </Box>
-                                                    </Grid>
-                                                ))}
-                                            </Grid>
-                                        </Box>
-                                    </Grid>
-
                                     {loading ? (
-                                        <Grid item xs={12}>
+                                        <Grid item xs={12} >
                                             <Box sx={{ width: '100%', height: '400px', display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
                                                 <Loading />
                                             </Box>
                                         </Grid>
                                     ) : (
-                                        <Grid item xs={12} sx={{ borderRadius: '0 0 5px 5px' }}>
-                                            {data.length > 0 &&
+                                        <Grid item xs={12} >
+                                            {/* {data.length > 0 &&
                                                 data.slice((page - 1) * limit, page * limit).map((item, index) => (
-                                                    <Box key={index}>
-                                                        <TableProducts data={item} onDelete={handleDeleteProductById} toggleVisible={toggleVisible} />
-                                                        {index < data.slice((page - 1) * limit, page * limit).length - 1 && (
-                                                            <Divider sx={{ borderColor: '#e7e7e7', borderBottomWidth: 1 }} />
-                                                        )}
-                                                    </Box>
-                                                ))}
+                                                    <TableProducts
+                                                        key={index}
+                                                        data={item}
+                                                        onDelete={handleDeleteProductById}
+                                                        toggleVisible={toggleVisible}
+                                                    />
+                                                ))} */}
+                                            <TableProducts
+                                                // key={index}
+                                                data={data}
+                                                onDelete={handleDeleteProductById}
+                                                toggleVisible={toggleVisible}
+                                            />
+
                                         </Grid>
                                     )}
                                 </Grid>

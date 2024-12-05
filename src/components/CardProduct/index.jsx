@@ -24,7 +24,7 @@ const CardProduct = ({ data, onDelete, toggleVisible }) => {
                         }}
 
                     >
-                        <Image layout='fill' src={data.file_url} alt="Foto do Produto" style={{ objectFit: 'cover', borderRadius: '10px' }} />
+                        <Image layout='fill' src={`${process.env.NEXT_PUBLIC_BASE_URL}/uploads/produtos/${data.idProducts}`} alt="Foto do Produto" style={{ objectFit: 'cover', borderRadius: '10px' }} />
                     </Box>
                 </Box>
             </Grid>
@@ -32,7 +32,7 @@ const CardProduct = ({ data, onDelete, toggleVisible }) => {
             <Grid item xs={12} sm={12} container direction="column" spacing={2}>
                 <Grid item>
                     <Typography variant="h6" color='primary' textAlign='center' >
-                        Título: {data.title}
+                        {data.title}
                     </Typography>
                 </Grid>
                 <Grid item>
