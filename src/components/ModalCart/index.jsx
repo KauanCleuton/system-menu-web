@@ -56,7 +56,7 @@ const ModalAddItemCart = () => {
                                             height: "120px"
                                         }}>
                                             <Image
-                                                src={item.file_url}
+                                                src={`${process.env.NEXT_PUBLIC_BASE_URL}/uploads/produtos/${item.idProducts}`}
                                                 layout='fill'
                                                 alt='foto do pedido'
                                                 style={{ borderRadius: "5px" }}

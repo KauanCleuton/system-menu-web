@@ -32,17 +32,18 @@ const Cart = () => {
         <Box
             sx={{
                 width: "100%",
-                height: "100vh",
+                height: "100%",
                 display: 'flex',
                 justifyContent: "center",
                 alignItems: "center",
-                py: 12,
+                py: 15,
                 px: 2,
             }}
         >
             <Container fixed sx={{
                 bgcolor: "#fff",
-                boxShadow: 1
+                boxShadow: 1,
+                py: 4
             }}>
                 <Grid container spacing={2}>
                     <Grid item xs={12} >
