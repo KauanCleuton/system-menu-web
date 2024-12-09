@@ -40,13 +40,10 @@ jobs:
         chmod 600 ~/.ssh/id_rsa
 
         echo "Connecting to VPS and deploying..."
-        ssh -o StrictHostKeyChecking=no admin@147.93.8.61 << 'EOF'
+        ssh -o StrictHostKeyChecking=no root@147.93.8.61 << 'EOF'
           cd system-menu-web
           git pull origin master
           npm ci
           npm run build
           pm2 restart vishidelivery-frontend || pm2 start npm --name "vishidelivery-frontend" -- start
         EOF
-
-    - name: Clean up SSH key
-      run: rm -f ~/.ssh/id_rsa
