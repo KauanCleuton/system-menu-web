@@ -111,7 +111,7 @@ const AuthLogin = ({ modal, setMode }) => {
                   variant="titleLogin"
                   fontWeight="400"
                   lineHeight={"40px"}
-                  sx={{ color: "#FF4D00" }}
+                  sx={{ color: theme.palette.primary.main }}
                 >
                   Login
                 </Typography>
@@ -134,7 +134,7 @@ const AuthLogin = ({ modal, setMode }) => {
                     sx={{
                       textTransform: "inherit",
                       p: 0,
-                      color: "#FF4D00",
+                      color: theme.palette.primary.main,
                     }}
                     onClick={() => setMode("register")}
                   >
@@ -183,13 +183,13 @@ const AuthLogin = ({ modal, setMode }) => {
                                   sx={{
                                     mt: 1,
                                     borderRadius: "8px",
-                                    border: `2px solid #FF4D00`,
+                                    border: `2px solid ${theme.palette.primary.main}`,
                                     p: 1,
                                     "&:hover": {
                                       borderColor: "#fff",
                                     },
                                     "&:focus": {
-                                      borderColor: "#FF4D00",
+                                      borderColor: theme.palette.primary.main,
                                     },
                                   }}
                                   InputProps={{
@@ -240,13 +240,13 @@ const AuthLogin = ({ modal, setMode }) => {
                               placeholder="Insira sua senha"
                               sx={{
                                 borderRadius: "8px",
-                                border: `2px solid #FF4D00`,
+                                border: `2px solid ${theme.palette.primary.main}`,
                                 p: 1,
                                 "&:hover": {
                                   borderColor: "#fff",
                                 },
                                 "&:focus": {
-                                  borderColor: "#FF4D00",
+                                  borderColor: theme.palette.primary.main,
                                 },
                               }}
                               InputProps={{
@@ -308,7 +308,7 @@ const AuthLogin = ({ modal, setMode }) => {
                               sx={{
                                 color: "#FFF",
                                 "&.Mui-checked": {
-                                  color: "#FF4D00",
+                                  color: theme.palette.primary.main,
                                 },
                               }}
                             />
@@ -348,11 +348,11 @@ const AuthLogin = ({ modal, setMode }) => {
                           variant="contained"
                           disabled={isSubmitting}
                           sx={{
-                            backgroundColor: "#FF4D00", color: "#FFF",
-                            border: `1px solid #FF4D00`,
+                            backgroundColor: theme.palette.primary.main, color: "#FFF",
+                            border: `1px solid ${theme.palette.primary.main}`,
                             ":hover": {
                               bgcolor: 'transparent',
-                              color: "#FF4D00"
+                              color: theme.palette.primary.main
                             }
                           }}
 

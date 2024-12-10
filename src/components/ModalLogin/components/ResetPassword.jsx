@@ -1,5 +1,5 @@
 // ResetPassword.js
-import { Box, Button, TextField, Typography } from "@mui/material";
+import { Box, Button, TextField, Typography, useTheme } from "@mui/material";
 import { useState } from "react";
 import axios from "axios";
 import { useDispatch } from "react-redux";
@@ -8,6 +8,7 @@ import customAxios from "@/service/middleware";
 import { ResetPasswordUser } from "@/service/auth.service";
 
 const ResetPassword = ({ setMode, phone }) => {
+  const theme = useTheme()
   const [newPassword, setNewPassword] = useState("");
   console.log(phone)
   const dispatch = useDispatch()
@@ -38,21 +39,21 @@ const ResetPassword = ({ setMode, phone }) => {
         autoComplete="new-password"
         sx={{
           '& .MuiInputBase-root': {
-            color: '#FF4D00',
+            color: theme.palette.primary.main,
           },
           '& .MuiOutlinedInput-root': {
             '& fieldset': {
-              borderColor: '#FF4D00',
+              borderColor: theme.palette.primary.main,
             },
             '&:hover fieldset': {
-              borderColor: '#FF4D00',
+              borderColor: theme.palette.primary.main,
             },
             '&.Mui-focused fieldset': {
-              borderColor: '#FF4D00',
+              borderColor: theme.palette.primary.main,
             },
           },
           '& .MuiInputLabel-root': {
-            color: '#FF4D00',
+            color: theme.palette.primary.main,
           },
         }}
         type="password"
@@ -62,12 +63,12 @@ const ResetPassword = ({ setMode, phone }) => {
       <Button type="submit" fullWidth variant="contained" sx={{
         mt: 3,
         mb: 2,
-        backgroundColor: "#FF4D00",
+        backgroundColor: theme.palette.primary.main,
         color: "#FFF",
-        border: `1px solid #FF4D00`,
+        border: `1px solid ${theme.palette.primary.main}`,
         ":hover": {
           bgcolor: 'transparent',
-          color: "#FF4D00"
+          color: theme.palette.primary.main
         }
       }}>
         Redefinir Senha

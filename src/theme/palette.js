@@ -4,7 +4,8 @@ const palette = {
       light: 'rgba(238,238,238,0.933)',
       headerText: 'rgba(255, 255, 255, 1)',
       white: "#fff",
-      logo: "/img/logo.svg"
+      logo: "/img/logo.svg",
+      red: "#e01212"
     },
     secondary: {
       main: '#000',
@@ -16,6 +17,9 @@ const palette = {
     },
     error: {
       main: '#ff1744',
+    },
+    success: {
+      main: "#156124"
     },
     orange: { main: '#ff9b30' },
     background: {

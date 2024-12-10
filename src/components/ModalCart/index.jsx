@@ -2,12 +2,13 @@ import React from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { updateQuantity, updateDeliveryDescription, closeModal } from '@/store/modalSlice';
 import { addItemToCart } from '@/store/cartSlice';
-import { Box, Button, Grid, IconButton, TextField, Typography } from '@mui/material';
+import { Box, Button, Grid, IconButton, TextField, Typography, useTheme } from '@mui/material';
 import AuthCard from '../Card';
 import { CloseOutlined } from '@mui/icons-material';
 import Image from 'next/image';
 
 const ModalAddItemCart = () => {
+    const theme = useTheme()
     const dispatch = useDispatch();
     const { selectedItem: item, quantity, deliveryDescription } = useSelector(state => state.modal);
 
@@ -38,7 +39,7 @@ const ModalAddItemCart = () => {
                                 justifyContent: "flex-end"
                             }}>
                                 <IconButton onClick={() => dispatch(closeModal())}>
-                                    <CloseOutlined sx={{ color: "#FF4D00" }} />
+                                    <CloseOutlined sx={{ color: theme.palette.primary.main }} />
                                 </IconButton>
                             </Box>
                         </Grid>
@@ -80,20 +81,20 @@ const ModalAddItemCart = () => {
                                 label="Observação"
                                 sx={{
                                     '& .MuiInputLabel-root': { // Estilo para o label
-                                        color: '#FF4D00',
+                                        color: theme.palette.primary.main,
                                     },
                                     '& .MuiOutlinedInput-root': {
                                         '& fieldset': { // Estilo para o outline
-                                            borderColor: '#FF4D00',
+                                            borderColor: theme.palette.primary.main,
                                         },
                                         '&:hover fieldset': { // Estilo para o outline no hover
-                                            borderColor: '#FF4D00',
+                                            borderColor: theme.palette.primary.main,
                                         },
                                         '&.Mui-focused fieldset': { // Estilo para o outline quando o campo está focado
-                                            borderColor: '#FF4D00',
+                                            borderColor: theme.palette.primary.main,
                                         },
                                         '& input': { // Estilo para o texto de entrada
-                                            color: '#FF4D00',
+                                            color: theme.palette.primary.main,
                                         },
                                     },
                                 }}
@@ -112,9 +113,9 @@ const ModalAddItemCart = () => {
                                 <Button
                                     variant='contained'
                                     sx={{
-                                        bgcolor: "#D32727",
+                                        bgcolor: theme.palette.error.main,
                                         ":hover": {
-                                            bgcolor: "#D32727"
+                                            bgcolor: theme.palette.error.main
                                         }
                                     }}
                                     onClick={() => handleQuantityChange(quantity - 1)}>
@@ -124,9 +125,9 @@ const ModalAddItemCart = () => {
                                 <Button
                                     variant='contained'
                                     sx={{
-                                        bgcolor: "#156124",
+                                        bgcolor: theme.palette.success.main,
                                         ":hover": {
-                                            bgcolor: "#156124"
+                                            bgcolor: theme.palette.success.main
                                         }
                                     }}
                                     onClick={() => handleQuantityChange(quantity + 1)}>
@@ -140,9 +141,9 @@ const ModalAddItemCart = () => {
                                     mb: 3,
                                     mt: 3,
                                     textTransform: "inherit",
-                                    bgcolor: "#FF4D00",
+                                    bgcolor: theme.palette.primary.main,
                                     ":hover": {
-                                        bgcolor: "#FF4D00"
+                                        bgcolor: theme.palette.primary.main
                                     }
                                 }}
                                 onClick={handleAddToCart}

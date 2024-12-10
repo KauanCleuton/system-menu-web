@@ -1,12 +1,12 @@
 import React from 'react';
-import { Menu, MenuItem, Box, Avatar, Tooltip, IconButton } from '@mui/material';
+import { Menu, MenuItem, Box, Avatar, Tooltip, IconButton, useTheme } from '@mui/material';
 import { useDispatch } from 'react-redux';
 import { AccountCircle } from '@mui/icons-material';
 import Link from 'next/link';
 
 const UserMenu = ({ anchorEl, handleClose, handleLogout, user}) => {
 
-
+    const theme = useTheme()
     return (
         <Box sx={{ flexGrow: 0 }}>
             {/* <Tooltip title="Open settings" sx={{display: {xs: "flex", lg: "none"}}}>
@@ -21,8 +21,8 @@ const UserMenu = ({ anchorEl, handleClose, handleLogout, user}) => {
                 PaperProps={{
                     sx: {
                         mt: 6,
-                        backgroundColor: '#000000', // Cor de fundo preta
-                        color: '#FF4D00', // Cor do texto laranja
+                        backgroundColor: theme.palette.secondary.main, // Cor de fundo preta
+                        color: theme.palette.primary.main, // Cor do texto laranja
                         width: '200px', // Defina o tamanho do menu aqui
                     }
                 }}
@@ -36,12 +36,12 @@ const UserMenu = ({ anchorEl, handleClose, handleLogout, user}) => {
                 }}
             >
                 <Link href="/profile" passHref>
-                    <MenuItem onClick={handleClose} sx={{ color: '#FF4D00', px: 3 }}>Perfil</MenuItem>
+                    <MenuItem onClick={handleClose} sx={{ color: theme.palette.primary.main, px: 3 }}>Perfil</MenuItem>
                 </Link>
                 <MenuItem onClick={() => {
                     handleLogout()
                     handleClose()
-                }} sx={{ color: '#FF4D00', px: 3 }}>Sair</MenuItem>
+                }} sx={{ color: theme.palette.primary.main, px: 3 }}>Sair</MenuItem>
             </Menu>
         </Box>
     );

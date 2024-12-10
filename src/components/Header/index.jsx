@@ -74,8 +74,8 @@ const Header = () => {
                     position={trigger ? 'fixed' : 'absolute'}
                     sx={{
                         width: '100vw',
-                        backgroundColor: trigger || path !== '/' ? "#000000" : "transparent",
-                        color: trigger || path !== '/' ? "#fff" : "#fff",
+                        backgroundColor: trigger || path !== '/' ? theme.palette.secondary.main : "transparent",
+                        color: trigger || path !== '/' ? theme.palette.primary.white : theme.palette.primary.white,
                         transition: "background-color 0.3s, color 0.3s"
                     }}
                 >
@@ -141,7 +141,7 @@ const Header = () => {
                                         ) : (
                                             <IconButton onClick={handleLeftDrawerToggle}>
                                                 <AccountCircle sx={{
-                                                    color: trigger || path !== '/' ? "#FF4D00" : "#fff",
+                                                    color: trigger || path !== '/' ? theme.palette.primary.main : "#fff",
                                                 }} />
                                             </IconButton>
                                         )}

@@ -1,4 +1,4 @@
-import { Box, Button, Typography, InputAdornment, InputBase, FormControl, InputLabel } from "@mui/material";
+import { Box, Button, Typography, InputAdornment, InputBase, FormControl, InputLabel, useTheme } from "@mui/material";
 import { useState } from "react";
 import { MailOutline } from "@mui/icons-material";
 import customAxios from "@/service/middleware";
@@ -7,6 +7,7 @@ import { useDispatch } from "react-redux";
 import { ForgotPassword } from "@/service/auth.service";
 
 const AuthForgotPassword = ({ setMode, setPhone }) => {
+  const theme = useTheme()
   const [phoneForgot, setPhoneForgot] = useState({
     phone: ''
   });
@@ -52,23 +53,23 @@ const AuthForgotPassword = ({ setMode, setPhone }) => {
           }}
           startAdornment={
             <InputAdornment position="start">
-              <MailOutline sx={{ color: '#FF4D00', width: 15, height: 15 }} />
+              <MailOutline sx={{ color: theme.palette.primary.main, width: 15, height: 15 }} />
             </InputAdornment>
           }
           sx={{
             borderBottom: '2px solid',
-            borderColor: '#FF4D00',
+            borderColor: theme.palette.primary.main,
             '& .MuiInputBase-input': {
-              color: '#FF4D00',
+              color: theme.palette.primary.main,
             },
             '& .MuiInputBase-root': {
-              borderColor: '#FF4D00',
+              borderColor: theme.palette.primary.main,
               borderBottom: '1px solid',
               '&:hover': {
-                borderColor: '#FF4D00',
+                borderColor: theme.palette.primary.main,
               },
               '&.Mui-focused': {
-                borderColor: '#FF4D00',
+                borderColor: theme.palette.primary.main,
                 borderBottom: '2px solid',
               },
             },
@@ -78,11 +79,11 @@ const AuthForgotPassword = ({ setMode, setPhone }) => {
       <Button type="submit" fullWidth variant="contained" sx={{ 
         mt: 3, 
         mb: 2, 
-        backgroundColor: "#FF4D00", color: "#FFF", 
-        border: `1px solid #FF4D00`,
+        backgroundColor: theme.palette.primary.main, color: "#FFF", 
+        border: `1px solid ${theme.palette.primary.main}`,
         ":hover": {
           bgcolor: 'transparent',
-          color: "#FF4D00"
+          color: theme.palette.primary.main
         }
 
        }}>

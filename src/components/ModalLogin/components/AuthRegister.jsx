@@ -61,7 +61,7 @@ const AuthRegister = ({ setMode }) => {
     return (
         <Grid container justifyContent="center" alignItems="center" spacing={{ xs: 1, md: 3 }} sx={{ mb: { lg: 2, xs: 4 } }}>
             <Grid item xs={12}>
-                <Typography variant="titleLogin" fontWeight="400" lineHeight={"40px"} sx={{ color: '#FF4D00' }}>
+                <Typography variant="titleLogin" fontWeight="400" lineHeight={"40px"} sx={{ color: theme.palette.primary.main }}>
                     Cadastrar
                 </Typography>
             </Grid>
@@ -87,13 +87,13 @@ const AuthRegister = ({ setMode }) => {
                                             sx={{
                                                 mt: 1,
                                                 borderRadius: '8px',
-                                                border: `2px solid #FF4D00`,
+                                                border: `2px solid ${theme.palette.primary.main}`,
                                                 p: 1,
                                                 '&:hover': {
                                                     borderColor: "#fff",
                                                 },
                                                 '&:focus': {
-                                                    borderColor: "#FF4D00",
+                                                    borderColor: theme.palette.primary.main,
                                                 },
                                             }}
                                             endAdornment={
@@ -123,13 +123,13 @@ const AuthRegister = ({ setMode }) => {
                                                     sx={{
                                                         mt: 1,
                                                         borderRadius: '8px',
-                                                        border: `2px solid #FF4D00`,
+                                                        border: `2px solid ${theme.palette.primary.main}`,
                                                         p: 1,
                                                         '&:hover': {
                                                             borderColor: "#fff",
                                                         },
                                                         '&:focus': {
-                                                            borderColor: "#FF4D00",
+                                                            borderColor: theme.palette.primary.main,
                                                         },
                                                     }}
                                                     endAdornment={
@@ -156,13 +156,13 @@ const AuthRegister = ({ setMode }) => {
                                             sx={{
                                                 mt: 1,
                                                 borderRadius: '8px',
-                                                border: `2px solid #FF4D00`,
+                                                border: `2px solid ${theme.palette.primary.main}`,
                                                 p: 1,
                                                 '&:hover': {
                                                     borderColor: "#fff",
                                                 },
                                                 '&:focus': {
-                                                    borderColor: "#FF4D00",
+                                                    borderColor: theme.palette.primary.main,
                                                 },
                                             }}
                                             startAdornment={
@@ -184,7 +184,7 @@ const AuthRegister = ({ setMode }) => {
                                         <ErrorMessage name="senha" component={FormHelperText} error />
                                     </FormControl>
                                 </Grid>
-                                <Grid item xs={12}>
+                                <Grid item xs={12}>         
                                     <Grid container direction="row" alignItems="center" justifyContent="space-between">
                                         <FormControlLabel
                                             control={
@@ -192,7 +192,7 @@ const AuthRegister = ({ setMode }) => {
                                                     sx={{
                                                         color: "#FFF",
                                                         '&.Mui-checked': {
-                                                            color: '#FF4D00',
+                                                            color: theme.palette.primary.main,
                                                         },
                                                     }}
                                                 />
@@ -223,10 +223,10 @@ const AuthRegister = ({ setMode }) => {
                                                 fontSize: '18px',
                                                 fontWeight: 400,
                                                 color: "#fff",
-                                                border: `1px solid #FF4D00`,
+                                                border: `1px solid ${theme.palette.primary.main}`,
                                                 ":hover": {
                                                     bgcolor: "transparent",
-                                                    color: "#FF4D00"
+                                                    color: theme.palette.primary.main
                                                 }
                                             }}
                                         >

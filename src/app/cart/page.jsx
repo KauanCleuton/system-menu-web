@@ -1,6 +1,6 @@
 "use client";
 import CartOptionCart from "@/components/CardOptionCart";
-import { Box, Button, Container, Grid, Typography } from "@mui/material";
+import { Box, Button, Container, Grid, Typography, useTheme } from "@mui/material";
 import { useDispatch, useSelector } from "react-redux";
 import { useState, useEffect } from 'react';
 import Link from "next/link";
@@ -9,6 +9,7 @@ import { useRouter } from "next/navigation";
 import Loading from "../loading";
 
 const Cart = () => {
+    const theme = useTheme()
     const dispatch = useDispatch();
     const router = useRouter();
     const items = useSelector(state => state.cart.items);
@@ -78,7 +79,7 @@ const Cart = () => {
                                         textTransform: "inherit",
                                         bgcolor: "#000",
                                         border: `1px solid #000`,
-                                        color: "#FF4D00",
+                                        color: theme.palette.primary.main,
                                         fontSize: { lg: '16px', xs: '9px' },
                                         ":hover": {
                                             bgcolor: "transparent",
@@ -92,12 +93,12 @@ const Cart = () => {
                                         variant="contained"
                                         sx={{
                                             textTransform: "inherit",
-                                            bgcolor: "#e01212",
-                                            border: `1px solid #e01212`,
+                                            bgcolor: theme.palette.primary.red,
+                                            border: `1px solid ${theme.palette.primary.red}`,
                                             fontSize: { lg: '16px', xs: '9px' },
                                             ":hover": {
                                                 bgcolor: "transparent",
-                                                color: "#e01212"
+                                                color: theme.palette.primary.red
                                             }
                                         }}>
                                         Limpar Tudo
@@ -108,12 +109,12 @@ const Cart = () => {
                                         variant="contained"
                                         sx={{
                                             textTransform: "inherit",
-                                            bgcolor: "#FF4D00",
-                                            border: `1px solid #FF4D00`,
+                                            bgcolor: theme.palette.primary.main,
+                                            border: `1px solid ${theme.palette.primary.main}`,
                                             fontSize: { lg: '16px', xs: '9px' },
                                             ":hover": {
                                                 bgcolor: "transparent",
-                                                color: "#FF4D00"
+                                                color: theme.palette.primary.main
                                             }
                                         }}>
                                         Próximo

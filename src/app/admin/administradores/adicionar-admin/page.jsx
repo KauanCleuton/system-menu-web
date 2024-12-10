@@ -219,11 +219,11 @@ const AddNewAdmin = () => {
                                                 fontSize: '18px',
                                                 fontWeight: 400,
                                                 color: "#fff",
-                                                border: `1px solid #FF4D00`,
+                                                border: `1px solid ${theme.palette.primary.main}`,
                                                 ":hover": {
                                                     bgcolor: "transparent",
-                                                    color: "#FF4D00",
-                                                    border: `1px solid #FF4D00`,
+                                                    color: theme.palette.primary.main,
+                                                    border: `1px solid ${theme.palette.primary.main}`,
                                                 },
                                             }}
                                         >
@@ -239,11 +239,11 @@ const AddNewAdmin = () => {
                                                 fontSize: '18px',
                                                 fontWeight: 400,
                                                 color: "#fff",
-                                                border: `1px solid #FF4D00`,
+                                                border: `1px solid ${theme.palette.primary.main}`,
                                                 ":hover": {
                                                     bgcolor: "transparent",
-                                                    color: "#FF4D00",
-                                                    border: `1px solid #FF4D00`,
+                                                    color: theme.palette.primary.main,
+                                                    border: `1px solid ${theme.palette.primary.main}`,
                                                 },
                                             }}
                                         >

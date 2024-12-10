@@ -1,11 +1,12 @@
 import { removeItemFromCart } from "@/store/cartSlice";
 import { DeleteOutlineOutlined } from "@mui/icons-material";
-import { Box, Grid, IconButton, Paper, Typography } from "@mui/material";
+import { Box, Grid, IconButton, Paper, Typography, useTheme } from "@mui/material";
 import Image from "next/image";
 import { useDispatch } from "react-redux";
 
 const CartOptionCart = ({ item }) => {
     const dispatch = useDispatch();
+    const theme = useTheme()
 
     const handleRemoveFromCart = (id) => {
         dispatch(removeItemFromCart(id));
@@ -16,7 +17,7 @@ const CartOptionCart = ({ item }) => {
         <Paper elevation={2} sx={{
             cursor: "pointer", mb: 2,
             width: "100%",
-            backgroundColor: "#000000",
+            backgroundColor: theme.palette.secondary.main,
             py: 1,
         }}>
             <Grid container >
@@ -30,7 +31,7 @@ const CartOptionCart = ({ item }) => {
                         <Box sx={{
                             width: "100%"
                         }}>
-                            <Typography variant="h6" sx={{ fontWeight: "bold", fontSize: { xs: '13px', md: '18px' }, color: "#FF4D00" }}>{item.title}</Typography>
+                            <Typography variant="h6" sx={{ fontWeight: "bold", fontSize: { xs: '13px', md: '18px' }, color: theme.palette.primary.main }}>{item.title}</Typography>
                             <Typography variant="body1" sx={{ fontSize: { xs: '13px', md: '16px' } }}>Observação: {item.deliveryDescription}</Typography>
                             <Typography variant="body1" sx={{ fontSize: { xs: '13px', md: '16px' } }}>Quantidade: {item.quantity}</Typography>
                         </Box>
@@ -42,15 +43,15 @@ const CartOptionCart = ({ item }) => {
                                 onClick={() => handleRemoveFromCart(item.idProducts)}
                                 sx={{
                                     color: "#fff",
-                                    bgcolor: "#FF4D00",
+                                    bgcolor: theme.palette.primary.main,
                                     borderRadius: '4px',
-                                    border: `1px solid #FF4D00`,
+                                    border: `1px solid ${theme.palette.primary.main}`,
                                     width: 30,
                                     height: "auto",
                                     mr: 2,
                                     ":hover": {
                                         bgcolor: "transparent",
-                                        color: "#FF4D00"
+                                        color: theme.palette.primary.main
                                     }
                                 }}
                             >

@@ -1,11 +1,12 @@
 import { openModal } from "@/store/modalSlice";
 import { AddShoppingCartOutlined } from "@mui/icons-material";
-import { Box, Grid, IconButton, Paper, Typography } from "@mui/material";
+import { Box, Grid, IconButton, Paper, Typography, useTheme } from "@mui/material";
 import Image from "next/image";
 import { useDispatch } from "react-redux";
 
 const CartOption = ({ img, title, description, price, item }) => {
     const dispatch = useDispatch();
+    const theme = useTheme()
 
     const handleOpenModal = () => {
         dispatch(openModal(item));
@@ -26,7 +27,7 @@ const CartOption = ({ img, title, description, price, item }) => {
                 <Grid item xs={8} md={8} lg={9} sm={9}>
                     <Box sx={{ height: "100%", display: "flex", flexDirection: "column", gap: '7px', py: 1 }}>
                         <Box>
-                            <Typography variant="h6" sx={{ fontWeight: "bold", color: "#FF4D00", fontSize: { xs: '13px', md: '18px' } }}>{title}</Typography>
+                            <Typography variant="h6" sx={{ fontWeight: "bold", color: theme.palette.primary.main, fontSize: { xs: '13px', md: '18px' } }}>{title}</Typography>
                             <Typography variant="body1" sx={{ fontSize: { xs: '13px', md: '16px' } }}>{description}</Typography>
                         </Box>
                         <Box sx={{ display: "flex", justifyContent: "space-between", alignItems: "center" }}>
@@ -37,15 +38,15 @@ const CartOption = ({ img, title, description, price, item }) => {
                                 onClick={handleOpenModal}
                                 sx={{
                                     color: "#fff",
-                                    bgcolor: "#FF4D00",
+                                    bgcolor: theme.palette.primary.main,
                                     borderRadius: '4px',
-                                    border: `1px solid #FF4D00`,
+                                    border: `1px solid ${theme.palette.primary.main}`,
                                     width: 30,
                                     height: "auto",
                                     mr: 2,
                                     ":hover": {
                                         bgcolor: "transparent",
-                                        color: "#FF4D00"
+                                        color: theme.palette.primary.main
                                     }
                                 }}
                             >

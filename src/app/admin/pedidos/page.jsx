@@ -121,10 +121,10 @@ const Orders = () => {
                                     fullWidth
                                     sx={{
                                         "& .MuiInputBase-input": {
-                                            color: "#000"
+                                            color: theme.palette.secondary.main
                                         },
                                         "& .MuiFormLabel-root": {
-                                            color: "#000"
+                                            color: theme.palette.secondary.main
                                         },
                                         "& .MuiOutlinedInput-root": {
                                             "& fieldset": {
@@ -138,7 +138,7 @@ const Orders = () => {
                                             }
                                         },
                                         "& .MuiFormHelperText-root": {
-                                            color: "#d32f2f"
+                                            color: theme.palette.primary.main
                                         }
                                     }}
                                 />
@@ -172,26 +172,7 @@ const Orders = () => {
                                         Buscar
                                         <SearchOutlinedIcon sx={{ ml: 1, width: 20, height: 20 }} />
                                     </Button>
-                                    <Button
-                                        variant="contained"
-                                        LinkComponent={Link}
-                                        href="/admin/produtos/adicionar-produto"
-                                        sx={{
-                                            color: theme.palette.secondary.white,
-                                            bgcolor: theme.palette.primary.main,
-                                            textTransform: "none",
-                                            py: 1,
-                                            fontSize: '13px',
-                                            border: `1px solid ${theme.palette.primary.main}`,
-                                            ":hover": {
-                                                bgcolor: "transparent",
-                                                color: theme.palette.primary.main,
-                                            },
-                                        }}
-                                    >
-                                        Novo Produto
-                                        <ControlPointIcon sx={{ ml: 1, width: 20, height: 20 }} />
-                                    </Button>
+                                   
                                 </Box>
                             </Grid>
                         </Grid>

@@ -41,7 +41,7 @@ const ModalLogin = () => {
                                             sx={{
                                                 width: 50,
                                                 height: 50,
-                                                color: '#FF4D00'
+                                                color: theme.palette.primary.main
                                             }}>
                                             <CloseOutlined sx={{ fontSize: 35 }} />
                                         </IconButton>

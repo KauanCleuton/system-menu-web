@@ -2,7 +2,7 @@ import React from 'react';
 import { Formik, Form, Field, ErrorMessage } from 'formik';
 import * as Yup from 'yup';
 import InputMask from 'react-input-mask';
-import { TextField, Button, Grid, FormControl, FormHelperText, InputAdornment } from '@mui/material';
+import { TextField, Button, Grid, FormControl, FormHelperText, InputAdornment, useTheme } from '@mui/material';
 
 // Validação com Yup
 const validationSchema = Yup.object({
@@ -14,6 +14,8 @@ const validationSchema = Yup.object({
 });
 
 const BillingAddress = ({ handleSubmit, initialValues }) => {
+    const theme = useTheme()
+
     return (
         <Formik
             initialValues={initialValues}
@@ -40,10 +42,10 @@ const BillingAddress = ({ handleSubmit, initialValues }) => {
                                             helperText={<ErrorMessage name="road" component={FormHelperText} />}
                                             sx={{
                                                 "& .MuiInputBase-input": {
-                                                    color: "#000", // Cor do texto ajustada
+                                                    color: theme.palette.secondary.main, // Cor do texto ajustada
                                                 },
                                                 "& .MuiFormLabel-root": {
-                                                    color: "#000", // Cor do rótulo ajustada
+                                                    color: theme.palette.secondary.main, // Cor do rótulo ajustada
                                                 },
                                                 "& .MuiFormHelperText-root": {
                                                     color: "#d32f2f" // Cor do texto de ajuda
@@ -71,10 +73,10 @@ const BillingAddress = ({ handleSubmit, initialValues }) => {
                                             helperText={<ErrorMessage name="house_number" component={FormHelperText} />}
                                             sx={{
                                                 "& .MuiInputBase-input": {
-                                                    color: "#000", // Cor do texto ajustada
+                                                    color: theme.palette.secondary.main, // Cor do texto ajustada
                                                 },
                                                 "& .MuiFormLabel-root": {
-                                                    color: "#000", // Cor do rótulo ajustada
+                                                    color: theme.palette.secondary.main, // Cor do rótulo ajustada
                                                 },
                                                 "& .MuiFormHelperText-root": {
                                                     color: "#d32f2f" // Cor do texto de ajuda
@@ -101,10 +103,10 @@ const BillingAddress = ({ handleSubmit, initialValues }) => {
                                             helperText={<ErrorMessage name="neighborhood" component={FormHelperText} />}
                                             sx={{
                                                 "& .MuiInputBase-input": {
-                                                    color: "#000", // Cor do texto ajustada
+                                                    color: theme.palette.secondary.main, // Cor do texto ajustada
                                                 },
                                                 "& .MuiFormLabel-root": {
-                                                    color: "#000", // Cor do rótulo ajustada
+                                                    color: theme.palette.secondary.main, // Cor do rótulo ajustada
                                                 },
                                                 "& .MuiFormHelperText-root": {
                                                     color: "#d32f2f" // Cor do texto de ajuda
@@ -131,10 +133,10 @@ const BillingAddress = ({ handleSubmit, initialValues }) => {
                                             helperText={<ErrorMessage name="city" component={FormHelperText} />}
                                             sx={{
                                                 "& .MuiInputBase-input": {
-                                                    color: "#000", // Cor do texto ajustada
+                                                    color: theme.palette.secondary.main, // Cor do texto ajustada
                                                 },
                                                 "& .MuiFormLabel-root": {
-                                                    color: "#000", // Cor do rótulo ajustada
+                                                    color: theme.palette.secondary.main, // Cor do rótulo ajustada
                                                 },
                                                 "& .MuiFormHelperText-root": {
                                                     color: "#d32f2f" // Cor do texto de ajuda
@@ -161,10 +163,10 @@ const BillingAddress = ({ handleSubmit, initialValues }) => {
                                             helperText={<ErrorMessage name="complement" component={FormHelperText} />}
                                             sx={{
                                                 "& .MuiInputBase-input": {
-                                                    color: "#000", // Cor do texto ajustada
+                                                    color: theme.palette.secondary.main, // Cor do texto ajustada
                                                 },
                                                 "& .MuiFormLabel-root": {
-                                                    color: "#000", // Cor do rótulo ajustada
+                                                    color: theme.palette.secondary.main, // Cor do rótulo ajustada
                                                 },
                                                 "& .MuiFormHelperText-root": {
                                                     color: "#d32f2f" // Cor do texto de ajuda
@@ -188,10 +190,10 @@ const BillingAddress = ({ handleSubmit, initialValues }) => {
                                     fontSize: '18px',
                                     fontWeight: 400,
                                     color: "#fff",
-                                    border: `1px solid #FF4D00`,
+                                    border: `1px solid ${theme.palette.primary.main}`,
                                     ":hover": {
                                         bgcolor: "transparent",
-                                        color: "#FF4D00"
+                                        color: theme.palette.primary.main
                                     },
                                 }}
                             >

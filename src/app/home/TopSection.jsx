@@ -119,7 +119,7 @@ const TopSection = () => {
                                                         borderRadius: '4px',
                                                         display: "flex",
                                                         // bgcolor: '#54CC0A',
-                                                        bgcolor: "#FF4D00",
+                                                        bgcolor: theme.palette.primary.main,
                                                         fontSize: { lg: 16, md: 14, sm: 12, xs: 9 },
                                                         fontWeight: 'bold',
                                                         color: "#fff",
