@@ -31,7 +31,7 @@ export default function BadgeCart() {
   }, []);
 
   if (!hydrated) {
-    return null; // ou um placeholder enquanto está hidratando
+    return null; 
   }
 
   return (
