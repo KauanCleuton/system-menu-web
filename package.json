@@ -6,7 +6,7 @@
     "dev": "cross-env NODE_ENV=development next dev",
     "build": "next build",
     "build:vm": "cross-env NODE_ENV=production next build",
-    "start": "cross-env NODE_ENV=production next start",
+    "start": "cross-env NODE_ENV=production next start -p 2006",
     "start:vm": "next build && cross-env NODE_ENV=production next start -p 3002 ",
     "lint": "next lint"
   },
