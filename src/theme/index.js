@@ -1,4 +1,4 @@
-import { createTheme } from '@mui/material/styles'; // Certifique-se de importar createTheme
+import { createTheme } from '@mui/material/styles';
 import { Roboto, Inter } from 'next/font/google';
 
 export const roboto = Inter({

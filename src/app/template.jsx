@@ -20,8 +20,8 @@ export default function Template({ children, pageProps }) {
 
 
   const [colorsTheme, setColorsTheme] = useState({
-    primary: "#FF4D00", // Cor padrão
-    secondary: "#000"   // Cor padrão
+    primary: "#FF4D00",
+    secondary: "#000"  
   });
 
   useEffect(() => {
