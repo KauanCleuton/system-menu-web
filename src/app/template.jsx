@@ -44,6 +44,22 @@ export default function Template({ children, pageProps }) {
 
 
 
+  const getContacts = async () => {
+    try {
+      const response = await themeSv.getContacts()
+
+      console.log(response, '921991299213929')
+    } catch (error) {
+      console.log(error)
+    }
+  }
+
+  useEffect(() => {
+    getContacts()
+  }, [])
+
+
+
   const Session = () => {
     const dispatch = useDispatch();
     const alert = useSelector((state) => state.alert);

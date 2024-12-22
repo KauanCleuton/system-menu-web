@@ -12,6 +12,10 @@ class ThemeService extends ServiceBase {
             }
         });
     }
+
+    getContacts() {
+        return this.get("/whatsapp/contacts")
+    }
 }
 
 export default ThemeService;
