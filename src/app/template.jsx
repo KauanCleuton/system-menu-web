@@ -42,8 +42,6 @@ export default function Template({ children, pageProps }) {
     fetchTheme();
   }, []);
 
-
-
   const getContacts = async () => {
     try {
       const response = await themeSv.getContacts()
@@ -57,8 +55,6 @@ export default function Template({ children, pageProps }) {
   useEffect(() => {
     getContacts()
   }, [])
-
-
 
   const Session = () => {
     const dispatch = useDispatch();
@@ -79,9 +75,6 @@ export default function Template({ children, pageProps }) {
       />
     );
   };
-
-
-
 
   return (
     <Provider store={store}>

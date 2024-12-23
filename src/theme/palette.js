@@ -34,8 +34,8 @@ const palette = {
       main: 'rgba( 0, 0, 0, 0.7)',
     },
     text: {
-      primary: 'rgba(255, 255, 255, 1)', // White text for dark backgrounds
-      secondary: 'rgba( 0, 0, 0, 0.7 )', // Black text for light backgrounds
+      primary: 'rgba(255, 255, 255, 1)',
+      secondary: 'rgba( 0, 0, 0, 0.7 )',
       light: 'rgba(0, 33, 71, 1)',
       link: '#FF4D00',
       amareloSaber: "#FFB606",
