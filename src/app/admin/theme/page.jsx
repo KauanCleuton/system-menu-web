@@ -27,7 +27,7 @@ const Tema = () => {
     const theme = useTheme()
     const [data, setData] = useState([])
     const [loading, setLoading] = useState(false)
-    const limit = 6;
+    const limit = 5;
     const [page, setPage] = useState(1);
     const sel = useSelector(state => state.theme)
     console.log(sel)
@@ -143,7 +143,7 @@ const Tema = () => {
                                                 </TableHead>
 
                                                 <TableBody>
-                                                    {data && data.map((order, index) => (
+                                                    {data && data.slice((page - 1) * limit, page * limit).map((item, index) => (
                                                         <TableRow key={index}>
                                                             <TableCell
                                                                 sx={{
@@ -151,7 +151,7 @@ const Tema = () => {
                                                                     fontSize: { lg: '12px', xs: '10px' },
                                                                 }}
                                                             >
-                                                                {order.id}
+                                                                {item.id}
                                                             </TableCell>
 
                                                             <TableCell
@@ -162,10 +162,10 @@ const Tema = () => {
                                                                 }}
                                                             >
                                                                 <Box sx={{ width: 40, height: 40, position: 'relative' }}>
-                                                                    {order.logo && (
+                                                                    {item.logo && (
                                                                         <Image
                                                                             alt="Logo"
-                                                                            src={order.logo}
+                                                                            src={item.logo}
                                                                             layout="fill"
                                                                             style={{ objectFit: 'cover' }}
                                                                         />
@@ -174,22 +174,29 @@ const Tema = () => {
                                                             </TableCell>
 
                                                             <TableCell
+                                                                align="center"
                                                                 sx={{
                                                                     color: theme.palette.secondary.main,
-                                                                    fontSize: { lg: '12px', xs: '10px' },
+                                                                    fontSize: { lg: '10px', xs: '10px' },
+                                                                    wordBreak: 'break-word',
+                                                                    textAlign: 'center'
                                                                 }}
                                                             >
-                                                                {order.nameTheme}
+                                                                {item.nameTheme}
                                                             </TableCell>
 
                                                             <TableCell
+                                                                align="center"
                                                                 sx={{
                                                                     color: theme.palette.secondary.main,
-                                                                    fontSize: { lg: '12px', xs: '10px' },
+                                                                    fontSize: { lg: '10px', xs: '10px' },
+                                                                    wordBreak: 'break-word',
+                                                                    textAlign: 'center'
                                                                 }}
                                                             >
-                                                                {order.domain}
+                                                                {item.domain}
                                                             </TableCell>
+
 
                                                             <TableCell
                                                                 sx={{
@@ -200,7 +207,7 @@ const Tema = () => {
                                                             >
                                                                 <Typography
                                                                     sx={{
-                                                                        backgroundColor: order.primary,
+                                                                        backgroundColor: item.primary,
                                                                         color: '#fff',
                                                                         padding: '5px 7px',
                                                                         borderRadius: '4px',
@@ -208,7 +215,7 @@ const Tema = () => {
                                                                         fontSize: 12
                                                                     }}
                                                                 >
-                                                                    {order.primary}
+                                                                    {item.primary}
                                                                 </Typography>
                                                             </TableCell>
 
@@ -221,7 +228,7 @@ const Tema = () => {
                                                             >
                                                                 <Typography
                                                                     sx={{
-                                                                        backgroundColor: order.secondary,
+                                                                        backgroundColor: item.secondary,
                                                                         color: '#fff',
                                                                         padding: '3px 0px',
                                                                         borderRadius: '4px',
@@ -229,22 +236,22 @@ const Tema = () => {
                                                                         fontSize: 12
                                                                     }}
                                                                 >
-                                                                    {order.secondary}
+                                                                    {item.secondary}
                                                                 </Typography>
                                                             </TableCell>
 
                                                             <TableCell
                                                                 sx={{
                                                                     color: theme.palette.secondary.main,
-                                                                    fontSize: { lg: '12px', xs: '10px' },
+                                                                    fontSize: { lg: '10px', xs: '10px' },
                                                                     textAlign: 'center',
                                                                 }}
                                                             >
-                                                                {order.title}
+                                                                {item.title}
                                                             </TableCell>
 
                                                             <TableCell
-                                                            align="center"
+                                                                align="center"
                                                                 sx={{
                                                                     color: theme.palette.secondary.main,
                                                                     fontSize: { lg: '12px', xs: '6px' },
@@ -252,10 +259,10 @@ const Tema = () => {
                                                                 }}
                                                             >
                                                                 <Box sx={{ width: 40, height: 40, position: 'relative' }}>
-                                                                    {order.favicon && (
+                                                                    {item.favicon && (
                                                                         <Image
                                                                             alt="Favicon"
-                                                                            src={order.favicon}
+                                                                            src={item.favicon}
                                                                             layout="fill"
                                                                             style={{ objectFit: 'cover' }}
                                                                         />
@@ -266,11 +273,11 @@ const Tema = () => {
                                                             <TableCell
                                                                 sx={{
                                                                     color: theme.palette.secondary.main,
-                                                                    fontSize: { lg: '12px', xs: '6x' },
+                                                                    fontSize: { lg: '10px', xs: '8px' },
                                                                     textAlign: 'center',
                                                                 }}
                                                             >
-                                                                {order.address}
+                                                                {item.address}
                                                             </TableCell>
 
                                                             <TableCell align="center"
@@ -278,7 +285,7 @@ const Tema = () => {
                                                                 <Box sx={{ display: 'flex', width: '100%', justifyContent: 'flex-end', gap: 0 }}>
                                                                     <IconButton
                                                                         LinkComponent={Link}
-                                                                        href={`/admin/theme/${order.id}`}
+                                                                        href={`/admin/theme/${item.id}`}
                                                                         sx={{
                                                                             fontSize: 13,
                                                                         }}
@@ -296,7 +303,7 @@ const Tema = () => {
                                                                     <FormControlLabel
                                                                         control={
                                                                             <Switch
-                                                                                checked={order.visibleTheme}
+                                                                                checked={item.visibleTheme}
                                                                             // onChange={() => toggleVisible(item.idProducts)}
                                                                             />
                                                                         }
