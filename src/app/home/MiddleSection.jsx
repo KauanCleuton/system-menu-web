@@ -1,11 +1,11 @@
 "use client"
 import Menu from "@/components/Menu";
-import { Box, Container, Grid, Paper, Typography } from "@mui/material"
+import { Box, Container, Grid, Paper, Typography, useTheme } from "@mui/material"
 
 
 
 const MiddleSection = () => {
-
+    const theme = useTheme()
     return (
         <Box
             sx={{
@@ -29,7 +29,7 @@ const MiddleSection = () => {
                                     fontSize: 34,
                                     fontWeight: "bold",
                                     textAlign: "center",
-                                    color: "#000000"
+                                    color: theme.palette.secondary.main
                                 }}
                             >
                                 Conheça nosso menu de opções

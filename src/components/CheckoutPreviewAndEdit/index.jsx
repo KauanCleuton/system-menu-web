@@ -100,33 +100,33 @@ const CheckoutPreviewAndEdit = ({ data, handleFinalize }) => {
       <Grid container spacing={2}>
         {/* Exibindo dados do pedido */}
         <Grid item xs={12} sm={6}>
-          <Typography variant="body1" sx={{ color: "#000" }}>
+          <Typography variant="body1" sx={{ color: theme.palette.secondary.main }}>
             <strong>Nome:</strong> {data.name}
           </Typography>
-          <Typography variant="body1" sx={{ color: "#000" }}>
+          <Typography variant="body1" sx={{ color: theme.palette.secondary.main }}>
             <strong>Telefone:</strong> {data.phone}
           </Typography>
-          <Typography variant="body1" sx={{ color: "#000" }}>
+          <Typography variant="body1" sx={{ color: theme.palette.secondary.main }}>
             <strong>Endereço:</strong>{" "}
             {data?.address
               ? `${data?.address.road}, ${data?.address.house_number}, ${data?.address.neighborhood}, ${data?.address.city}, ${data?.address.complement}`
               : "Não disponível"}
           </Typography>
-          <Typography variant="body1" sx={{ color: "#000" }}>
+          <Typography variant="body1" sx={{ color: theme.palette.secondary.main }}>
             <strong>Data:</strong> {new Date().toLocaleDateString()}
           </Typography>
           {data?.orderItems.map((item, index) => (
             <Box key={index} sx={{ mb: 2, mt: 2 }}>
-              <Typography variant="body1" sx={{ color: "#000" }}>
+              <Typography variant="body1" sx={{ color: theme.palette.secondary.main }}>
                 <strong>Produto:</strong> {item.title}
               </Typography>
-              <Typography variant="body1" sx={{ color: "#000" }}>
+              <Typography variant="body1" sx={{ color: theme.palette.secondary.main }}>
                 <strong>Quantidade:</strong> {item.quantity}
               </Typography>
-              <Typography variant="body1" sx={{ color: "#000" }}>
+              <Typography variant="body1" sx={{ color: theme.palette.secondary.main }}>
                 <strong>Observação:</strong> {item.observation}
               </Typography>
-              <Typography variant="body1" sx={{ color: "#000" }}>
+              <Typography variant="body1" sx={{ color: theme.palette.secondary.main }}>
                 <strong>Preço:</strong>{" "}
                 {Number(item.price).toLocaleString("pt-BR", { style: "currency", currency: "BRL" })}
               </Typography>
@@ -172,9 +172,9 @@ const CheckoutPreviewAndEdit = ({ data, handleFinalize }) => {
                           handleChangeForm(e)
                         }}
                         sx={{
-                          "& .MuiInputBase-input": { color: "#000" },
-                          "& .MuiFormLabel-root": { color: "#000" },
-                          "& .MuiFormHelperText-root": { color: "#d32f2f" },
+                          "& .MuiInputBase-input": { color: theme.palette.secondary.main },
+                          "& .MuiFormLabel-root": { color: theme.palette.secondary.main },
+                          "& .MuiFormHelperText-root": { color: theme.palette.primary.main}
                         }}
                         label="Arquivo"
                         InputProps={{

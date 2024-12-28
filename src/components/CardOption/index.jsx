@@ -16,7 +16,7 @@ const CartOption = ({ img, title, description, price, item }) => {
         <Box component={Paper} elevation={2} sx={{
             cursor: "pointer",
             width: "100%",
-            backgroundColor: "#000000",
+            backgroundColor: theme.palette.secondary.main,
         }}>
             <Grid container p={0} >
                 <Grid item xs={4} md={4} lg={3} sm={3}>

@@ -1,11 +1,12 @@
 import React, { useState } from 'react';
-import { Button, TextField, Box, Grid, Typography } from '@mui/material';
+import { Button, TextField, Box, Grid, Typography, useTheme } from '@mui/material';
 import { MoneyOff, CreditCard, AttachMoneyOutlined, PixOutlined } from '@mui/icons-material';
 
 const Pagamento = ({ onPaymentMethodChange, handleNext }) => {
   const [paymentMethod, setPaymentMethod] = useState('');
   const [troco, setTroco] = useState('');
 
+  const theme = useTheme()
   const handlePaymentChange = (method) => {
     setPaymentMethod(method);
     // Update the payment method in parent component
@@ -65,13 +66,13 @@ const Pagamento = ({ onPaymentMethodChange, handleNext }) => {
               value={troco}
               sx={{
                 "& .MuiInputBase-input": {
-                  color: "#000", // Cor do texto ajustada
+                  color: theme.palette.secondary.main
                 },
                 "& .MuiFormLabel-root": {
-                  color: "#000", // Cor do rótulo ajustada
+                  color: theme.palette.secondary.main
                 },
                 "& .MuiFormHelperText-root": {
-                  color: "#d32f2f" // Cor do texto de ajuda
+                  color: theme.palette.primary.main // Cor do texto de ajuda
                 }
               }}
               onChange={handleTrocoChange}

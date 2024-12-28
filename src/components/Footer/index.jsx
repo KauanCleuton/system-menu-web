@@ -2,12 +2,29 @@ import { Box, Container, Grid, Typography, IconButton, useTheme } from "@mui/mat
 import Link from "next/link";
 import Image from "next/image";
 import { Instagram, WhatsApp, Email } from "@mui/icons-material";
+import { useSelector } from "react-redux";
 
 const Footer = () => {
+    const logo = useSelector(state => state.theme.logo)
+    const phone = useSelector(state => state.theme.phone)
+    const address = useSelector(state => state.theme.address)
     const theme = useTheme()
     const updateDateYearCopyright = () => {
         return `© ${new Date().getFullYear()} Vishi Delivery`;
     };
+
+    const formatPhoneNumber = (phone) => {
+        const cleaned = phone.replace(/\D/g, "");
+      
+        if (cleaned.length <= 10) {
+          return cleaned.replace(/^(\d{2})(\d{4})(\d{4})$/, "($1) $2-$3");
+        } else if (cleaned.length === 11) {
+          return cleaned.replace(/^(\d{2})(\d{5})(\d{4})$/, "($1) $2-$3");
+        } else {
+          return phone;
+        }
+      };
+      
 
     return (
         <Box sx={{ width: "100vw", bgcolor: 'secondary.main', color: 'primary.main', py: 2 }}>
@@ -18,7 +35,7 @@ const Footer = () => {
                         <Box sx={{ width: {lg: '120px', xs: '80px'}, height: {lg: '120px', xs: '80px'}, position: 'relative' }}>
                             <Image
                                 alt="Logotipo da Vishi Delivery"
-                                src="/img/logo.svg"
+                                src={logo ? logo : theme.palette.primary.logo}
                                 layout="fill"
                                 objectFit="contain"
                             />
@@ -32,17 +49,17 @@ const Footer = () => {
                                 Contato
                             </Typography>
                             <Typography variant="body2" sx={{ mb: 1, fontSize: {lg: '0.75rem', xs: '0.60rem'} }}>
-                                Rua São Cristóvão, 93, Guaiúba, CE
+                                {address ? address : 'Rua São Cristóvão, 93, Guaiúba, CE'}
                             </Typography>
                             <Typography variant="body2" sx={{ mb: 1, fontSize: {lg: '0.75rem', xs: '0.60rem'} }}>
                                 Telefone: <Link href="tel:558592985693" style={{
                                     color: theme.palette.primary.main
                                 }}>
-                                    (85) 99298-5693
+                                    {formatPhoneNumber(phone)}
                                 </Link>
                             </Typography>
                             <Typography variant="body2" sx={{ mb: 1, fontSize: {lg: '0.75rem', xs: '0.60rem'} }}>
-                                PIX: {`(85) 99298-5693`}
+                                PIX: {`${formatPhoneNumber(phone)}`}
                             </Typography>
                         </Box>
                     </Grid>

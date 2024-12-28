@@ -48,7 +48,7 @@ const BillingAddress = ({ handleSubmit, initialValues }) => {
                                                     color: theme.palette.secondary.main, // Cor do rótulo ajustada
                                                 },
                                                 "& .MuiFormHelperText-root": {
-                                                    color: "#d32f2f" // Cor do texto de ajuda
+                                                    color:theme.palette.primary.main
                                                 }
                                             }}
                                         />
@@ -79,7 +79,7 @@ const BillingAddress = ({ handleSubmit, initialValues }) => {
                                                     color: theme.palette.secondary.main, // Cor do rótulo ajustada
                                                 },
                                                 "& .MuiFormHelperText-root": {
-                                                    color: "#d32f2f" // Cor do texto de ajuda
+                                                    color:theme.palette.primary.main
                                                 }
                                             }}
                                         />
@@ -109,7 +109,7 @@ const BillingAddress = ({ handleSubmit, initialValues }) => {
                                                     color: theme.palette.secondary.main, // Cor do rótulo ajustada
                                                 },
                                                 "& .MuiFormHelperText-root": {
-                                                    color: "#d32f2f" // Cor do texto de ajuda
+                                                    color:theme.palette.primary.main
                                                 }
                                             }}
                                         />
@@ -139,7 +139,7 @@ const BillingAddress = ({ handleSubmit, initialValues }) => {
                                                     color: theme.palette.secondary.main, // Cor do rótulo ajustada
                                                 },
                                                 "& .MuiFormHelperText-root": {
-                                                    color: "#d32f2f" // Cor do texto de ajuda
+                                                    color:theme.palette.primary.main
                                                 }
                                             }}
                                         />
@@ -169,7 +169,7 @@ const BillingAddress = ({ handleSubmit, initialValues }) => {
                                                     color: theme.palette.secondary.main, // Cor do rótulo ajustada
                                                 },
                                                 "& .MuiFormHelperText-root": {
-                                                    color: "#d32f2f" // Cor do texto de ajuda
+                                                    color:theme.palette.primary.main
                                                 }
                                             }}
                                         />
@@ -184,12 +184,12 @@ const BillingAddress = ({ handleSubmit, initialValues }) => {
                                 type="submit"
                                 variant="contained"
                                 sx={{
-                                    bgcolor: "#ec500d",
+                                    bgcolor: theme.palette.primary.main,
                                     borderRadius: '5px',
                                     textTransform: 'inherit',
                                     fontSize: '18px',
                                     fontWeight: 400,
-                                    color: "#fff",
+                                    color: theme.palette.primary.white,
                                     border: `1px solid ${theme.palette.primary.main}`,
                                     ":hover": {
                                         bgcolor: "transparent",

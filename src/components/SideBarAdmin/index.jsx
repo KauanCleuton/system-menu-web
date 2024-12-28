@@ -10,11 +10,11 @@ import InventoryIcon from '@mui/icons-material/Inventory';
 import LocalShippingIcon from '@mui/icons-material/LocalShipping';
 import AttachMoneyIcon from '@mui/icons-material/AttachMoney'; // Novo ícone para "Caixa"
 import { usePathname } from 'next/navigation';
-import { Person, PersonOutline } from '@mui/icons-material';
+import { Palette, Person, PersonOutline } from '@mui/icons-material';
 
 const routesComponent = [
     { title: "Dashboard", icon: <DashboardIcon sx={{ width: 20, height: 20 }} />, route: "/admin" },
-    // { title: "Caixa", icon: <AttachMoneyIcon sx={{ width: 20, height: 20 }} />, route: "/admin/caixa" }, 
+    // { title: "Caixa", icon: <AttachMoneyIcon sx={{ width: 20, height: 20 }} />, route: "/admin/caixa" },
     { title: "Administradores", icon: <AdminPanelSettingsIcon sx={{ width: 20, height: 20 }} />, route: "/admin/administradores" },
     { title: "Usuários", icon: <PeopleIcon sx={{ width: 20, height: 20 }} />, route: "/admin/usuarios" },
     { title: "Categorias", icon: <CategoryIcon sx={{ width: 20, height: 20 }} />, route: "/admin/categorias" },
@@ -22,6 +22,7 @@ const routesComponent = [
     { title: "Produtos", icon: <InventoryIcon sx={{ width: 20, height: 20 }} />, route: "/admin/produtos" },
     // { title: "Entregador", icon: <LocalShippingIcon sx={{ width: 20, height: 20 }} />, route: "/admin/entregador" },
     { title: "Perfil Administrador", icon: <Person sx={{ width: 20, height: 20 }} />, route: "/admin/perfil" },
+    { title: "Tema", icon: <Palette sx={{ width: 20, height: 20 }} />, route: "/admin/theme" }, // Seção para mudar o tema
 ];
 
 const Sidebar = () => {

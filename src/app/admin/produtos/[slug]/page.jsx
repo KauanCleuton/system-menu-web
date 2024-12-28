@@ -99,7 +99,7 @@ const EditProduct = () => {
                     <Typography
                         variant='h2'
                         sx={{
-                            color: '#000',
+                            color: theme.palette.secondary.main,
                             textAlign: 'center',
                             fontSize: { lg: '40px', md: '34px', sm: '30px', xs: '25px' },
                         }}
@@ -148,9 +148,9 @@ const EditProduct = () => {
                                                     onChange={handleFileChange}
                                                     helperText={<ErrorMessage name="file_url" component={FormHelperText} />}
                                                     sx={{
-                                                        "& .MuiInputBase-input": { color: '#000' },
-                                                        "& .MuiFormLabel-root": { color: '#000' },
-                                                        "& .MuiFormHelperText-root": { color: '#d32f2f' },
+                                                        "& .MuiInputBase-input": { color: theme.palette.secondary.main },
+                                                        "& .MuiFormLabel-root": { color: theme.palette.secondary.main },
+                                                        "& .MuiFormHelperText-root": { color: theme.palette.primary.main },
                                                     }}
                                                 />
                                             </FormControl>
@@ -177,7 +177,7 @@ const EditProduct = () => {
                                                                     sx={{
                                                                         "& .MuiInputBase-input": { color: theme.palette.primary.main },
                                                                         "& .MuiFormLabel-root": { color: theme.palette.primary.main },
-                                                                        "& .MuiFormHelperText-root": { color: '#d32f2f' },
+                                                                        "& .MuiFormHelperText-root": { color: theme.palette.primary.main },
                                                                     }}
                                                                 />
                                                             )}
@@ -194,7 +194,7 @@ const EditProduct = () => {
                                                                     color: theme.palette.primary.main,
                                                                 },
                                                                 '& .MuiAutocomplete-option.Mui-focused': {
-                                                                    backgroundColor: '#ec500d',
+                                                                    backgroundColor: theme.palette.primary.main,
                                                                     color: '#fff',
                                                                 },
                                                             }}
@@ -218,7 +218,7 @@ const EditProduct = () => {
                                                             sx={{
                                                                 "& .MuiInputBase-input": { color: theme.palette.primary.main },
                                                                 "& .MuiFormLabel-root": { color: theme.palette.primary.main },
-                                                                "& .MuiFormHelperText-root": { color: '#d32f2f' },
+                                                                "& .MuiFormHelperText-root": { color: theme.palette.primary.main },
                                                             }}
                                                         />
                                                     )}
@@ -240,7 +240,7 @@ const EditProduct = () => {
                                                             sx={{
                                                                 "& .MuiInputBase-input": { color: theme.palette.primary.main },
                                                                 "& .MuiFormLabel-root": { color: theme.palette.primary.main },
-                                                                "& .MuiFormHelperText-root": { color: '#d32f2f' },
+                                                                "& .MuiFormHelperText-root": { color: theme.palette.primary.main },
                                                             }}
                                                         />
                                                     )}
@@ -263,7 +263,7 @@ const EditProduct = () => {
                                                             sx={{
                                                                 "& .MuiInputBase-input": { color: theme.palette.primary.main },
                                                                 "& .MuiFormLabel-root": { color: theme.palette.primary.main },
-                                                                "& .MuiFormHelperText-root": { color: '#d32f2f' },
+                                                                "& .MuiFormHelperText-root": { color: theme.palette.primary.main },
                                                             }}
                                                         />
                                                     )}

@@ -24,8 +24,9 @@ const verifyJWTExpiration = (decoded) => {
     return false;
   }
 };
+
 export const isLoggedIn = (tokenType = 'refreshToken') => {
-  if (typeof sessionStorage !== 'undefined') {
+  if (typeof window !== 'undefined' && typeof sessionStorage !== 'undefined') {
     const accessToken = sessionStorage.getItem('accessToken');
     const refreshToken = sessionStorage.getItem('refreshToken');
 
@@ -49,9 +50,9 @@ export const isLoggedIn = (tokenType = 'refreshToken') => {
     console.error(
       'O objeto sessionStorage não está disponível neste ambiente.'
     );
-    // Trate o erro de acordo com as necessidades do seu aplicativo.
   }
 };
+
 
 export const isclientCredentialsExpired = () => {
   const clientCredentials = sessionStorage.getItem('clientCredentials');

@@ -6,7 +6,7 @@ import Image from "next/image"
 import { useSelector } from "react-redux"
 
 const TopSection = () => {
-
+    const logo = useSelector(state => state.theme.logo)
     const theme = useTheme()
     return (
         <Box
@@ -52,7 +52,7 @@ const TopSection = () => {
                 >
                     <Grid container >
                         <Grid item xs={12}>
-                            <Grid container spacing={'14px'}>
+                            <Grid container spacing={'1px'}>
                                 <Grid item xs={12} >
                                     <Box sx={{
                                         width: "100%",
@@ -61,16 +61,17 @@ const TopSection = () => {
                                     }}>
                                         <Box
                                             sx={{
-                                                width: { lg: '150px', md: "140px", sm: '120px', xs: '110px' },
-                                                height: { lg: '150px', md: "140px", sm: '120px', xs: '110px' },
+                                                width: { lg: '170px', md: "140px", sm: '120px', xs: '110px' },
+                                                height: { lg: '170px', md: "140px", sm: '120px', xs: '110px' },
                                                 position: "relative",
+                                                borderRadius:'100%'
                                             }}
                                         >
                                             <Image
                                                 alt="Image do hamburguer"
-                                                src="/img/hamburguer-bg.png"
+                                                src={   logo ? logo : theme.palette.primary.logo}
                                                 style={{ cursor: 'pointer', objectFit: "cover", borderRadius: "50%" }}
-                                                fill
+                                                layout="fill"
                                             />
                                         </Box>
                                     </Box>

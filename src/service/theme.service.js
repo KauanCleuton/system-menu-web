@@ -1,8 +1,30 @@
 import ServiceBase from "./service.base";
 
-class ThemeService extends ServiceBase {
+export class ThemeService extends ServiceBase {
     constructor() {
-        super('noAuth');
+        super('user');
+    }
+
+    
+    postCreateTheme(data) {
+        return this.post('/theme', data)
+    }
+    putThemeById(id, data) {
+        return this.put(`/theme/${id}`, data)
+    }
+    deleteThemeById(id) {
+        return this.delete(`/theme/${id}`)
+    }
+    patchToggleVisibleThemeById(id) {
+        return this.patch(`/theme/visible/${id}`)
+    }
+
+}
+
+
+export class ThemeServiceNoAuth extends ServiceBase {
+    constructor() {
+        super('noAuth')
     }
 
     getThemeByDomain(domain) {
@@ -12,10 +34,10 @@ class ThemeService extends ServiceBase {
             }
         });
     }
-
-    getContacts() {
-        return this.get("/whatsapp/contacts")
+    getAllThemes() {
+        return this.get("/all-themes")
     }
 }
 
-export default ThemeService;
+
+

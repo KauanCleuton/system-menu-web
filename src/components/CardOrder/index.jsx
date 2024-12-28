@@ -18,24 +18,24 @@ const CardOrder = ({ data, handleRouterOrder, setData }) => {
         }}>
             <Grid container direction="row" flexWrap='wrap' alignItems='center' justifyContent='space-between' spacing={2}>
                 <Grid item>
-                    <Typography variant="subtitle1" sx={{ color: '#000', fontWeight: 'bold' }}>Nome do cliente:</Typography>
-                    <Typography variant="body1" sx={{ color: '#000' }}>{User.name}</Typography>
+                    <Typography variant="subtitle1" sx={{ color: theme.palette.secondary.main, fontWeight: 'bold' }}>Nome do cliente:</Typography>
+                    <Typography variant="body1" sx={{ color: theme.palette.secondary.main }}>{User.name}</Typography>
                 </Grid>
                 <Grid item>
-                    <Typography variant="subtitle1" sx={{ color: '#000', fontWeight: 'bold' }}>Endereço de entrega:</Typography>
-                    <Typography variant="body1" sx={{ color: '#000' }}>{address}</Typography>
+                    <Typography variant="subtitle1" sx={{ color: theme.palette.secondary.main, fontWeight: 'bold' }}>Endereço de entrega:</Typography>
+                    <Typography variant="body1" sx={{ color: theme.palette.secondary.main }}>{address}</Typography>
                 </Grid>
                 <Grid item>
-                    <Typography variant="subtitle1" sx={{ color: '#000', fontWeight: 'bold' }}>Valor total do pedido:</Typography>
-                    <Typography variant="body1" sx={{ color: '#000' }}>R$ {total_price.toFixed(2)}</Typography>
+                    <Typography variant="subtitle1" sx={{ color: theme.palette.secondary.main, fontWeight: 'bold' }}>Valor total do pedido:</Typography>
+                    <Typography variant="body1" sx={{ color: theme.palette.secondary.main }}>R$ {total_price.toFixed(2)}</Typography>
                 </Grid>
                 <Grid item>
-                    <Typography variant="subtitle1" sx={{ color: '#000', fontWeight: 'bold' }}>Status atual do pedido:</Typography>
-                    <Typography variant="body1" sx={{ color: '#000' }}>{status}</Typography>
+                    <Typography variant="subtitle1" sx={{ color: theme.palette.secondary.main, fontWeight: 'bold' }}>Status atual do pedido:</Typography>
+                    <Typography variant="body1" sx={{ color: theme.palette.secondary.main }}>{status}</Typography>
                 </Grid>
                 <Grid item>
-                    <Typography variant="subtitle1" sx={{ color: '#000', fontWeight: 'bold' }}>Hora do pedido:</Typography>
-                    <Typography variant="body1" sx={{ color: '#000' }}>{created_at}</Typography>
+                    <Typography variant="subtitle1" sx={{ color: theme.palette.secondary.main, fontWeight: 'bold' }}>Hora do pedido:</Typography>
+                    <Typography variant="body1" sx={{ color: theme.palette.secondary.main }}>{created_at}</Typography>
                 </Grid>
                 <Grid item container alignItems="center" justifyContent="flex-end">
                     <Button

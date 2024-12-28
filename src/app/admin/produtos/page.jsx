@@ -134,18 +134,18 @@ const Produtos = () => {
                         <Grid item lg={8} xs={12}>
                             <TextField
                                 id="search-admin"
-                                label="Buscar Admin pelo nome"
-                                placeholder="Buscar Admin pelo nome"
+                                label="Buscar produto pelo name"
+                                placeholder="Buscar produto pelo name"
                                 variant="outlined"
                                 value={name}
                                 onChange={(e) => setName(e.target.value)}
                                 fullWidth
                                 sx={{
                                     "& .MuiInputBase-input": {
-                                        color: "#000"
+                                        color: theme.palette.secondary.main
                                     },
                                     "& .MuiFormLabel-root": {
-                                        color: "#000"
+                                        color: theme.palette.secondary.main
                                     },
                                     "& .MuiOutlinedInput-root": {
                                         "& fieldset": {
@@ -159,7 +159,7 @@ const Produtos = () => {
                                         }
                                     },
                                     "& .MuiFormHelperText-root": {
-                                        color: "#d32f2f"
+                                        color: theme.palette.primary.main
                                     }
                                 }}
                             />

@@ -26,7 +26,7 @@ const MaskedInput = ({ name, label, mask, placeholder, adornment, onChange, valu
                 {...inputProps}
                 label={label}
                 sx={{
-                  color: "#000"
+                  color: theme.palette.secondary.main
                 }}
                 startAdornment={adornment ? <InputAdornment position="start">{adornment}</InputAdornment> : null}
               />

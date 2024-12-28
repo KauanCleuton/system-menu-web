@@ -88,7 +88,7 @@ const Menu = () => {
                                         sx={{
                                             fontSize: 29,
                                             fontWeight: "bold",
-                                            color: "#000",
+                                            color:theme.palette.secondary.main,
                                             mt: 1,
                                         }}
                                     >

@@ -133,12 +133,12 @@ const AddNewAdmin = () => {
                         <Typography
                             variant='h2'
                             sx={{
-                                color: '#000',
+                                color: theme.palette.secondary.main,
                                 textAlign: 'center',
                                 fontSize: { lg: '40px', md: '34px', sm: '30px', xs: '25px' },
                             }}
                         >
-                            Adicionar Novo Administrador
+                            Adicionar Novo Produto
                         </Typography>
                     </Grid>
                     <Grid item xs={12}>
@@ -178,9 +178,9 @@ const AddNewAdmin = () => {
                                                     onChange={handleFileChange}
                                                     helperText={<ErrorMessage name="file_url" component={FormHelperText} />}
                                                     sx={{
-                                                        "& .MuiInputBase-input": { color: '#000' },
-                                                        "& .MuiFormLabel-root": { color: '#000' },
-                                                        "& .MuiFormHelperText-root": { color: '#d32f2f' },
+                                                        "& .MuiInputBase-input": { color: theme.palette.secondary.main },
+                                                        "& .MuiFormLabel-root": { color: theme.palette.secondary.main },
+                                                        "& .MuiFormHelperText-root": { color: theme.palette.primary.main },
                                                     }}
                                                 />
                                             </FormControl>
@@ -209,7 +209,7 @@ const AddNewAdmin = () => {
                                                                     sx={{
                                                                         "& .MuiInputBase-input": { color: theme.palette.primary.main },
                                                                         "& .MuiFormLabel-root": { color: theme.palette.primary.main },
-                                                                        "& .MuiFormHelperText-root": { color: '#d32f2f' },
+                                                                        "& .MuiFormHelperText-root": { color: theme.palette.primary.main },
                                                                     }}
                                                                 />
                                                             )}
@@ -226,7 +226,7 @@ const AddNewAdmin = () => {
                                                                     color: theme.palette.primary.main,
                                                                 },
                                                                 '& .MuiAutocomplete-option.Mui-focused': {
-                                                                    backgroundColor: '#ec500d',
+                                                                    backgroundColor: theme.palette.primary.main,
                                                                     color: '#fff',
                                                                 },
                                                             }}
@@ -251,7 +251,7 @@ const AddNewAdmin = () => {
                                                             sx={{
                                                                 "& .MuiInputBase-input": { color: theme.palette.primary.main },
                                                                 "& .MuiFormLabel-root": { color: theme.palette.primary.main },
-                                                                "& .MuiFormHelperText-root": { color: '#d32f2f' },
+                                                                "& .MuiFormHelperText-root": { color: theme.palette.primary.main },
                                                             }}
                                                         />
                                                     )}
@@ -274,7 +274,7 @@ const AddNewAdmin = () => {
                                                             sx={{
                                                                 "& .MuiInputBase-input": { color: theme.palette.primary.main },
                                                                 "& .MuiFormLabel-root": { color: theme.palette.primary.main },
-                                                                "& .MuiFormHelperText-root": { color: '#d32f2f' },
+                                                                "& .MuiFormHelperText-root": { color: theme.palette.primary.main },
                                                             }}
                                                         />
                                                     )}
@@ -298,7 +298,7 @@ const AddNewAdmin = () => {
                                                             sx={{
                                                                 "& .MuiInputBase-input": { color: theme.palette.primary.main },
                                                                 "& .MuiFormLabel-root": { color: theme.palette.primary.main },
-                                                                "& .MuiFormHelperText-root": { color: '#d32f2f' },
+                                                                "& .MuiFormHelperText-root": { color: theme.palette.primary.main },
                                                             }}
                                                         />
                                                     )}

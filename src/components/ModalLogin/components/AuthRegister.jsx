@@ -216,7 +216,7 @@ const AuthRegister = ({ setMode }) => {
                                             type="submit"
                                             variant="contained"
                                             sx={{
-                                                bgcolor: "#ec500d",
+                                                bgcolor: theme.palette.primary.main,
                                                 borderRadius: '5px',
                                                 textTransform: 'inherit',
                                                 width: '100%',

@@ -26,7 +26,7 @@ const Paginator = ({ count, page, setPage, limit }) => {
             //components={{ previous: '<<', next: '>>' }}
             {...item}
             sx={{
-              color: "#000",
+              color: theme.palette.secondary.main,
               bgcolor: '#e7e7e7',
               ...(item.page === page && {
                 backgroundColor: theme.palette.primary.main,

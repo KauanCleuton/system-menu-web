@@ -93,7 +93,7 @@ const CategoryComponent = ({ data, onSubmit, functionStates, onClose }) => {
                                                                 }
                                                             },
                                                             "& .MuiFormHelperText-root": {
-                                                                color: "#d32f2f"
+                                                                color: theme.palette.primary.main
                                                             }
                                                         }}
                                                     />

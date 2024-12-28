@@ -56,7 +56,7 @@ const AddNewAdmin = () => {
     return (
         <Grid container spacing={2} direction='column' py={1}>
             <Grid item>
-                <Typography variant='h2' sx={{ color: "#000", textAlign: "center", fontSize: {lg: '40px', md: '34px', sm: '30px', xs: '25px'} }}>
+                <Typography variant='h2' sx={{ color: theme.palette.secondary.main, textAlign: "center", fontSize: {lg: '40px', md: '34px', sm: '30px', xs: '25px'} }}>
                     Adicionar Novo Administrador
                 </Typography>
             </Grid>
@@ -86,17 +86,17 @@ const AddNewAdmin = () => {
                                                     helperText={<ErrorMessage name="name" component={FormHelperText} />}
                                                     sx={{
                                                         "& .MuiInputBase-input": {
-                                                            color: "#000",
+                                                            color: theme.palette.secondary.main,
                                                         },
                                                         "& .MuiFormLabel-root": {
-                                                            color: "#000",
+                                                            color: theme.palette.secondary.main,
                                                         },
                                                         "& .MuiFormHelperText-root": {
-                                                            color: "#d32f2f",
+                                                            color: theme.palette.primary.main,
                                                         },
                                                         "& .MuiOutlinedInput-root": {
                                                             "&:hover fieldset": {
-                                                                borderColor: "#ec500d",
+                                                                borderColor: theme.palette.primary.main,
                                                             },
                                                         },
                                                     }}
@@ -128,22 +128,27 @@ const AddNewAdmin = () => {
                                                             InputProps={{
                                                                 endAdornment: (
                                                                     <InputAdornment position="end">
-                                                                        <PhoneIphoneOutlined sx={{ color: "#FFF", width: 17, height: 17 }} />
+                                                                        <PhoneIphoneOutlined sx={{ color: theme.palette.primary.white, width: 17, height: 17 }} />
                                                                     </InputAdornment>
                                                                 ),
                                                                 inputProps: {
-                                                                    style: { color: "#000" },
+                                                                    style: { color: theme.palette.secondary.main },
                                                                 },
                                                             }}
                                                             sx={{
                                                                 "& .MuiInputBase-input": {
-                                                                    color: "#000",
+                                                                    color: theme.palette.secondary.main,
                                                                 },
                                                                 "& .MuiFormLabel-root": {
-                                                                    color: "#000",
+                                                                    color: theme.palette.secondary.main,
                                                                 },
                                                                 "& .MuiFormHelperText-root": {
-                                                                    color: "#d32f2f",
+                                                                    color: theme.palette.primary.main,
+                                                                },
+                                                                "& .MuiOutlinedInput-root": {
+                                                                    "&:hover fieldset": {
+                                                                        borderColor: theme.palette.primary.main,
+                                                                    },
                                                                 },
                                                             }}
                                                         />
@@ -181,17 +186,17 @@ const AddNewAdmin = () => {
                                                     helperText={<ErrorMessage name="senha" component={FormHelperText} />}
                                                     sx={{
                                                         "& .MuiInputBase-input": {
-                                                            color: "#000",
+                                                            color: theme.palette.secondary.main,
                                                         },
                                                         "& .MuiFormLabel-root": {
-                                                            color: "#000",
+                                                            color: theme.palette.secondary.main,
                                                         },
                                                         "& .MuiFormHelperText-root": {
-                                                            color: "#d32f2f",
+                                                            color: theme.palette.primary.main,
                                                         },
                                                         "& .MuiOutlinedInput-root": {
                                                             "&:hover fieldset": {
-                                                                borderColor: "#ec500d",
+                                                                borderColor: theme.palette.primary.main,
                                                             },
                                                         },
                                                     }}
@@ -213,12 +218,12 @@ const AddNewAdmin = () => {
                                             LinkComponent={Link}
                                             href="/admin/administradores"
                                             sx={{
-                                                bgcolor: "#ec500d",
+                                                bgcolor: theme.palette.primary.main,
                                                 borderRadius: '5px',
                                                 textTransform: 'inherit',
                                                 fontSize: '18px',
                                                 fontWeight: 400,
-                                                color: "#fff",
+                                                color: theme.palette.primary.white,
                                                 border: `1px solid ${theme.palette.primary.main}`,
                                                 ":hover": {
                                                     bgcolor: "transparent",
@@ -233,12 +238,12 @@ const AddNewAdmin = () => {
                                             type="submit"
                                             variant="contained"
                                             sx={{
-                                                bgcolor: "#ec500d",
+                                                bgcolor: theme.palette.primary.main,
                                                 borderRadius: '5px',
                                                 textTransform: 'inherit',
                                                 fontSize: '18px',
                                                 fontWeight: 400,
-                                                color: "#fff",
+                                                color: theme.palette.primary.white,
                                                 border: `1px solid ${theme.palette.primary.main}`,
                                                 ":hover": {
                                                     bgcolor: "transparent",

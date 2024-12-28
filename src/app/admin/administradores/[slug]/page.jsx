@@ -89,7 +89,7 @@ const EditAdmin = () => {
     return (
         <Grid container spacing={2} direction='column' py={1}>
             <Grid item>
-                <Typography variant='h2' sx={{ color: "#000", textAlign: "center", fontSize: { lg: '40px', md: '34px', sm: '30px', xs: '25px' } }}>
+                <Typography variant='h2' sx={{ color: theme.palette.secondary.main, textAlign: "center", fontSize: { lg: '40px', md: '34px', sm: '30px', xs: '25px' } }}>
                     Editar Administrador
                 </Typography>
             </Grid>
@@ -164,11 +164,11 @@ const EditAdmin = () => {
                                                             InputProps={{
                                                                 endAdornment: (
                                                                     <InputAdornment position="end">
-                                                                        <PhoneIphoneOutlined sx={{ color: "#FFF", width: 17, height: 17 }} />
+                                                                        <PhoneIphoneOutlined sx={{ color: theme.palette.primary.white, width: 17, height: 17 }} />
                                                                     </InputAdornment>
                                                                 ),
                                                                 inputProps: {
-                                                                    style: { color: "#000" },
+                                                                    style: { color: theme.palette.secondary.main },
                                                                 },
                                                             }}
                                                             sx={{
@@ -302,7 +302,7 @@ const EditAdmin = () => {
                                                 textTransform: 'inherit',
                                                 fontSize: '18px',
                                                 fontWeight: 400,
-                                                color: "#fff",
+                                                color: theme.palette.primary.white,
                                                 border: `1px solid ${theme.palette.primary.main}`,
                                                 ":hover": {
                                                     bgcolor: "transparent",
@@ -322,7 +322,7 @@ const EditAdmin = () => {
                                                 textTransform: 'inherit',
                                                 fontSize: '18px',
                                                 fontWeight: 400,
-                                                color: "#fff",
+                                                color: theme.palette.primary.white,
                                                 border: `1px solid ${theme.palette.primary.main}`,
                                                 ":hover": {
                                                     bgcolor: "transparent",

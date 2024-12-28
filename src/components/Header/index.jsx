@@ -15,6 +15,7 @@ import SnackBar from '../SnackBar';
 
 const Header = () => {
     const theme = useTheme()
+    const logo = useSelector(state => state.theme.logo)
     const totalItems = useSelector(state => state.cart.totalItems);
     const path = usePathname();
     const trigger = useScrollTrigger({ disableHysteresis: true, threshold: 0 });
@@ -86,19 +87,20 @@ const Header = () => {
                                     <Box sx={{
                                         width: "100%",
                                         display: "flex",
-                                        justifyContent: "flex-start"
+                                        justifyContent: "flex-start",
+                                        p: 1
                                     }}>
                                         <Box
                                             component={Link}
                                             href="/"
                                             sx={{
-                                                width: "74px",
-                                                height: '74px',
+                                                width: "67px",
+                                                height: '67px',
                                                 position: "relative"
                                             }}
                                         >
                                             <Image
-                                                src={theme.palette.primary.logo}
+                                                src={logo ? logo : theme.palette.primary.logo}
                                                 alt="Logo do Site"
                                                 layout='fill'
                                                 style={{ objectFit: "cover" }}

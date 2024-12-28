@@ -33,11 +33,11 @@ const Cart = () => {
         <Box
             sx={{
                 width: "100%",
-                height: "100%",
+                height: "100vh",
                 display: 'flex',
                 justifyContent: "center",
                 alignItems: "center",
-                py: 15,
+                py: 14,
                 px: 2,
             }}
         >
@@ -64,7 +64,7 @@ const Cart = () => {
                                     display: "flex",
                                     justifyContent: { lg: "flex-start", xs: "center" }
                                 }}>
-                                    <Typography variant="h3" sx={{ fontSize: { lg: 28, md: 25, sm: 22, xs: 21 }, fontWeight: "bold", color: "#000" }}>
+                                    <Typography variant="h3" sx={{ fontSize: { lg: 28, md: 25, sm: 22, xs: 21 }, fontWeight: "bold", color: theme.palette.secondary.main }}>
                                         Total do pedido: {items.length !== 0 && `${Number(totalAmount).toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' })}`}
                                     </Typography>
                                 </Box>
@@ -77,13 +77,13 @@ const Cart = () => {
                                 }}>
                                     <Button component={Link} href="/" variant="contained" sx={{
                                         textTransform: "inherit",
-                                        bgcolor: "#000",
-                                        border: `1px solid #000`,
+                                        bgcolor: theme.palette.secondary.main,
+                                        border: `1px solid ${theme.palette.secondary.main}`,
                                         color: theme.palette.primary.main,
                                         fontSize: { lg: '16px', xs: '9px' },
                                         ":hover": {
                                             bgcolor: "transparent",
-                                            color: "#000"
+                                            color: theme.palette.secondary.main
                                         }
                                     }}>
                                         Comprar Mais

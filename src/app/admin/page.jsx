@@ -294,10 +294,10 @@ const Caixa = () => {
                                                         )}
                                                         sx={{
                                                             "& .MuiInputBase-input": {
-                                                                color: "#000", 
+                                                                color: theme.palette.secondary.main, 
                                                             },
                                                             "& .MuiFormLabel-root": {
-                                                                color: "#000", 
+                                                                color: theme.palette.secondary.main, 
                                                             },
                                                             "& .MuiOutlinedInput-root": {
                                                                 "& fieldset": {
@@ -346,10 +346,10 @@ const Caixa = () => {
                                                             fullWidth
                                                             sx={{
                                                                 "& .MuiInputBase-input": {
-                                                                    color: "#000", 
+                                                                    color: theme.palette.secondary.main, 
                                                                 },
                                                                 "& .MuiFormLabel-root": {
-                                                                    color: "#000", 
+                                                                    color: theme.palette.secondary.main, 
                                                                 },
                                                                 "& .MuiOutlinedInput-root": {
                                                                     "& fieldset": {
@@ -528,7 +528,7 @@ const Caixa = () => {
                                         </Box>
                                     </Grid>
                                 ) :
-                                    <Grid item xs={12} border="1px solid #000" sx={{ borderRadius: '0 0 5px 5px' }}>
+                                    <Grid item xs={12} border={`1px solid ${theme.palette.secondary.main}`} sx={{ borderRadius: '0 0 5px 5px' }}>
                                         {data.length > 0 && (
                                             data.slice((page - 1) * limit, page * limit).map((item, index) => (
                                                 <Box key={index}  >
