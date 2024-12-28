@@ -7,6 +7,8 @@ import { useSelector } from "react-redux"
 
 const TopSection = () => {
     const logo = useSelector(state => state.theme.logo)
+    const address = useSelector(state => state.theme.address)
+    const name = useSelector(state => state.theme.name)
     const theme = useTheme()
     return (
         <Box
@@ -69,7 +71,7 @@ const TopSection = () => {
                                         >
                                             <Image
                                                 alt="Image do hamburguer"
-                                                src={   logo ? logo : theme.palette.primary.logo}
+                                                src={ logo ? logo : theme.palette.primary.logo}
                                                 style={{ cursor: 'pointer', objectFit: "cover", borderRadius: "50%" }}
                                                 layout="fill"
                                             />
@@ -88,7 +90,7 @@ const TopSection = () => {
                                             <Typography sx={{ textAlign: "center", 
                                                 fontSize: { lg: 35, md: 26, sm: 24, xs: 20 }, fontWeight: 'bold', color: "#fff" 
                                                 }} >
-                                                Vishi Delivery
+                                                {name ? name : 'Vishi Delivery'}
                                             </Typography>
                                         </Box>
                                     </Grid>
@@ -101,7 +103,7 @@ const TopSection = () => {
                                             }}
                                         >
                                             <Typography sx={{ textAlign: "center", fontSize: { lg: 16, md: 14, sm: 12, xs: 11 }, fontWeight: '500', color: "#fff" }} >
-                                                Rua São Cristóvão, 93, Guaiúba, CE
+                                                {address ? address : 'Rua São Cristóvão - 93, Santo Antônio, Guaiúba - CE'}
                                             </Typography>
                                         </Box>
                                     </Grid>

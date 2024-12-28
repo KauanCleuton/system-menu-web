@@ -1,11 +1,11 @@
-"use client"
-import { Provider, useDispatch, useSelector } from 'react-redux';  // Certifique-se de importar useDispatch corretamente
-import { SET_THEME } from '@/store/actions';  // Importe corretamente suas actions
+"use client"; 
+import { Provider, useDispatch, useSelector } from 'react-redux';
+import { SET_THEME } from '@/store/actions'; 
 import React, { useEffect, useState } from 'react';
 import { Box } from '@mui/material';
 import { ThemeProvider } from '@mui/material/styles';
 import CssBaseline from '@mui/material/CssBaseline';
-import Head from 'next/head';
+import Head from 'next/head'; 
 import store from '@/store';
 import Header from '@/components/Header';
 import Footer from '@/components/Footer';
