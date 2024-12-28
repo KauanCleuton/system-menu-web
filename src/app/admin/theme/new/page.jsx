@@ -18,7 +18,7 @@ const ThemePage = () => {
     const dispatch = useDispatch()
     const [initialValues, setInitialValues] = useState({
         nameTheme: '',
-        domain: window.location.hostname,
+        domain: typeof window !== "undefined" ? window.location.hostname : "",
         primary: '',
         secondary: '',
         logo: '',
