@@ -32,17 +32,12 @@ function AppTemplate({ children }) {
       const domain = window.location.hostname;
       const response = await themeSv.getThemeByDomain(domain);
       const themeData = response.find((item) => item.visibleTheme === true);
-
-      console.log(themeData, '9219392193');
-
       if (themeData) {
         setColorsTheme({
           primary: themeData.primary && /^#[0-9A-F]{6}$/i.test(themeData.primary) ? themeData.primary : '#FF4D00',
           secondary: themeData.secondary && /^#[0-9A-F]{6}$/i.test(themeData.secondary) ? themeData.secondary : '#000',
         });
-
         dispatch({ type: SET_THEME, payload: themeData });
-
         dispatch({
           type: 'SYNC_THEME_UPDATE',
           payload: false,
