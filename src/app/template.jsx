@@ -43,7 +43,6 @@ function AppTemplate({ children }) {
 
         dispatch({ type: SET_THEME, payload: themeData });
 
-        // Marca que o tema foi carregado
         dispatch({
           type: 'SYNC_THEME_UPDATE',
           payload: false,
