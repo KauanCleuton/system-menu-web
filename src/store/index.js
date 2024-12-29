@@ -5,6 +5,7 @@ import loginReducer from './loginSlice';
 import customizationReducer from './customizationOpened';
 import alertReducer from './alertReducer';
 import themeReducer from './themeReducer';
+import themeUpdateReducer from './themeUpdateReducer';
 
 const store = configureStore({
     reducer: {
@@ -14,6 +15,7 @@ const store = configureStore({
         customization: customizationReducer,
         alert: alertReducer,
         theme: themeReducer,
+        themeUpdate: themeUpdateReducer
     },
 });
 

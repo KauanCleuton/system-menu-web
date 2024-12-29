@@ -11,6 +11,10 @@ export const HIDE_ALERT = 'HIDE_ALERT';
 
 export const SET_THEME = '@theme/SET_THEME';
 export const RESET_THEME = '@theme/RESET_THEME';
+export const SYNC_THEME_UPDATE = '@themeUpdate/SYNC_THEME_UPDATE';
+export const SYNC_THEME = '@themeUpdate/SYNC_THEME';
+
+
 
 export const setTheme = (themeData) => ({
   type: SET_THEME,
@@ -22,11 +26,10 @@ export const resetTheme = () => ({
 });
 
 export const showAlert = (message, severity, type) => ({
-    type: SHOW_ALERT,
-    payload: { message, severity, type,open: true },
-  });
-  
-  export const hideAlert = () => ({
-    type: HIDE_ALERT,
-  });
-  
+  type: SHOW_ALERT,
+  payload: { message, severity, type, open: true },
+});
+
+export const hideAlert = () => ({
+  type: HIDE_ALERT,
+});
