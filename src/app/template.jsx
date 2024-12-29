@@ -1,4 +1,4 @@
-// "use client"; 
+"use client"; 
 import { Provider, useDispatch, useSelector } from 'react-redux';
 import { SET_THEME, SYNC_THEME } from '@/store/actions'; 
 import React, { useEffect, useState } from 'react';
