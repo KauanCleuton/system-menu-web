@@ -45,5 +45,5 @@ jobs:
           git pull origin master
           npm ci
           npm run build
-          pm2 restart vishidelivery-frontend || pm2 start npm --name "vishidelivery-frontend" -- start
+          pm2 restart vishidelivery-frontend
         EOF
