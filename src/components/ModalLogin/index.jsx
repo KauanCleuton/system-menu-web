@@ -18,6 +18,7 @@ const ModalLogin = () => {
     const dispatch = useDispatch();
     const theme = useTheme();
     const mode = useSelector((state) => state.login.mode);
+    const logo = useSelector(state => state.theme.logo)
     //const [mode, setMode] = useState('login');
     const setMode = (mode) => dispatch({ type: SET_LOGIN_MENU, mode: mode });
     const closeModal = () => dispatch({ type: SET_LOGIN_MENU, opened: false });
@@ -52,8 +53,8 @@ const ModalLogin = () => {
                                         width: 160, height: 160, position: 'relative',
                                     }}>
                                         <Image
-                                            src={`/img/logo.svg`}
-                                            alt="EADY"
+                                            src={logo ? logo : theme.palette.primary.logo}
+                                            alt="Logo do Sistema"
                                             layout="fill"
                                             objectFit="contain"
                                             style={{ cursor: "pointer" }}

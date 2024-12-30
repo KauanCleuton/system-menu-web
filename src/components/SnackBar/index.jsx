@@ -10,7 +10,7 @@ import LockOpenIcon from '@mui/icons-material/LockOpen';
 import KeyIcon from '@mui/icons-material/Key'
 import { useDispatch, useSelector } from 'react-redux';
 import { CLOSE_ALERT, hideAlert } from '@/store/actions';
-import { AdminPanelSettings, CategoryOutlined, Inventory2Outlined } from '@mui/icons-material';
+import { AdminPanelSettings, CategoryOutlined, Inventory2Outlined, Palette, PaletteOutlined } from '@mui/icons-material';
 import { useTheme } from '@mui/material';
 
 const SnackBar = ({ open, onClose, message, severity, type }) => {
@@ -34,6 +34,8 @@ const SnackBar = ({ open, onClose, message, severity, type }) => {
                 return <LockIcon sx={{ color: theme.palette.primary.main }} />;
             case 'success':
                 return <LockOpenIcon sx={{ color: theme.palette.primary.main }} />;
+            case 'tema':
+                return <PaletteOutlined sx={{ color: theme.palette.primary.main }} />;
             default:
                 return null;
         }

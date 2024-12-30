@@ -1,5 +1,5 @@
 "use client"
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { TextField, Button, Box, Grid, Typography, FormControl } from '@mui/material';
 import { Formik, Field, Form, ErrorMessage } from 'formik';
 import * as Yup from 'yup';
@@ -7,11 +7,13 @@ import { useTheme } from '@mui/material/styles';
 import Link from 'next/link';
 import { useDispatch } from 'react-redux';
 import { SET_ALERT, SYNC_THEME_UPDATE } from '@/store/actions';
-import { useRouter } from 'next/navigation';
+import { useParams, useRouter } from 'next/navigation';
 import Loading from '@/app/loading';
-import { ThemeService } from '@/service/theme.service';
+import { ThemeService, ThemeServiceNoAuth } from '@/service/theme.service';
 
+const themeSvNoAuth = new ThemeServiceNoAuth()
 const themeSv = new ThemeService()
+
 const ThemePage = () => {
     const theme = useTheme();
     const [loading, setLoading] = useState(false)
@@ -28,6 +30,9 @@ const ThemePage = () => {
         address: '',
         phone: '',
     });
+    const { id, domain } = useParams()
+
+
 
     const router = useRouter()
 
@@ -68,37 +73,73 @@ const ThemePage = () => {
     };
 
 
-    const handleCreateNewTheme = async (values) => {
+    const getThemeById = async () => {
+        try {
+            setLoading(true)
+            const response = await themeSvNoAuth.getThemeByDomain(domain);
+
+            const themeData = response.find((item) => item.id === Number(id));
+            if (themeData) {
+                setInitialValues({
+                    nameTheme: themeData.nameTheme || '',
+                    domain: themeData.domain || '',
+                    primary: themeData.primary || '',
+                    secondary: themeData.secondary || '',
+                    logo: themeData.logo || '',
+                    title: themeData.title || '',
+                    favicon: themeData.favicon || '',
+                    siteName: themeData.siteName || '',
+                    address: themeData.address || '',
+                    phone: themeData.phone || '',
+                });
+                setColors(state => ({ ...state, primary: themeData.primary || '', secondary: themeData.secondary || '' }))
+            } else {
+                console.error("Nenhum tema visível encontrado.");
+            }
+        } catch (error) {
+            console.error("Erro ao buscar tema por ID:", error);
+        }
+        finally {
+            setLoading(false)
+        }
+    };
+
+    useEffect(() => {
+        getThemeById();
+    }, [id, domain]);
+
+
+
+
+    const handleUpdateTheme = async (values) => {
 
         try {
             setLoading(true);
 
-            const response = await themeSv.postCreateTheme(values);
+            const response = await themeSv.putThemeById(id, values);
 
             dispatch({
                 type: SET_ALERT,
-                message: 'Tema criado com sucesso!',
+                message: 'Tema atualizado com sucesso!',
                 severity: 'sucess',
                 alertType: 'tema',
             });
 
-            if (response.success) {
-                dispatch({
-                    type: SYNC_THEME_UPDATE,
-                    payload: true,
-                });
-            }
+            dispatch({
+                type: SYNC_THEME_UPDATE,
+                payload: true,
+            });
+            router.replace("/admin/theme");
         } catch (error) {
             console.log(error);
             dispatch({
                 type: SET_ALERT,
-                message: 'Erro ao adicionar novo tema',
+                message: 'Erro ao atualizar tema',
                 severity: 'error',
                 alertType: 'tema',
             });
         } finally {
             setLoading(false);
-            router.replace("/admin/theme");
         }
     };
 
@@ -135,8 +176,10 @@ const ThemePage = () => {
                             </Typography>
                             <Box
                                 sx={{
-                                    width: 150,
-                                    height: 150,
+
+                                    width: { lg: 150, md: 150, sm: 100, xs: 60 },
+
+                                    height: { lg: 150, md: 150, sm: 100, xs: 60 },
                                     backgroundColor: colors.primary,
                                     display: 'flex',
                                     justifyContent: 'center',
@@ -162,8 +205,10 @@ const ThemePage = () => {
                             </Typography>
                             <Box
                                 sx={{
-                                    width: 150,
-                                    height: 150,
+
+                                    width: { lg: 150, md: 150, sm: 100, xs: 60 },
+
+                                    height: { lg: 150, md: 150, sm: 100, xs: 60 },
                                     backgroundColor: colors.secondary,
                                     display: 'flex',
                                     justifyContent: 'center',
@@ -181,8 +226,9 @@ const ThemePage = () => {
                 <Grid item xs={12} >
                     <Formik
                         initialValues={initialValues}
+                        enableReinitialize={true}
                         validationSchema={validationSchema}
-                        onSubmit={(values) => handleCreateNewTheme(values)}
+                        onSubmit={(values) => handleUpdateTheme(values)}
                     >
                         {({ values, handleChange, handleBlur, touched, errors, setFieldValue }) => (
                             <Form>
@@ -255,7 +301,7 @@ const ThemePage = () => {
                                                     color: theme.palette.primary.main,
                                                 },
                                             }}
-                                            value={initialValues.domain}
+                                            value={values.domain}
                                             onChange={handleChange}
                                             onBlur={handleBlur}
                                             helperText={touched.domain && errors.domain}
@@ -611,7 +657,7 @@ const ThemePage = () => {
                                             </Button>
 
                                             <Button type="submit" variant="contained" color="primary" >
-                                                Salvar Tema
+                                                Atualizar Tema
                                             </Button>
                                         </Box>
                                     </Grid>

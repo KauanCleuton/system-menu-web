@@ -1,28 +1,20 @@
 "use client";
 import Loading from "@/app/loading";
-import CardProduct from "@/components/CardProduct";
 import Paginator from "@/components/Paginator";
-import TableProducts from "@/components/TableProducts";
-import ViewToggleButtons from "@/components/ToggleButton";
-import { SET_ALERT } from "@/store/actions";
-import ControlPointIcon from '@mui/icons-material/ControlPoint';
-import SearchOutlinedIcon from '@mui/icons-material/SearchOutlined';
+import { SET_ALERT, SYNC_THEME_UPDATE } from "@/store/actions";
 import { FormControlLabel, IconButton, Switch, useTheme } from '@mui/material';
 import Button from '@mui/material/Button';
-import TextField from '@mui/material/TextField';
 import Link from "next/link";
 import { useEffect, useRef, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { Box, Grid, Typography, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Paper } from '@mui/material';
-import OrdersService from "@/service/pedidos.service";
 import { Delete, Edit, LocalShipping, PaletteOutlined, Receipt, SearchOutlined } from "@mui/icons-material";
-import { useRouter, useSelectedLayoutSegment } from "next/navigation";
-import SeeProofPix from "@/components/SeeProofPix";
 import Image from "next/image";
-import { ThemeServiceNoAuth } from "@/service/theme.service";
+import { ThemeService, ThemeServiceNoAuth } from "@/service/theme.service";
 
 
 const themeSv = new ThemeServiceNoAuth()
+const themeSvAuth = new ThemeService()
 const Tema = () => {
     const theme = useTheme()
     const [data, setData] = useState([])
@@ -31,7 +23,7 @@ const Tema = () => {
     const [page, setPage] = useState(1);
     const sel = useSelector(state => state.theme)
     console.log(sel)
-
+    const dispatch = useDispatch()
 
     const fetchData = async () => {
         try {
@@ -52,6 +44,78 @@ const Tema = () => {
     }, [])
 
 
+    const toggleVisible = async (id) => {
+        try {
+            setLoading(true)
+            setData((prevTheme) =>
+                prevTheme.map((themeItem) =>
+                    themeItem.id === id
+                        ? { ...themeItem, visibleTheme: !themeItem.visibleTheme }
+                        : themeItem
+                )
+            );
+            const response = await themeSvAuth.patchToggleVisibleThemeById(id);
+            console.log(response, '23821382183821388');
+
+            dispatch({
+                type: SET_ALERT,
+                message: response.visibleTheme ? 'Tema ativado!' : 'Tema desativado',
+                severity: 'success',
+                alertType: 'tema',
+            });
+            dispatch({
+                type: SYNC_THEME_UPDATE,
+                payload: true,
+            });
+        } catch (error) {
+            dispatch({
+                type: SYNC_THEME_UPDATE,
+                payload: true,
+            });
+            setData((prevTheme) =>
+                prevTheme.map((themeItem) =>
+                    themeItem.id === id
+                        ? { ...themeItem, visibleTheme: !themeItem.visibleTheme }
+                        : themeItem
+                )
+            );
+            console.error('Erro ao atualizar ao atualizar tema', error);
+        }
+        finally {
+            fetchData()
+            setLoading(false)
+        }
+    };
+
+    const handleDeleteThemeById = async (id) => {
+        try {
+            setLoading(true)
+            const response = await themeSvAuth.deleteThemeById(id)
+            console.log(response)
+            dispatch({
+                type: SET_ALERT,
+                message: 'Tema deletado com sucesso!',
+                severity: 'success',
+                alertType: 'tema'
+            })
+            dispatch({
+                type: SYNC_THEME_UPDATE,
+                payload: true,
+            });
+        } catch (error) {
+            console.error("Erro ao deletar tema", error)
+            dispatch({
+                type: SET_ALERT,
+                message: error.message || 'Erro ao deletar tema',
+                severity: 'error',
+                alertType: 'tema'
+            })
+        }
+        finally {
+            setLoading(false)
+            fetchData()
+        }
+    }
 
 
     return (
@@ -161,7 +225,7 @@ const Tema = () => {
                                                                     textAlign: 'center',
                                                                 }}
                                                             >
-                                                                <Box sx={{ width: 40, height: 40, position: 'relative' }}>
+                                                                <Box sx={{ width: 50, height: 50, position: 'relative', background: item.secondary, borderRadius: '100%' }}>
                                                                     {item.logo && (
                                                                         <Image
                                                                             alt="Logo"
@@ -258,7 +322,7 @@ const Tema = () => {
                                                                     textAlign: 'center',
                                                                 }}
                                                             >
-                                                                <Box sx={{ width: 40, height: 40, position: 'relative' }}>
+                                                                <Box sx={{ width: 50, height: 50, position: 'relative',  background: item.secondary, borderRadius: '100%' }}>
                                                                     {item.favicon && (
                                                                         <Image
                                                                             alt="Favicon"
@@ -285,7 +349,7 @@ const Tema = () => {
                                                                 <Box sx={{ display: 'flex', width: '100%', justifyContent: 'flex-end', gap: 0 }}>
                                                                     <IconButton
                                                                         LinkComponent={Link}
-                                                                        href={`/admin/theme/${item.id}`}
+                                                                        href={`/admin/theme/${item.id}/${item.domain}`}
                                                                         sx={{
                                                                             fontSize: 13,
                                                                         }}
@@ -293,7 +357,7 @@ const Tema = () => {
                                                                         <Edit color="action" />
                                                                     </IconButton>
                                                                     <IconButton
-                                                                        // onClick={() => onDelete(item.idProducts)}
+                                                                        onClick={() => handleDeleteThemeById(item.id)}
                                                                         sx={{
                                                                             fontSize: 13,
                                                                         }}
@@ -304,7 +368,7 @@ const Tema = () => {
                                                                         control={
                                                                             <Switch
                                                                                 checked={item.visibleTheme}
-                                                                            // onChange={() => toggleVisible(item.idProducts)}
+                                                                                onChange={() => toggleVisible(item.id)}
                                                                             />
                                                                         }
 

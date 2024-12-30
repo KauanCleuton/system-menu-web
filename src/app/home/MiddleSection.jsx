@@ -10,7 +10,7 @@ const MiddleSection = () => {
         <Box
             sx={{
                 width: "100vw",
-                height: "100%",
+                height: "100vh",
                 display: "flex",
                 justifyContent: "center",
                 py: 2,
