@@ -6,51 +6,110 @@ import { useDispatch } from "react-redux";
 
 const CartOption = ({ img, title, description, price, item }) => {
     const dispatch = useDispatch();
-    const theme = useTheme()
+    const theme = useTheme();
 
     const handleOpenModal = () => {
         dispatch(openModal(item));
     };
 
     return (
-        <Box component={Paper} elevation={2} sx={{
-            cursor: "pointer",
-            width: "100%",
-            backgroundColor: theme.palette.secondary.main,
-        }}>
-            <Grid container p={0} >
-                <Grid item xs={4} md={4} lg={3} sm={3}>
-                    <Box sx={{ position: "relative", width: { lg: '134px', md: '125px', sm: '120px', xs: '100px' }, height: { lg: '134px', md: '125px', sm: '120px', xs: '116px' } }}>
-                        <Image src={`${process.env.NEXT_PUBLIC_BASE_URL}/uploads/produtos/${item.idProducts}`} layout="fill" alt="Imagem do produto" style={{ objectFit: "cover", borderRadius: '5px 0 0 5px' }} />
+        <Box
+            component={Paper}
+            elevation={2}
+            sx={{
+                cursor: "pointer",
+                width: "100%",
+                backgroundColor: theme.palette.secondary.main,
+                borderRadius: "8px",
+                overflow: "hidden",
+            }}
+        >
+            <Grid container>
+                <Grid item>
+                    <Box
+                        sx={{
+                            position: "relative",
+                            width: { lg: '134px', md: '125px', sm: '120px', xs: '100px' },
+                            height: { lg: '160px', md: '125px', sm: '120px', xs: '116px' },
+                        }}
+                    >
+                        <Image
+                            src={
+                                `${process.env.NEXT_PUBLIC_BASE_URL}/uploads/produtos/${item?.idProducts}`
+                            }
+                            layout="fill"
+                            alt={`Imagem do produto: ${title}`}
+                            style={{ objectFit: "cover" }}
+                        />
                     </Box>
                 </Grid>
-                <Grid item xs={8} md={8} lg={9} sm={9}>
-                    <Box sx={{ height: "100%", display: "flex", flexDirection: "column", gap: '7px', py: 1 }}>
+
+                <Grid item xs>
+                    <Box
+                        sx={{
+                            height: "100%",
+                            display: "flex",
+                            flexDirection: "column",
+                            gap: 1,
+                            px: 2,
+                            py: 1
+                        }}
+                    >
                         <Box>
-                            <Typography variant="h6" sx={{ fontWeight: "bold", color: theme.palette.primary.main, fontSize: { xs: '13px', md: '18px' } }}>{title}</Typography>
-                            <Typography variant="body1" sx={{ fontSize: { xs: '13px', md: '16px' } }}>{description}</Typography>
+                            <Typography
+                                variant="h6"
+                                sx={{
+                                    fontWeight: "bold",
+                                    color: theme.palette.primary.main,
+                                    fontSize: { xs: '13px', md: '18px' },
+                                }}
+                            >
+                                {title}
+                            </Typography>
+                            <Typography
+                                variant="body2"
+                                sx={{ fontSize: { xs: '13px', md: '16px' } }}
+                            >
+                                {description}
+                            </Typography>
                         </Box>
-                        <Box sx={{ display: "flex", justifyContent: "space-between", alignItems: "center" }}>
-                            <Typography variant="body2" sx={{ fontWeight: "bold", fontSize: { xs: '13px', md: '16px' } }}>
-                                {Number(item.price).toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' })}
-                                </Typography>
+
+                        <Box
+                            sx={{
+                                display: "flex",
+                                justifyContent: "space-between",
+                                alignItems: "center",
+                                mt: "auto",
+                            }}
+                        >
+                            <Typography
+                                variant="body2"
+                                sx={{
+                                    fontWeight: "bold",
+                                    fontSize: { xs: '13px', md: '16px' },
+                                }}
+                            >
+                                {Number(price).toLocaleString('pt-BR', {
+                                    style: 'currency',
+                                    currency: 'BRL',
+                                })}
+                            </Typography>
                             <IconButton
                                 onClick={handleOpenModal}
                                 sx={{
                                     color: "#fff",
                                     bgcolor: theme.palette.primary.main,
                                     borderRadius: '4px',
-                                    border: `1px solid ${theme.palette.primary.main}`,
-                                    width: 30,
-                                    height: "auto",
-                                    mr: 2,
+                                    width: 36,
+                                    height: 36,
                                     ":hover": {
                                         bgcolor: "transparent",
-                                        color: theme.palette.primary.main
-                                    }
+                                        color: theme.palette.primary.main,
+                                    },
                                 }}
+                                aria-label="Adicionar ao carrinho"
                             >
-                                <AddShoppingCartOutlined sx={{ fontSize: 14 }} />
+                                <AddShoppingCartOutlined sx={{ fontSize: 18 }} />
                             </IconButton>
                         </Box>
                     </Box>

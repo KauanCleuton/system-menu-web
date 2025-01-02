@@ -1,4 +1,4 @@
-import { Box, Grid, Modal, Typography } from "@mui/material";
+import { Box, Grid, Modal, Typography, useTheme } from "@mui/material";
 import CartOption from "../CardOption";
 import { useDispatch, useSelector } from "react-redux";
 import ModalAddItemCart from "../ModalCart";
@@ -14,9 +14,9 @@ const Menu = () => {
     const dispatch = useDispatch();
     const [loading, setLoading] = useState(false);
     const { opened, selectedItem, quantity, deliveryDescription } = useSelector((state) => state.modal);
-    const [categories, setCategories] = useState({}); // Inicializa como objeto
+    const [categories, setCategories] = useState({}); 
     const router = useRouter();
-
+    const theme = useTheme()
     const handleClose = () => {
         dispatch(closeModal());
     };
