@@ -18,20 +18,25 @@ const CartOptionCart = ({ item }) => {
             cursor: "pointer", mb: 2,
             width: "100%",
             backgroundColor: theme.palette.secondary.main,
-            py: 1,
         }}>
             <Grid container >
-                <Grid item xs="auto">
-                    <Box sx={{ position: "relative", width: { lg: '130px', md: '125px', sm: '120px', xs: '100px' }, height: { lg: '100%', md: '125px', sm: '120px', xs: '116px' } }}>
+                <Grid item>
+                    <Box
+                        sx={{
+                            position: "relative",
+                            width: { lg: '150px', md: '150px', sm: '150px', xs: '150px' },
+                            height: { lg: '150px', md: '150px', sm: '150px', xs: '150px' },
+                        }}
+                    >
                         <Image src={`${process.env.NEXT_PUBLIC_BASE_URL}/uploads/produtos/${item.idProducts}`} layout="fill" alt="Imagem do produto" style={{ objectFit: "cover", borderRadius: "5px 0 0 5px" }} />
                     </Box>
                 </Grid>
                 <Grid item xs>
-                    <Box sx={{ width: "100%", height: "100%", px: 1, display: "flex", flexDirection: "column", justifyContent: "space-between", py: 0 }}>
+                    <Box sx={{ width: "100%", height: '100%',px: 1, display: "flex", flexDirection: "column", justifyContent: "space-between", py: 1 }}>
                         <Box sx={{
                             width: "100%"
                         }}>
-                            <Typography variant="h6" sx={{ fontWeight: "bold", fontSize: { xs: '13px', md: '18px' }, color: theme.palette.primary.main }}>{item.title}</Typography>
+                            <Typography variant="h6" sx={{ fontWeight: "bold", fontSize: { xs: '20px', md: '18px' }, color: theme.palette.primary.main }}>{item.title}</Typography>
                             <Typography variant="body1" sx={{ fontSize: { xs: '13px', md: '16px' } }}>Observação: {item.deliveryDescription}</Typography>
                             <Typography variant="body1" sx={{ fontSize: { xs: '13px', md: '16px' } }}>Quantidade: {item.quantity}</Typography>
                         </Box>
@@ -48,7 +53,7 @@ const CartOptionCart = ({ item }) => {
                                     border: `1px solid ${theme.palette.primary.main}`,
                                     width: 30,
                                     height: "auto",
-                                    mr: 2,
+                                    mr: 0,
                                     ":hover": {
                                         bgcolor: "transparent",
                                         color: theme.palette.primary.main

@@ -30,7 +30,7 @@ const CartOption = ({ img, title, description, price, item }) => {
                         sx={{
                             position: "relative",
                             width: { lg: '134px', md: '125px', sm: '120px', xs: '100px' },
-                            height: { lg: '160px', md: '125px', sm: '120px', xs: '116px' },
+                            height: { lg: '160px', md: '160px', sm: '150px', xs: '150px' },
                         }}
                     >
                         <Image

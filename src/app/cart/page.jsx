@@ -14,6 +14,10 @@ const Cart = () => {
     const router = useRouter();
     const items = useSelector(state => state.cart.items);
     const totalAmount = useSelector(state => state.cart.totalAmount);
+
+
+    console.log(totalAmount, '1293821382183812323', items,'128321838123832821328')
+
     const [hydrated, setHydrated] = useState(false);
 
     useEffect(() => {

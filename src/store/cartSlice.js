@@ -1,30 +1,33 @@
 import { createAction, createReducer } from '@reduxjs/toolkit';
 import { jsPDF } from 'jspdf';
-import 'jspdf-autotable'; 
+import 'jspdf-autotable'; // Certifique-se de ter este plugin instalado
 
 const initialState = {
-  items: [],
-  totalAmount: 0,
-  totalItems: 0,
+  items: getStoredItems(),
+  totalAmount: getStoredAmount(),
+  totalItems: getStoredItems().length,
 };
 
 function getStoredItems() {
-  if (typeof window !== 'undefined') {
+  try {
     const storedItems = window.localStorage.getItem('cartItems');
     return storedItems ? JSON.parse(storedItems) : [];
+  } catch (error) {
+    console.error('Error retrieving cart items from localStorage:', error);
+    return [];
   }
-  return [];
 }
 
 function getStoredAmount() {
-  if (typeof window !== 'undefined') {
+  try {
     const storedAmount = window.localStorage.getItem('totalAmount');
     return storedAmount ? Number(storedAmount).toFixed(2) : 0;
+  } catch (error) {
+    console.error('Error retrieving total amount from localStorage:', error);
+    return 0;
   }
-  return 0;
 }
 
-// Agora vamos configurar o Redux com esses valores após a renderização do cliente
 export const addItemToCart = createAction('cart/addItemToCart', (item) => {
   return {
     payload: item,
@@ -52,11 +55,9 @@ const cartReducer = createReducer(initialState, (builder) => {
           state.totalItems++;
         }
         state.totalAmount += newItem.price * newItem.quantity;
-        if (typeof window !== 'undefined') {
-          window.localStorage.setItem('cartItems', JSON.stringify(state.items));
-          window.localStorage.setItem('totalAmount', JSON.stringify(state.totalAmount));
-          window.localStorage.setItem('totalItems', JSON.stringify(state.totalItems));
-        }
+        window.localStorage.setItem('cartItems', JSON.stringify(state.items));
+        window.localStorage.setItem('totalAmount', JSON.stringify(state.totalAmount));
+        window.localStorage.setItem('totalItems', JSON.stringify(state.totalItems));
       }
     })
     .addCase(removeItemFromCart, (state, action) => {
@@ -67,22 +68,18 @@ const cartReducer = createReducer(initialState, (builder) => {
         state.totalAmount -= existingItem.price * existingItem.quantity;
         state.items.splice(existingItemIndex, 1);
         state.totalItems--;
-        if (typeof window !== 'undefined') {
-          window.localStorage.setItem('cartItems', JSON.stringify(state.items));
-          window.localStorage.setItem('totalAmount', JSON.stringify(state.totalAmount));
-          window.localStorage.setItem('totalItems', JSON.stringify(state.totalItems));
-        }
+        window.localStorage.setItem('cartItems', JSON.stringify(state.items));
+        window.localStorage.setItem('totalAmount', JSON.stringify(state.totalAmount));
+        window.localStorage.setItem('totalItems', JSON.stringify(state.totalItems));
       }
     })
     .addCase(clearCart, (state) => {
       state.items = [];
       state.totalAmount = 0;
       state.totalItems = 0;
-      if (typeof window !== 'undefined') {
-        window.localStorage.removeItem('cartItems');
-        window.localStorage.removeItem('totalAmount');
-        window.localStorage.removeItem('totalItems');
-      }
+      window.localStorage.removeItem('cartItems');
+      window.localStorage.removeItem('totalAmount');
+      window.localStorage.removeItem('totalItems');
     });
 });
 
