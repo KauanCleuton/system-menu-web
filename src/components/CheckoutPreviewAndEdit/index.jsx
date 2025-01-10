@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import {
   Box,
   Grid,
@@ -18,11 +18,17 @@ import UserNoAuthSv from "@/service/user.service";
 import CheckCircleIcon from "@mui/icons-material/CheckCircle";
 import ErrorIcon from "@mui/icons-material/Error";
 import { SET_ALERT } from "@/store/actions";
+import { useRouter } from "next/navigation";
+import Image from "next/image";
+import Loading from "../Loading";
+import { Pix } from "@mui/icons-material";
 
 
 const userSv = new UserNoAuthSv()
-const CheckoutPreviewAndEdit = ({ data, handleFinalize }) => {
+const CheckoutPreviewAndEdit = ({ data, handleFinalize, qrCodeGenerated, qrCodeImage, pixCola }) => {
   const [comprovante, setComprovante] = useState([])
+  const [timeLeft, setTimeLeft] = useState(300);
+  const navigate = useRouter();
   const theme = useTheme()
   const [loading, setLoading] = useState(false)
   const dispatch = useDispatch()
@@ -92,53 +98,177 @@ const CheckoutPreviewAndEdit = ({ data, handleFinalize }) => {
   };
 
 
-  return (
+  useEffect(() => {
+    let timer;
+
+    if (qrCodeGenerated) {
+      timer = setInterval(() => {
+        setTimeLeft((prevTime) => prevTime - 1);
+      }, 1000);
+
+      if (timeLeft === 0) {
+        clearInterval(timer);
+        setTimeout(() => {
+          navigate("/");
+        }, 120000);
+      }
+    }
+
+    return () => clearInterval(timer);
+  }, [qrCodeGenerated, timeLeft, navigate]);
+
+
+
+  return loading ? <Loading /> : (
     <Box sx={{ p: 0 }}>
       <Typography variant="h3" gutterBottom color="primary">
-        Visualizar Dados
+        {data.payment === 'PIX' ? 'Qrcode e pix cola' : 'Visualizar Dados'}
       </Typography>
-      <Grid container spacing={2}>
-        {/* Exibindo dados do pedido */}
-        <Grid item xs={12} sm={6}>
-          <Typography variant="body1" sx={{ color: theme.palette.secondary.main }}>
-            <strong>Nome:</strong> {data.name}
-          </Typography>
-          <Typography variant="body1" sx={{ color: theme.palette.secondary.main }}>
-            <strong>Telefone:</strong> {data.phone}
-          </Typography>
-          <Typography variant="body1" sx={{ color: theme.palette.secondary.main }}>
-            <strong>Endereço:</strong>{" "}
-            {data?.address
-              ? `${data?.address.road}, ${data?.address.house_number}, ${data?.address.neighborhood}, ${data?.address.city}, ${data?.address.complement}`
-              : "Não disponível"}
-          </Typography>
-          <Typography variant="body1" sx={{ color: theme.palette.secondary.main }}>
-            <strong>Data:</strong> {new Date().toLocaleDateString()}
-          </Typography>
-          {data?.orderItems.map((item, index) => (
-            <Box key={index} sx={{ mb: 2, mt: 2 }}>
-              <Typography variant="body1" sx={{ color: theme.palette.secondary.main }}>
-                <strong>Produto:</strong> {item.title}
-              </Typography>
-              <Typography variant="body1" sx={{ color: theme.palette.secondary.main }}>
-                <strong>Quantidade:</strong> {item.quantity}
-              </Typography>
-              <Typography variant="body1" sx={{ color: theme.palette.secondary.main }}>
-                <strong>Observação:</strong> {item.observation}
-              </Typography>
-              <Typography variant="body1" sx={{ color: theme.palette.secondary.main }}>
-                <strong>Preço:</strong>{" "}
-                {Number(item.price).toLocaleString("pt-BR", { style: "currency", currency: "BRL" })}
-              </Typography>
-            </Box>
-          ))}
+      {data.payment === 'PIX' ? (
+        <>
+        <Box
+          sx={{
+            display: 'flex',
+            flexDirection: 'column',
+            alignItems: 'center',
+            justifyContent: 'center',
+            textAlign: 'center',
+            gap: 2, // Espaço entre os elementos
+            mt: 4, // Margem superior
+          }}
+        >
+          <Pix sx={{ fontSize: 50, color: theme.palette.primary.main }} />
           <Typography variant="h6" color="secondary">
-            <strong>Total:</strong>{" "}
-            {Number(data?.total_price).toLocaleString("pt-BR", { style: "currency", currency: "BRL" })}
+            <strong>Pagamento via PIX</strong>
           </Typography>
-        </Grid>
+          <Typography variant="body1" sx={{ color: theme.palette.secondary.main }}>
+            Clique no botão abaixo para gerar o QR Code do PIX. Você terá até 5 minutos para realizar o pagamento.
+          </Typography>
+        </Box>
+      
+        {!qrCodeGenerated ? (
+          <Box sx={{ display: 'flex', justifyContent: 'center', mt: 4 }}>
+            <Button
+              sx={{
+                mt: 10,
+              }}
+              variant="contained"
+              color="primary"
+              onClick={() => {
+                handleFinalize(data);
+                setTimeLeft(300);
+              }}
+            >
+              Gerar QR Code
+            </Button>
+          </Box>
+        ) : (
+          <Box sx={{ textAlign: 'center', mt: 4 }}>
+            <Box
+              sx={{
+                display: 'flex',
+                justifyContent: 'center',
+                alignItems: 'center',
+                mt: 2,
+                mb: 2,
+              }}
+            >
+              <Box
+                sx={{
+                  width: 270,
+                  height: 270,
+                  position: 'relative',
+                }}
+              >
+                <Image
+                  src={`data:image/png;base64,${qrCodeImage}`}
+                  alt="QR Code PIX"
+                  layout="fill"
+                  style={{ objectFit: 'cover' }}
+                />
+              </Box>
+            </Box>
 
-        <Grid item xs={12}>
+            <Typography variant="body1" sx={{ mb: 1, color: theme.palette.secondary.main }}>
+              Valor a pagar: <strong>{Intl.NumberFormat('pt-BR', {
+                style: 'currency',
+                currency: 'BRL'
+              }).format(data.total_price)}</strong>
+            </Typography>
+
+            <Typography variant="body1" sx={{ mb: 1, color: theme.palette.secondary.main }}>
+              Pix cola: <strong>{pixCola}</strong>
+            </Typography>
+            <Button
+              variant="contained"
+              color="secondary"
+              onClick={() => {
+                navigator.clipboard.writeText(pixCola);
+                dispatch({ type: SET_ALERT, message: 'Pix cola copiado com sucesso!' });
+              }}
+            >
+              Copiar Pix cola
+            </Button>
+            <Typography variant="body2" color="error" sx={{ mt: 2 }}>
+              O QR Code expira em 5 minutos.
+            </Typography>
+            <Typography variant="body2" sx={{ mt: 1, color: theme.palette.primary.main }}>
+              Tempo restante: {Math.floor(timeLeft / 60)}:{timeLeft % 60 < 10 ? '0' : ''}
+              {timeLeft % 60} minutos
+            </Typography>
+          </Box>
+        )}
+      </>
+
+      ) : (<>
+        <Grid container spacing={2}>
+          {/* Exibindo dados do pedido */}
+          <Grid item xs={12} sm={6}>
+            <Typography variant="body1" sx={{ color: theme.palette.secondary.main }}>
+              <strong>Nome:</strong> {data.name}
+            </Typography>
+            <Typography variant="body1" sx={{ color: theme.palette.secondary.main }}>
+              <strong>Telefone:</strong> {data.phone}
+            </Typography>
+            <Typography variant="body1" sx={{ color: theme.palette.secondary.main }}>
+              <strong>Endereço:</strong>{" "}
+              {data?.address
+                ? `${data?.address.road}, ${data?.address.house_number}, ${data?.address.neighborhood}, ${data?.address.city}, ${data?.address.complement}`
+                : "Não disponível"}
+            </Typography>
+            <Typography variant="body1" sx={{ color: theme.palette.secondary.main }}>
+              <strong>Data:</strong> {new Date().toLocaleDateString()}
+            </Typography>
+            {data?.orderItems.map((item, index) => (
+              <Box key={index} sx={{ mb: 2, mt: 2 }}>
+                <Typography variant="body1" sx={{ color: theme.palette.secondary.main }}>
+                  <strong>Produto:</strong> {item.title}
+                </Typography>
+                <Typography variant="body1" sx={{ color: theme.palette.secondary.main }}>
+                  <strong>Quantidade:</strong> {item.quantity}
+                </Typography>
+                <Typography variant="body1" sx={{ color: theme.palette.secondary.main }}>
+                  <strong>Observação:</strong> {item.observation}
+                </Typography>
+                <Typography variant="body1" sx={{ color: theme.palette.secondary.main }}>
+                  <strong>Preço:</strong>{" "}
+                  {Number(item.price).toLocaleString("pt-BR", { style: "currency", currency: "BRL" })}
+                </Typography>
+              </Box>
+            ))}
+
+            <Typography variant="h6" color="secondary">
+              <strong>Tipo do pagamento:</strong>{" "}
+              {data.payment}
+            </Typography>
+
+            <Typography variant="h6" color="secondary">
+              <strong>Total:</strong>{" "}
+              {Number(data?.total_price).toLocaleString("pt-BR", { style: "currency", currency: "BRL" })}
+            </Typography>
+          </Grid>
+
+          {/* <Grid item xs={12}>
           <Formik
             initialValues={{ file: null }}
             validationSchema={validationSchema}
@@ -245,8 +375,10 @@ const CheckoutPreviewAndEdit = ({ data, handleFinalize }) => {
               </Form>
             )}
           </Formik>
+        </Grid> */}
         </Grid>
-      </Grid>
+
+      </>)}
     </Box>
   );
 };

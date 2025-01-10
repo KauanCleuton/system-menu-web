@@ -1,5 +1,5 @@
 import React, { useEffect } from 'react';
-import { Box, Typography, Button, Grid, useTheme } from '@mui/material';
+import { Box, Typography, Grid } from '@mui/material';
 import CheckCircleIcon from '@mui/icons-material/CheckCircle';
 import CancelIcon from '@mui/icons-material/Cancel';
 import HourglassEmptyIcon from '@mui/icons-material/HourglassEmpty';
@@ -8,13 +8,11 @@ import { useDispatch } from 'react-redux';
 import { clearCart } from '@/store/cartSlice';
 
 const Finalizado = ({ status }) => {
-    const theme = useTheme();
-    const router = useRouter()
-    const dispatch = useDispatch()
-
-
+    const router = useRouter();
+    const dispatch = useDispatch();
 
     useEffect(() => {
+        // Limpa o carrinho e redireciona após 3 segundos para "/"
         const timer = setTimeout(() => {
             dispatch(clearCart());
             router.push("/");
@@ -25,12 +23,12 @@ const Finalizado = ({ status }) => {
 
     const renderStatusIcon = () => {
         switch (status) {
-            case 'finalizado':
+            case 'success':
                 return <CheckCircleIcon style={{ color: 'green', fontSize: 50 }} />;
-            case 'cancelado':
-                return <CancelIcon style={{ color: 'red', fontSize: 50 }} />;
-            case 'pendente':
+            case 'pending':
                 return <HourglassEmptyIcon style={{ color: 'orange', fontSize: 50 }} />;
+            case 'error':
+                return <CancelIcon style={{ color: 'red', fontSize: 50 }} />;
             default:
                 return null;
         }
@@ -39,9 +37,11 @@ const Finalizado = ({ status }) => {
     const renderStatusMessage = () => {
         switch (status) {
             case 'success':
-                return 'Seu pedido foi finalizado com sucesso! Agradecemos a sua compra.';
+                return 'Pagamento confirmado com sucesso! Estamos preparando o seu pedido.';
+            case 'pending':
+                return 'Pagamento pendente. Estamos aguardando a confirmação. Por favor, aguarde.';
             case 'error':
-                return 'Seu pedido foi cancelado. Por favor, tente novamente mais tarde.';
+                return 'Falha no pagamento. Tente novamente ou entre em contato com o suporte.';
             default:
                 return 'Status desconhecido. Por favor, entre em contato com o suporte.';
         }

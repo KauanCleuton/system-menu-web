@@ -1,5 +1,5 @@
 "use client"
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { Container, Box, Grid } from '@mui/material';
 import CheckoutSteps from '@/components/StepsCheckout';
 import PhoneNumberInput from '@/components/PhoneNumberInput';
@@ -35,9 +35,13 @@ const Checkout = () => {
     address: '',
     orderItems: '',
     phone: '',
-    troco: ''
+    troco: '',
+    email: '',
+    document: ''
   });
 
+  const [billing, setBilling] = useState([])
+  const [qrCodeGenerate, setQrCodeGenerate] = useState(false)
   const handleNext = () => {
     setActiveStep((prevStep) => prevStep + 1);
   };
@@ -52,7 +56,7 @@ const Checkout = () => {
       const data = await UserSv.getAddress(phoneNumber);
       console.log(data, 231321)
       setAddress(data);
-      
+
       setMode(true);
       setInitialValues({
         house_number: Number(data.house_number),
@@ -61,7 +65,7 @@ const Checkout = () => {
         city: data.city,
         complement: data.complement,
       });
-      
+
     } catch (error) {
       console.error('Erro ao buscar o endereço:', error);
       setInitialValues({
@@ -101,10 +105,14 @@ const Checkout = () => {
       troco: method === 'Dinheiro' ? troco : ''
     }));
   };
+
+
   const handleFinalize = async (dataForm) => {
     try {
       const formData = new FormData();
-      formData.append("name", dataForm.name)
+      formData.append("name", dataForm.name);
+      formData.append("email", dataForm.email);
+      formData.append("document", dataForm.document);
       formData.append("quantity", dataForm.quantity);
       formData.append("total_price", dataForm.total_price);
       formData.append("payment", dataForm.payment);
@@ -112,20 +120,74 @@ const Checkout = () => {
       formData.append("orderItems", JSON.stringify(data.orderItems));
       formData.append("phone", dataForm.phone);
       formData.append("troco", dataForm.troco);
+
       if (dataForm.comprovante) {
         formData.append("comprovante", dataForm.comprovante);
       }
+
       const response = await UserSv.createPedido(formData);
-      handleNext();
-      dispatch({ type: SET_ALERT, message: response.message, severity: "success" });
+
+      if (response?.cobranca) {
+        setQrCodeGenerate(true);
+        localStorage.setItem("idPayment", response?.cobranca.id)
+        setBilling(response.cobranca);
+        console.log(response.cobranca);
+      } else {
+        console.warn("Cobranca não retornada pela API");
+      }
+
+      dispatch({
+        type: SET_ALERT,
+        message: "Efetue o pagamento!",
+        severity: "success",
+      });
       setMessage("success");
       dispatch(clearCart());
     } catch (error) {
       console.error(error);
+
       setMessage("error");
-      dispatch({ type: SET_ALERT, message: "Erro ao finalizar compra", severity: "error" });
+      dispatch({
+        type: SET_ALERT,
+        message: "Erro ao finalizar compra",
+        severity: "error",
+      });
     }
   };
+
+
+
+  const [statusPagamento, setStatusPagamento] = useState(null);
+
+  useEffect(() => {
+    if (!billing?.id) {
+      console.warn("billing.id não está definido.");
+      return;
+    }
+  
+    const eventSource = new EventSource(`${process.env.NEXT_PUBLIC_BASE_URL}/events/payment/${billing.id}`);
+  
+    eventSource.onmessage = (event) => {
+      const data = JSON.parse(event.data);
+  
+      if (data.status === "PAGO") {
+        setStatusPagamento("success");
+        handleNext();
+      } else if (data.status !== "PAGO" && data.reload) {
+        setStatusPagamento("error");
+        handleNext();
+      }
+    };
+  
+    eventSource.onerror = (error) => {
+      console.error("Erro na conexão SSE:", error);
+    };
+  
+    return () => {
+      eventSource.close();
+    };
+  }, [billing?.id]);
+
 
   const getStepContent = (step) => {
     switch (step) {
@@ -157,14 +219,18 @@ const Checkout = () => {
             <CheckoutPreviewAndEdit
               data={data}
               handleFinalize={handleFinalize}
+              pixCola={billing?.pixInfo?.payload || ""}
+              qrCodeImage={billing?.pixInfo?.encodedImage || ""}
+              qrCodeGenerated={qrCodeGenerate}
             />
+
           </Grid>
         )
       case 3:
         return (
           <Grid item xs={12}>
             <Finalizado
-              status={message}
+              status={statusPagamento}
             />
           </Grid>
         )
@@ -175,7 +241,7 @@ const Checkout = () => {
 
   console.log(data)
   return (
-    <Box sx={{ width: '100%', height: { xs: "100%", sm: "100vh",md: '100vh',lg: '100vh' }, py: 13 }}>
+    <Box sx={{ width: '100%', height: { xs: "100%", sm: "100%", md: '100%', lg: '100%' }, py: 13, mb: 20 }}>
       <Container fixed sx={{ paddingBottom: "90px" }}>
         <Grid container spacing={3}>
           <Grid item xs={12}>
