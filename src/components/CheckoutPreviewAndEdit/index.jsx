@@ -137,7 +137,7 @@ const CheckoutPreviewAndEdit = ({ data, handleFinalize, qrCodeGenerated, qrCodeI
             mt: 4, // Margem superior
           }}
         >
-          <Pix sx={{ fontSize: 50, color: theme.palette.primary.main }} />
+          <Pix sx={{ fontSize: 80, color: "#4DB6AC"}} />
           <Typography variant="h6" color="secondary">
             <strong>Pagamento via PIX</strong>
           </Typography>
@@ -196,12 +196,12 @@ const CheckoutPreviewAndEdit = ({ data, handleFinalize, qrCodeGenerated, qrCodeI
               }).format(data.total_price)}</strong>
             </Typography>
 
-            <Typography variant="body1" sx={{ mb: 1, color: theme.palette.secondary.main, fontSize: {lg: '40px', md: '40px', xs: '20px', sm: '20px' } }}>
+            <Typography sx={{ mb: 1, color: theme.palette.secondary.main, fontSize: {lg: '40px', md: '40px', xs: '20px', sm: '20px' } }}>
               Pix cola: <strong>{pixCola}</strong>
             </Typography>
             <Button
               variant="contained"
-              color="secondary"
+              color="primary"
               onClick={() => {
                 navigator.clipboard.writeText(pixCola);
                 dispatch({ type: SET_ALERT, message: 'Pix cola copiado com sucesso!' });
@@ -209,10 +209,10 @@ const CheckoutPreviewAndEdit = ({ data, handleFinalize, qrCodeGenerated, qrCodeI
             >
               Copiar Pix cola
             </Button>
-            <Typography variant="body2" color="error" sx={{ mt: 2 }}>
+            <Typography variant="body2" color="error" sx={{ mt: 2, fontWeight: 'bold' }}>
               O QR Code expira em 5 minutos.
             </Typography>
-            <Typography variant="body2" sx={{ mt: 1, color: theme.palette.primary.main }}>
+            <Typography variant="body2" sx={{ mt: 1, color: theme.palette.primary.main, fontWeight: 'bold' }}>
               Tempo restante: {Math.floor(timeLeft / 60)}:{timeLeft % 60 < 10 ? '0' : ''}
               {timeLeft % 60} minutos
             </Typography>

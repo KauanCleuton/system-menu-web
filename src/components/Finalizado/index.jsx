@@ -1,5 +1,5 @@
 import React, { useEffect } from 'react';
-import { Box, Typography, Grid } from '@mui/material';
+import { Box, Typography, Grid, useTheme } from '@mui/material';
 import CheckCircleIcon from '@mui/icons-material/CheckCircle';
 import CancelIcon from '@mui/icons-material/Cancel';
 import HourglassEmptyIcon from '@mui/icons-material/HourglassEmpty';
@@ -10,13 +10,13 @@ import { clearCart } from '@/store/cartSlice';
 const Finalizado = ({ status }) => {
     const router = useRouter();
     const dispatch = useDispatch();
+    const theme = useTheme()
 
     useEffect(() => {
-        // Limpa o carrinho e redireciona após 3 segundos para "/"
         const timer = setTimeout(() => {
             dispatch(clearCart());
             router.push("/");
-        }, 3000);
+        }, 10000);
 
         return () => clearTimeout(timer);
     }, [dispatch, router]);
@@ -24,11 +24,11 @@ const Finalizado = ({ status }) => {
     const renderStatusIcon = () => {
         switch (status) {
             case 'success':
-                return <CheckCircleIcon style={{ color: 'green', fontSize: 80 }} />; 
+                return <CheckCircleIcon style={{ color: 'green', width: 70, height: 70 }} />; 
             case 'pending':
-                return <HourglassEmptyIcon style={{ color: 'orange', fontSize: 80 }} />;
+                return <HourglassEmptyIcon style={{ color: 'orange', width: 70, height: 70 }} />;
             case 'error':
-                return <CancelIcon style={{ color: 'red', fontSize: 80 }} />;
+                return <CancelIcon style={{ color: 'red', width: 70, height: 70 }} />;
             default:
                 return null;
         }
@@ -60,8 +60,8 @@ const Finalizado = ({ status }) => {
                     {renderStatusIcon()}
                 </Grid>
                 <Grid item xs={12}>
-                    <Typography variant="h3" gutterBottom sx={{
-                        color: 'primary.secondary'
+                    <Typography variant="h4" gutterBottom sx={{
+                        color: theme.palette.primary.main
                     }}>
                         {renderStatusMessage()}
                     </Typography>
