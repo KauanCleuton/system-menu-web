@@ -196,7 +196,7 @@ const CheckoutPreviewAndEdit = ({ data, handleFinalize, qrCodeGenerated, qrCodeI
               }).format(data.total_price)}</strong>
             </Typography>
 
-            <Typography sx={{ mb: 1, color: theme.palette.secondary.main, fontSize: {lg: '40px', md: '40px', xs: '20px', sm: '20px' } }}>
+            <Typography sx={{ mb: 1, color: theme.palette.secondary.main, fontSize: {lg: 17, md: 17, sm: 13, xs: 13}}}>
               Pix cola: <strong>{pixCola}</strong>
             </Typography>
             <Button
