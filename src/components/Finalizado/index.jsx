@@ -24,11 +24,11 @@ const Finalizado = ({ status }) => {
     const renderStatusIcon = () => {
         switch (status) {
             case 'success':
-                return <CheckCircleIcon style={{ color: 'green', fontSize: 50 }} />;
+                return <CheckCircleIcon style={{ color: 'green', fontSize: 80 }} />; 
             case 'pending':
-                return <HourglassEmptyIcon style={{ color: 'orange', fontSize: 50 }} />;
+                return <HourglassEmptyIcon style={{ color: 'orange', fontSize: 80 }} />;
             case 'error':
-                return <CancelIcon style={{ color: 'red', fontSize: 50 }} />;
+                return <CancelIcon style={{ color: 'red', fontSize: 80 }} />;
             default:
                 return null;
         }
@@ -37,7 +37,13 @@ const Finalizado = ({ status }) => {
     const renderStatusMessage = () => {
         switch (status) {
             case 'success':
-                return 'Pagamento confirmado com sucesso! Estamos preparando o seu pedido.';
+                return (
+                    <>
+                        Pagamento confirmado com sucesso! Estamos preparando o seu pedido.
+                        <br />
+                        Em breve, você receberá uma notificação quando o pedido estiver pronto.
+                    </>
+                );
             case 'pending':
                 return 'Pagamento pendente. Estamos aguardando a confirmação. Por favor, aguarde.';
             case 'error':
@@ -54,7 +60,9 @@ const Finalizado = ({ status }) => {
                     {renderStatusIcon()}
                 </Grid>
                 <Grid item xs={12}>
-                    <Typography variant="h5" gutterBottom>
+                    <Typography variant="h3" gutterBottom sx={{
+                        color: 'primary.secondary'
+                    }}>
                         {renderStatusMessage()}
                     </Typography>
                 </Grid>
