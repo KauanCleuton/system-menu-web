@@ -24,8 +24,8 @@ const CartOptionCart = ({ item }) => {
                     <Box
                         sx={{
                             position: "relative",
-                            width: { lg: '150px', md: '150px', sm: '150px', xs: '150px' },
-                            height: { lg: '150px', md: '150px', sm: '150px', xs: '150px' },
+                            width: { lg: '150px', md: '150px', sm: '120px', xs: '120px' },
+                            height: { lg: '150px', md: '150px', sm: '120px', xs: '120px' },
                         }}
                     >
                         <Image src={`${process.env.NEXT_PUBLIC_BASE_URL}/uploads/produtos/${item.idProducts}`} layout="fill" alt="Imagem do produto" style={{ objectFit: "cover", borderRadius: "5px 0 0 5px" }} />
