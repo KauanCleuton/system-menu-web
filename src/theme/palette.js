@@ -5,7 +5,8 @@ const palette = {
       headerText: 'rgba(255, 255, 255, 1)',
       white: "#fff",
       logo: "/img/logo.svg",
-      red: "#e01212"
+      red: "#e01212",
+      pending: "#c1881f"
     },
     secondary: {
       main: '#000',

@@ -18,7 +18,8 @@ import OrdersService from "@/service/pedidos.service";
 import { Delete, LocalShipping, Receipt } from "@mui/icons-material";
 import { useRouter } from "next/navigation";
 import SeeProofPix from "@/components/SeeProofPix";
-
+import CheckCircleIcon from '@mui/icons-material/CheckCircle';
+import HourglassEmptyIcon from '@mui/icons-material/HourglassEmpty';
 
 const orderSv = new OrdersService()
 const Orders = () => {
@@ -172,7 +173,7 @@ const Orders = () => {
                                         Buscar
                                         <SearchOutlinedIcon sx={{ ml: 1, width: 20, height: 20 }} />
                                     </Button>
-                                   
+
                                 </Box>
                             </Grid>
                         </Grid>
@@ -203,7 +204,7 @@ const Orders = () => {
                                                 <Table sx={{ minWidth: '100%' }}>
                                                     <TableHead>
                                                         <TableRow>
-                                                            {['ID', 'Cliente', 'Telefone', 'Data/Hora', 'Status', 'Quantidade', 'Pagamento', 'Total', 'Ações'].map((header, index) => (
+                                                            {['ID', 'Cliente', 'Telefone', 'Data/Hora', 'Status', 'Status Pagamento', 'Quantidade', 'Pagamento', 'Total', 'Ações'].map((header, index) => (
                                                                 <TableCell
                                                                     key={index}
                                                                     sx={{
@@ -221,7 +222,7 @@ const Orders = () => {
                                                     </TableHead>
 
                                                     <TableBody>
-                                                        {data && data.map((order, index) => (
+                                                        {data && data.slice((page - 1) * limit, page * limit).map((order, index) => (
                                                             <TableRow key={index}>
                                                                 <TableCell
                                                                     sx={{
@@ -291,9 +292,40 @@ const Orders = () => {
                                                                     sx={{
                                                                         color: theme.palette.secondary.main,
                                                                         fontSize: { lg: '12px', xs: '10px' },
+                                                                        textAlign: 'center'
                                                                     }}
                                                                 >
                                                                     {order.status}
+                                                                </TableCell>
+                                                                <TableCell
+                                                                    sx={{
+                                                                        color: order.status_payment === 'Pago' ? theme.palette.success.main : theme.palette.warning.main,
+                                                                        textAlign: 'center'
+                                                                    }}
+                                                                >
+                                                                    {order.status_payment === 'Pago' ? (
+                                                                        <Box sx={{
+                                                                            width: '100%',
+                                                                            display: 'flex',
+                                                                            gap: 1,
+                                                                            alignItems: 'center',
+                                                                            justifyContent: 'center'
+                                                                        }}>
+                                                                            <CheckCircleIcon sx={{ color: theme.palette.success.main, }} />
+                                                                            {order.status_payment}
+                                                                        </Box>
+                                                                    ) : (
+                                                                        <Box sx={{
+                                                                            width: '100%',
+                                                                            display: 'flex',
+                                                                            gap: 1,
+                                                                            alignItems: 'center',
+                                                                            justifyContent: 'center'
+                                                                        }}>
+                                                                            <HourglassEmptyIcon sx={{ color: theme.palette.warning.main, }} />
+                                                                            {order.status_payment}
+                                                                        </Box>
+                                                                    )}
                                                                 </TableCell>
                                                                 <TableCell
                                                                     sx={{
@@ -317,6 +349,7 @@ const Orders = () => {
                                                                     sx={{
                                                                         color: theme.palette.secondary.main,
                                                                         fontSize: { lg: '12px', xs: '10px' },
+                                                                        textAlign: 'center'
                                                                     }}
                                                                 >
                                                                     {parseInt(order.total_price).toLocaleString("pt-BR", {
@@ -339,13 +372,13 @@ const Orders = () => {
                                                                 >
                                                                     <Delete />
                                                                 </IconButton> */}
-                                                                    <IconButton
+                                                                    {/* <IconButton
                                                                         onClick={() => handleOpenModal(index)}
                                                                         color="primary"
 
                                                                     >
                                                                         <Receipt />
-                                                                    </IconButton>
+                                                                    </IconButton> */}
                                                                     <IconButton
                                                                         color="warning"
                                                                         onClick={() => handleOrderPutById(order.idPedidos)}

@@ -121,9 +121,9 @@ const CheckoutPreviewAndEdit = ({ data, handleFinalize, qrCodeGenerated, qrCodeI
 
   return loading ? <Loading /> : (
     <Box sx={{ p: 0 }}>
-      <Typography variant="h3" gutterBottom color="primary">
+      {/* <Typography variant="h3" gutterBottom color="primary">
         {data.payment === 'PIX' ? 'Qrcode e pix cola' : 'Visualizar Dados'}
-      </Typography>
+      </Typography> */}
       {data.payment === 'PIX' ? (
         <>
         <Box
@@ -137,7 +137,7 @@ const CheckoutPreviewAndEdit = ({ data, handleFinalize, qrCodeGenerated, qrCodeI
             mt: 4, // Margem superior
           }}
         >
-          <Pix sx={{ fontSize: 80, color: "#4DB6AC"}} />
+          <Pix sx={{ fontSize: 120, color: "#4DB6AC"}} />
           <Typography variant="h6" color="secondary">
             <strong>Pagamento via PIX</strong>
           </Typography>
@@ -196,7 +196,7 @@ const CheckoutPreviewAndEdit = ({ data, handleFinalize, qrCodeGenerated, qrCodeI
               }).format(data.total_price)}</strong>
             </Typography>
 
-            <Typography sx={{ mb: 1, color: theme.palette.secondary.main, fontSize: {lg: 17, md: 17, sm: 13, xs: 13}}}>
+            <Typography sx={{ mb: 1, color: theme.palette.secondary.main, fontSize: {lg: 17, md: 17, sm: 13, xs: 10}}}>
               Pix cola: <strong>{pixCola}</strong>
             </Typography>
             <Button

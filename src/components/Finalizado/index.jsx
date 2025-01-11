@@ -16,7 +16,7 @@ const Finalizado = ({ status }) => {
         const timer = setTimeout(() => {
             dispatch(clearCart());
             router.push("/");
-        }, 10000);
+        }, 60000);
 
         return () => clearTimeout(timer);
     }, [dispatch, router]);
@@ -24,11 +24,11 @@ const Finalizado = ({ status }) => {
     const renderStatusIcon = () => {
         switch (status) {
             case 'success':
-                return <CheckCircleIcon style={{ color: 'green', width: 70, height: 70 }} />; 
+                return <CheckCircleIcon style={{ color: 'green', width: 140, height: 140 }} />; 
             case 'pending':
-                return <HourglassEmptyIcon style={{ color: 'orange', width: 70, height: 70 }} />;
+                return <HourglassEmptyIcon style={{ color: 'orange', width: 140, height: 140 }} />;
             case 'error':
-                return <CancelIcon style={{ color: 'red', width: 70, height: 70 }} />;
+                return <CancelIcon style={{ color: 'red', width: 140, height: 140 }} />;
             default:
                 return null;
         }
@@ -60,8 +60,9 @@ const Finalizado = ({ status }) => {
                     {renderStatusIcon()}
                 </Grid>
                 <Grid item xs={12}>
-                    <Typography variant="h4" gutterBottom sx={{
-                        color: theme.palette.primary.main
+                    <Typography gutterBottom sx={{
+                        color: theme.palette.primary.main,
+                        fontSize: {lg: 30, md: 27, sm: 23, xs: 15}
                     }}>
                         {renderStatusMessage()}
                     </Typography>
