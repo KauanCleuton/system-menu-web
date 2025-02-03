@@ -99,10 +99,8 @@ const CheckoutPreviewAndEdit = ({ data, handleFinalize, qrCodeGenerated, qrCodeI
       }
     }
   
-    // Validação do CVV
     if (!card.cvc || card.cvc.length !== 3) newErrors.cvc = 'CVV inválido';
   
-    // Validação do número de parcelas
     if (!card.installments) newErrors.installments = 'Selecione o número de parcelas';
   
     setErrors(newErrors);
@@ -242,8 +240,8 @@ const CheckoutPreviewAndEdit = ({ data, handleFinalize, qrCodeGenerated, qrCodeI
                 alignItems: 'center',
                 justifyContent: 'center',
                 textAlign: 'center',
-                gap: 2, // Espaço entre os elementos
-                mt: 4, // Margem superior
+                gap: 2,
+                mt: 4,
               }}
             >
               <Pix sx={{ fontSize: 120, color: "#4DB6AC" }} />
@@ -333,7 +331,6 @@ const CheckoutPreviewAndEdit = ({ data, handleFinalize, qrCodeGenerated, qrCodeI
       case 'Dinheiro': {
         return (
           <Grid container spacing={2}>
-            {/* Exibindo dados do pedido */}
             <Grid item xs={12} sm={6}>
               <Typography variant="body1" sx={{ color: theme.palette.secondary.main }}>
                 <strong>Nome:</strong> {data.name}
@@ -544,7 +541,7 @@ const CheckoutPreviewAndEdit = ({ data, handleFinalize, qrCodeGenerated, qrCodeI
                         color: theme.palette.secondary.main
                       },
                       "& .MuiFormHelperText-root": {
-                        color: theme.palette.primary.main // Cor do texto de ajuda
+                        color: theme.palette.primary.main
                       }
                     }} />}
                 </InputMask>
@@ -592,7 +589,7 @@ const CheckoutPreviewAndEdit = ({ data, handleFinalize, qrCodeGenerated, qrCodeI
                         color: theme.palette.secondary.main
                       },
                       "& .MuiFormHelperText-root": {
-                        color: theme.palette.primary.main // Cor do texto de ajuda
+                        color: theme.palette.primary.main
                       }
                     }} />}
                 </InputMask>
@@ -632,7 +629,7 @@ const CheckoutPreviewAndEdit = ({ data, handleFinalize, qrCodeGenerated, qrCodeI
                         color: theme.palette.secondary.main
                       },
                       "& .MuiFormHelperText-root": {
-                        color: theme.palette.primary.main // Cor do texto de ajuda
+                        color: theme.palette.primary.main
                       }
                     }} />}
                 />
