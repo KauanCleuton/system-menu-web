@@ -3,6 +3,7 @@ import { Formik, Form, Field, ErrorMessage } from 'formik';
 import * as Yup from 'yup';
 import InputMask from 'react-input-mask';
 import { TextField, Button, Grid, FormControl, FormHelperText, InputAdornment, useTheme } from '@mui/material';
+import { PhoneIphoneOutlined } from '@mui/icons-material';
 
 // Validação com Yup
 const validationSchema = Yup.object({
@@ -11,23 +12,29 @@ const validationSchema = Yup.object({
     neighborhood: Yup.string().required('Bairro é obrigatório'),
     city: Yup.string().required('Cidade é obrigatória'),
     complement: Yup.string(),
+    postalCode: Yup.string().matches(/^\d{5}-\d{3}$/, 'CEP inválido').required('CEP é obrigatório'),
 });
 
 const BillingAddress = ({ handleSubmit, initialValues }) => {
-    const theme = useTheme()
+    const theme = useTheme();
 
     return (
         <Formik
             initialValues={initialValues}
             validationSchema={validationSchema}
             onSubmit={(values) => {
-                handleSubmit(values);
+                const formattedPostalCode = values.postalCode.replace('-', '');
+
+                const updatedValues = {
+                    ...values,
+                    postalCode: formattedPostalCode,
+                };
+                handleSubmit(updatedValues);
             }}
         >
             {({ handleChange, handleBlur, values, touched, errors }) => (
                 <Form>
                     <Grid container spacing={3}>
-                        {/* Rua */}
                         <Grid item xs={12}>
                             <FormControl fullWidth>
                                 <Field name="road">
@@ -42,14 +49,14 @@ const BillingAddress = ({ handleSubmit, initialValues }) => {
                                             helperText={<ErrorMessage name="road" component={FormHelperText} />}
                                             sx={{
                                                 "& .MuiInputBase-input": {
-                                                    color: theme.palette.secondary.main, // Cor do texto ajustada
+                                                    color: theme.palette.secondary.main,
                                                 },
                                                 "& .MuiFormLabel-root": {
-                                                    color: theme.palette.secondary.main, // Cor do rótulo ajustada
+                                                    color: theme.palette.secondary.main,
                                                 },
                                                 "& .MuiFormHelperText-root": {
-                                                    color:theme.palette.primary.main
-                                                }
+                                                    color: theme.palette.primary.main,
+                                                },
                                             }}
                                         />
                                     )}
@@ -57,7 +64,7 @@ const BillingAddress = ({ handleSubmit, initialValues }) => {
                             </FormControl>
                         </Grid>
 
-                        {/* Número da Casa */}
+                        {/* Campo de Número da Casa */}
                         <Grid item xs={12}>
                             <FormControl fullWidth>
                                 <Field name="house_number">
@@ -67,20 +74,20 @@ const BillingAddress = ({ handleSubmit, initialValues }) => {
                                             label="Número da Casa"
                                             variant="outlined"
                                             margin="normal"
-                                            type='number'
+                                            type="number"
                                             fullWidth
                                             error={touched.house_number && Boolean(errors.house_number)}
                                             helperText={<ErrorMessage name="house_number" component={FormHelperText} />}
                                             sx={{
                                                 "& .MuiInputBase-input": {
-                                                    color: theme.palette.secondary.main, // Cor do texto ajustada
+                                                    color: theme.palette.secondary.main,
                                                 },
                                                 "& .MuiFormLabel-root": {
-                                                    color: theme.palette.secondary.main, // Cor do rótulo ajustada
+                                                    color: theme.palette.secondary.main,
                                                 },
                                                 "& .MuiFormHelperText-root": {
-                                                    color:theme.palette.primary.main
-                                                }
+                                                    color: theme.palette.primary.main,
+                                                },
                                             }}
                                         />
                                     )}
@@ -88,7 +95,7 @@ const BillingAddress = ({ handleSubmit, initialValues }) => {
                             </FormControl>
                         </Grid>
 
-                        {/* Bairro */}
+                        {/* Campo de Bairro */}
                         <Grid item xs={12}>
                             <FormControl fullWidth>
                                 <Field name="neighborhood">
@@ -103,14 +110,14 @@ const BillingAddress = ({ handleSubmit, initialValues }) => {
                                             helperText={<ErrorMessage name="neighborhood" component={FormHelperText} />}
                                             sx={{
                                                 "& .MuiInputBase-input": {
-                                                    color: theme.palette.secondary.main, // Cor do texto ajustada
+                                                    color: theme.palette.secondary.main,
                                                 },
                                                 "& .MuiFormLabel-root": {
-                                                    color: theme.palette.secondary.main, // Cor do rótulo ajustada
+                                                    color: theme.palette.secondary.main,
                                                 },
                                                 "& .MuiFormHelperText-root": {
-                                                    color:theme.palette.primary.main
-                                                }
+                                                    color: theme.palette.primary.main,
+                                                },
                                             }}
                                         />
                                     )}
@@ -118,7 +125,6 @@ const BillingAddress = ({ handleSubmit, initialValues }) => {
                             </FormControl>
                         </Grid>
 
-                        {/* Cidade */}
                         <Grid item xs={12}>
                             <FormControl fullWidth>
                                 <Field name="city">
@@ -133,14 +139,14 @@ const BillingAddress = ({ handleSubmit, initialValues }) => {
                                             helperText={<ErrorMessage name="city" component={FormHelperText} />}
                                             sx={{
                                                 "& .MuiInputBase-input": {
-                                                    color: theme.palette.secondary.main, // Cor do texto ajustada
+                                                    color: theme.palette.secondary.main,
                                                 },
                                                 "& .MuiFormLabel-root": {
-                                                    color: theme.palette.secondary.main, // Cor do rótulo ajustada
+                                                    color: theme.palette.secondary.main,
                                                 },
                                                 "& .MuiFormHelperText-root": {
-                                                    color:theme.palette.primary.main
-                                                }
+                                                    color: theme.palette.primary.main,
+                                                },
                                             }}
                                         />
                                     )}
@@ -148,7 +154,6 @@ const BillingAddress = ({ handleSubmit, initialValues }) => {
                             </FormControl>
                         </Grid>
 
-                        {/* Complemento */}
                         <Grid item xs={12}>
                             <FormControl fullWidth>
                                 <Field name="complement">
@@ -163,14 +168,14 @@ const BillingAddress = ({ handleSubmit, initialValues }) => {
                                             helperText={<ErrorMessage name="complement" component={FormHelperText} />}
                                             sx={{
                                                 "& .MuiInputBase-input": {
-                                                    color: theme.palette.secondary.main, // Cor do texto ajustada
+                                                    color: theme.palette.secondary.main,
                                                 },
                                                 "& .MuiFormLabel-root": {
-                                                    color: theme.palette.secondary.main, // Cor do rótulo ajustada
+                                                    color: theme.palette.secondary.main,
                                                 },
                                                 "& .MuiFormHelperText-root": {
-                                                    color:theme.palette.primary.main
-                                                }
+                                                    color: theme.palette.primary.main,
+                                                },
                                             }}
                                         />
                                     )}
@@ -178,7 +183,44 @@ const BillingAddress = ({ handleSubmit, initialValues }) => {
                             </FormControl>
                         </Grid>
 
-                        {/* Botão de Enviar */}
+                        <Grid item xs={12}>
+                            <FormControl fullWidth>
+                                <Field name="postalCode">
+                                    {({ field }) => (
+                                        <InputMask
+                                            mask="99999-999"
+                                            {...field}
+                                            onChange={handleChange}
+                                            onBlur={handleBlur}
+                                        >
+                                            {() => (
+                                                <TextField
+                                                    {...field}
+                                                    label="CEP"
+                                                    variant="outlined"
+                                                    margin="normal"
+                                                    fullWidth
+                                                    error={touched.postalCode && Boolean(errors.postalCode)}
+                                                    helperText={<ErrorMessage name="postalCode" component={FormHelperText} />}
+                                                    sx={{
+                                                        "& .MuiInputBase-input": {
+                                                            color: theme.palette.secondary.main,
+                                                        },
+                                                        "& .MuiFormLabel-root": {
+                                                            color: theme.palette.secondary.main,
+                                                        },
+                                                        "& .MuiFormHelperText-root": {
+                                                            color: theme.palette.primary.main,
+                                                        },
+                                                    }}
+                                                />
+                                            )}
+                                        </InputMask>
+                                    )}
+                                </Field>
+                            </FormControl>
+                        </Grid>
+
                         <Grid item xs={12}>
                             <Button
                                 type="submit"
@@ -193,7 +235,7 @@ const BillingAddress = ({ handleSubmit, initialValues }) => {
                                     border: `1px solid ${theme.palette.primary.main}`,
                                     ":hover": {
                                         bgcolor: "transparent",
-                                        color: theme.palette.primary.main
+                                        color: theme.palette.primary.main,
                                     },
                                 }}
                             >

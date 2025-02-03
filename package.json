@@ -3,11 +3,11 @@
   "version": "0.1.0",
   "private": true,
   "scripts": {
-    "dev": "cross-env NODE_ENV=development next dev",
+    "dev": "NODE_ENV=development next dev",
     "build": "next build",
-    "build:vm": "cross-env NODE_ENV=production next build",
-    "start": "cross-env NODE_ENV=production next start -p 3002",
-    "start:vm": "next build && cross-env NODE_ENV=production next start -p 3002 ",
+    "build:vm": "NODE_ENV=production next build",
+    "start": "NODE_ENV=production next start -p 3002",
+    "start:vm": "next build && NODE_ENV=production next start -p 3002 ",
     "lint": "next lint"
   },
   "dependencies": {
@@ -32,7 +32,7 @@
     "punycode": "^2.3.1",
     "react": "^18.3.1",
     "react-countdown-circle-timer": "^3.2.1",
-    "react-credit-cards-2": "^1.0.2",
+    "react-credit-cards-2": "^1.0.3",
     "react-dom": "^18",
     "react-input-mask": "^2.0.4",
     "react-medium-image-zoom": "^5.2.11",

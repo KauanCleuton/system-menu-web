@@ -10,10 +10,9 @@ import {
   OutlinedInput,
   TextField,
   useTheme,
+  Autocomplete
 } from "@mui/material";
 import { useDispatch, useSelector } from "react-redux";
-import { Formik, Form } from "formik";
-import * as Yup from "yup";
 import UserNoAuthSv from "@/service/user.service";
 import CheckCircleIcon from "@mui/icons-material/CheckCircle";
 import ErrorIcon from "@mui/icons-material/Error";
@@ -22,6 +21,15 @@ import { useRouter } from "next/navigation";
 import Image from "next/image";
 import Loading from "../Loading";
 import { Pix } from "@mui/icons-material";
+import Cards from 'react-credit-cards-2';
+import 'react-credit-cards-2/dist/es/styles-compiled.css'
+import { Formik, Form, Field } from 'formik';
+import InputMask from 'react-input-mask';
+import * as Yup from 'yup';
+
+const installmentOptions = Array.from({ length: 10 }, (_, i) => `${i + 1}x`);
+
+
 
 
 const userSv = new UserNoAuthSv()
@@ -32,6 +40,110 @@ const CheckoutPreviewAndEdit = ({ data, handleFinalize, qrCodeGenerated, qrCodeI
   const theme = useTheme()
   const [loading, setLoading] = useState(false)
   const dispatch = useDispatch()
+  const [card, setCard] = useState({ name: '', number: '', expiry: '', cvc: '', installments: '' });
+  const [errors, setErrors] = useState({});
+  const [isFormValid, setIsFormValid] = useState(false);
+
+
+
+  const handleInputFocus = (e) => {
+    setCard((prev) => ({ ...prev, focus: e.target.name }));
+  };
+
+  const handleInstallmentsChange = (event, value) => {
+    setCard((prev) => ({ ...prev, installments: value }));
+    console.log(value)
+  };
+
+  const handleSavedCard = (e) => {
+    const { name, value } = e.target;
+    if (name === 'expiry') {
+      const formattedValue = value.replace(/\//g, '').padEnd(4, '0');
+      setCard((prev) => ({ ...prev, [name]: formattedValue }));
+    } else {
+      setCard((prev) => ({ ...prev, [name]: value }));
+    }
+  };
+  
+  const validateFields = () => {
+    const newErrors = {};
+  
+    if (!card.name || card.name.trim() === '') newErrors.name = 'Nome do titular é obrigatório';
+  
+    if (!card.number || card.number.replace(/\s/g, '').length !== 16) newErrors.number = 'Número do cartão inválido';
+  
+    if (!card.expiry || card.expiry.trim() === '') {
+      newErrors.expiry = 'Data de validade é obrigatória';
+    } else if (!/^\d{2}\/\d{4}$/.test(card.expiry)) {
+      const formattedExpiry = card.expiry.slice(0, 2) + '/' + card.expiry.slice(2);
+      if (!/^\d{2}\/\d{4}$/.test(formattedExpiry)) {
+        newErrors.expiry = 'Data de validade inválida';
+      } else {
+        card.expiry = formattedExpiry;
+      }
+    } else {
+      const [expiryMonth, expiryYear] = card.expiry.split('/');
+  
+      const month = parseInt(expiryMonth, 10);
+      const year = parseInt(expiryYear, 10);
+  
+      if (month < 1 || month > 12) {
+        newErrors.expiry = 'Mês inválido';
+      } else {
+        const currentDate = new Date();
+        const expiryDate = new Date(`20${expiryYear}`, month, 0); 
+  
+        if (expiryDate < currentDate) {
+          newErrors.expiry = 'Data de validade expirada';
+        }
+      }
+    }
+  
+    // Validação do CVV
+    if (!card.cvc || card.cvc.length !== 3) newErrors.cvc = 'CVV inválido';
+  
+    // Validação do número de parcelas
+    if (!card.installments) newErrors.installments = 'Selecione o número de parcelas';
+  
+    setErrors(newErrors);
+    return Object.keys(newErrors).length === 0;
+  };
+  
+  
+  
+
+  
+  useEffect(() => {
+    setIsFormValid(validateFields());
+  }, [card]);
+  
+  const handleSubmit = () => {
+    if (validateFields()) {
+      const formattedCard = {
+        holderName: card.name,
+        number: card.number.replace(/\s/g, ''),
+        expiryMonth: card.expiry.slice(0, 2),
+        expiryYear: card.expiry.slice(3, 7), 
+        cvv: card.cvc,
+      };
+
+      const payload = {
+        creditCard: {
+          ...formattedCard
+        },
+        installmentCount: Number(card.installments.slice('x')[0]),
+        ...data
+
+      }
+  
+      console.log('Compra confirmada:', {
+        payload
+      });
+      handleFinalize(payload)
+    }
+  };
+  
+  
 
 
   const generateWhatsAppMessage = () => {
@@ -118,157 +230,156 @@ const CheckoutPreviewAndEdit = ({ data, handleFinalize, qrCodeGenerated, qrCodeI
   }, [qrCodeGenerated, timeLeft, navigate]);
 
 
-
-  return loading ? <Loading /> : (
-    <Box sx={{ p: 0 }}>
-      {/* <Typography variant="h3" gutterBottom color="primary">
-        {data.payment === 'PIX' ? 'Qrcode e pix cola' : 'Visualizar Dados'}
-      </Typography> */}
-      {data.payment === 'PIX' ? (
-        <>
-        <Box
-          sx={{
-            display: 'flex',
-            flexDirection: 'column',
-            alignItems: 'center',
-            justifyContent: 'center',
-            textAlign: 'center',
-            gap: 2, // Espaço entre os elementos
-            mt: 4, // Margem superior
-          }}
-        >
-          <Pix sx={{ fontSize: 120, color: "#4DB6AC"}} />
-          <Typography variant="h6" color="secondary">
-            <strong>Pagamento via PIX</strong>
-          </Typography>
-          <Typography variant="body1" sx={{ color: theme.palette.secondary.main }}>
-            Clique no botão abaixo para gerar o QR Code do PIX. Você terá até 5 minutos para realizar o pagamento.
-          </Typography>
-        </Box>
-      
-        {!qrCodeGenerated ? (
-          <Box sx={{ display: 'flex', justifyContent: 'center', mt: 4 }}>
-            <Button
-              sx={{
-                mt: 10,
-              }}
-              variant="contained"
-              color="primary"
-              onClick={() => {
-                handleFinalize(data);
-                setTimeLeft(300);
-              }}
-            >
-              Gerar QR Code
-            </Button>
-          </Box>
-        ) : (
-          <Box sx={{ textAlign: 'center', mt: 4 }}>
+  const renderComponent = () => {
+    switch (data.payment) {
+      case 'PIX': {
+        return (
+          <>
             <Box
               sx={{
                 display: 'flex',
-                justifyContent: 'center',
+                flexDirection: 'column',
                 alignItems: 'center',
-                mt: 2,
-                mb: 2,
+                justifyContent: 'center',
+                textAlign: 'center',
+                gap: 2, // Espaço entre os elementos
+                mt: 4, // Margem superior
               }}
             >
-              <Box
-                sx={{
-                  width: 270,
-                  height: 270,
-                  position: 'relative',
-                }}
-              >
-                <Image
-                  src={`data:image/png;base64,${qrCodeImage}`}
-                  alt="QR Code PIX"
-                  layout="fill"
-                  style={{ objectFit: 'cover' }}
-                />
-              </Box>
+              <Pix sx={{ fontSize: 120, color: "#4DB6AC" }} />
+              <Typography variant="h6" color="secondary">
+                <strong>Pagamento via PIX</strong>
+              </Typography>
+              <Typography variant="body1" sx={{ color: theme.palette.secondary.main }}>
+                Clique no botão abaixo para gerar o QR Code do PIX. Você terá até 5 minutos para realizar o pagamento.
+              </Typography>
             </Box>
 
-            <Typography variant="body1" sx={{ mb: 1, color: theme.palette.secondary.main }}>
-              Valor a pagar: <strong>{Intl.NumberFormat('pt-BR', {
-                style: 'currency',
-                currency: 'BRL'
-              }).format(data.total_price)}</strong>
-            </Typography>
+            {!qrCodeGenerated ? (
+              <Box sx={{ display: 'flex', justifyContent: 'center', mt: 4 }}>
+                <Button
+                  sx={{
+                    mt: 10,
+                  }}
+                  variant="contained"
+                  color="primary"
+                  onClick={() => {
+                    handleFinalize(data);
+                    setTimeLeft(300);
+                  }}
+                >
+                  Gerar QR Code
+                </Button>
+              </Box>
+            ) : (
+              <Box sx={{ textAlign: 'center', mt: 4 }}>
+                <Box
+                  sx={{
+                    display: 'flex',
+                    justifyContent: 'center',
+                    alignItems: 'center',
+                    mt: 2,
+                    mb: 2,
+                  }}
+                >
+                  <Box
+                    sx={{
+                      width: 270,
+                      height: 270,
+                      position: 'relative',
+                    }}
+                  >
+                    <Image
+                      src={`data:image/png;base64,${qrCodeImage}`}
+                      alt="QR Code PIX"
+                      layout="fill"
+                      style={{ objectFit: 'cover' }}
+                    />
+                  </Box>
+                </Box>
 
-            <Typography sx={{ mb: 1, color: theme.palette.secondary.main, fontSize: {lg: 17, md: 17, sm: 13, xs: 10}}}>
-              Pix cola: <strong>{pixCola}</strong>
-            </Typography>
-            <Button
-              variant="contained"
-              color="primary"
-              onClick={() => {
-                navigator.clipboard.writeText(pixCola);
-                dispatch({ type: SET_ALERT, message: 'Pix cola copiado com sucesso!' });
-              }}
-            >
-              Copiar Pix cola
-            </Button>
-            <Typography variant="body2" color="error" sx={{ mt: 2, fontWeight: 'bold' }}>
-              O QR Code expira em 5 minutos.
-            </Typography>
-            <Typography variant="body2" sx={{ mt: 1, color: theme.palette.primary.main, fontWeight: 'bold' }}>
-              Tempo restante: {Math.floor(timeLeft / 60)}:{timeLeft % 60 < 10 ? '0' : ''}
-              {timeLeft % 60} minutos
-            </Typography>
-          </Box>
-        )}
-      </>
+                <Typography variant="body1" sx={{ mb: 1, color: theme.palette.secondary.main }}>
+                  Valor a pagar: <strong>{Intl.NumberFormat('pt-BR', {
+                    style: 'currency',
+                    currency: 'BRL'
+                  }).format(data.total_price)}</strong>
+                </Typography>
 
-      ) : (<>
-        <Grid container spacing={2}>
-          {/* Exibindo dados do pedido */}
-          <Grid item xs={12} sm={6}>
-            <Typography variant="body1" sx={{ color: theme.palette.secondary.main }}>
-              <strong>Nome:</strong> {data.name}
-            </Typography>
-            <Typography variant="body1" sx={{ color: theme.palette.secondary.main }}>
-              <strong>Telefone:</strong> {data.phone}
-            </Typography>
-            <Typography variant="body1" sx={{ color: theme.palette.secondary.main }}>
-              <strong>Endereço:</strong>{" "}
-              {data?.address
-                ? `${data?.address.road}, ${data?.address.house_number}, ${data?.address.neighborhood}, ${data?.address.city}, ${data?.address.complement}`
-                : "Não disponível"}
-            </Typography>
-            <Typography variant="body1" sx={{ color: theme.palette.secondary.main }}>
-              <strong>Data:</strong> {new Date().toLocaleDateString()}
-            </Typography>
-            {data?.orderItems.map((item, index) => (
-              <Box key={index} sx={{ mb: 2, mt: 2 }}>
-                <Typography variant="body1" sx={{ color: theme.palette.secondary.main }}>
-                  <strong>Produto:</strong> {item.title}
+                <Typography sx={{ mb: 1, color: theme.palette.secondary.main, fontSize: { lg: 17, md: 17, sm: 13, xs: 10 } }}>
+                  Pix cola: <strong>{pixCola}</strong>
                 </Typography>
-                <Typography variant="body1" sx={{ color: theme.palette.secondary.main }}>
-                  <strong>Quantidade:</strong> {item.quantity}
+                <Button
+                  variant="contained"
+                  color="primary"
+                  onClick={() => {
+                    navigator.clipboard.writeText(pixCola);
+                    dispatch({ type: SET_ALERT, message: 'Pix cola copiado com sucesso!' });
+                  }}
+                >
+                  Copiar Pix cola
+                </Button>
+                <Typography variant="body2" color="error" sx={{ mt: 2, fontWeight: 'bold' }}>
+                  O QR Code expira em 5 minutos.
                 </Typography>
-                <Typography variant="body1" sx={{ color: theme.palette.secondary.main }}>
-                  <strong>Observação:</strong> {item.observation}
-                </Typography>
-                <Typography variant="body1" sx={{ color: theme.palette.secondary.main }}>
-                  <strong>Preço:</strong>{" "}
-                  {Number(item.price).toLocaleString("pt-BR", { style: "currency", currency: "BRL" })}
+                <Typography variant="body2" sx={{ mt: 1, color: theme.palette.primary.main, fontWeight: 'bold' }}>
+                  Tempo restante: {Math.floor(timeLeft / 60)}:{timeLeft % 60 < 10 ? '0' : ''}
+                  {timeLeft % 60} minutos
                 </Typography>
               </Box>
-            ))}
+            )}
+          </>
+        )
+      }
+      case 'Dinheiro': {
+        return (
+          <Grid container spacing={2}>
+            {/* Exibindo dados do pedido */}
+            <Grid item xs={12} sm={6}>
+              <Typography variant="body1" sx={{ color: theme.palette.secondary.main }}>
+                <strong>Nome:</strong> {data.name}
+              </Typography>
+              <Typography variant="body1" sx={{ color: theme.palette.secondary.main }}>
+                <strong>Telefone:</strong> {data.phone}
+              </Typography>
+              <Typography variant="body1" sx={{ color: theme.palette.secondary.main }}>
+                <strong>Endereço:</strong>{" "}
+                {data?.address
+                  ? `${data?.address.road}, ${data?.address.house_number}, ${data?.address.neighborhood}, ${data?.address.city}, ${data?.address.complement}`
+                  : "Não disponível"}
+              </Typography>
+              <Typography variant="body1" sx={{ color: theme.palette.secondary.main }}>
+                <strong>Data:</strong> {new Date().toLocaleDateString()}
+              </Typography>
+              {data?.orderItems.map((item, index) => (
+                <Box key={index} sx={{ mb: 2, mt: 2 }}>
+                  <Typography variant="body1" sx={{ color: theme.palette.secondary.main }}>
+                    <strong>Produto:</strong> {item.title}
+                  </Typography>
+                  <Typography variant="body1" sx={{ color: theme.palette.secondary.main }}>
+                    <strong>Quantidade:</strong> {item.quantity}
+                  </Typography>
+                  <Typography variant="body1" sx={{ color: theme.palette.secondary.main }}>
+                    <strong>Observação:</strong> {item.observation}
+                  </Typography>
+                  <Typography variant="body1" sx={{ color: theme.palette.secondary.main }}>
+                    <strong>Preço:</strong>{" "}
+                    {Number(item.price).toLocaleString("pt-BR", { style: "currency", currency: "BRL" })}
+                  </Typography>
+                </Box>
+              ))}
 
-            <Typography variant="h6" color="secondary">
-              <strong>Tipo do pagamento:</strong>{" "}
-              {data.payment}
-            </Typography>
+              <Typography variant="h6" color="secondary">
+                <strong>Tipo do pagamento:</strong>{" "}
+                {data.payment}
+              </Typography>
 
-            <Typography variant="h6" color="secondary">
-              <strong>Total:</strong>{" "}
-              {Number(data?.total_price).toLocaleString("pt-BR", { style: "currency", currency: "BRL" })}
-            </Typography>
-          </Grid>
+              <Typography variant="h6" color="secondary">
+                <strong>Total:</strong>{" "}
+                {Number(data?.total_price).toLocaleString("pt-BR", { style: "currency", currency: "BRL" })}
+              </Typography>
+            </Grid>
 
-          {/* <Grid item xs={12}>
+            {/* <Grid item xs={12}>
           <Formik
             initialValues={{ file: null }}
             validationSchema={validationSchema}
@@ -376,9 +487,174 @@ const CheckoutPreviewAndEdit = ({ data, handleFinalize, qrCodeGenerated, qrCodeI
             )}
           </Formik>
         </Grid> */}
-        </Grid>
+          </Grid>
+        )
+      }
+      case 'CREDIT_CARD': {
+        return (
+          <Grid container spacing={2}>
+            <Grid item xs={12}>
+              <Box sx={{
+                width: "auto",
+              }}>
+                <Cards
+                  number={card.number}
+                  expiry={card.expiry.slice(0, 2) + '/' + card.expiry}
+                  cvc={card.cvc}
+                  name={card.name}
+                  focused={card.focus}
+                />
+              </Box>
+            </Grid>
 
-      </>)}
+            <Grid item xs={12}>
+              <FormControl fullWidth error={!!errors.name}>
+                <TextField
+                  name="name"
+                  label="Nome do Titular"
+                  variant="outlined"
+                  sx={{
+                    "& .MuiInputBase-input": {
+                      color: theme.palette.secondary.main
+                    },
+                    "& .MuiFormLabel-root": {
+                      color: theme.palette.secondary.main
+                    },
+                    "& .MuiFormHelperText-root": {
+                      color: theme.palette.primary.main
+                    }
+                  }}
+                  value={card.name}
+                  onChange={handleSavedCard}
+                  onFocus={handleInputFocus}
+                />
+                {errors.name && <FormHelperText>{errors.name}</FormHelperText>}
+              </FormControl>
+            </Grid>
+
+            <Grid item xs={12}>
+              <FormControl fullWidth error={!!errors.number}>
+                <InputMask mask="9999 9999 9999 9999" value={card.number} onChange={handleSavedCard} onFocus={handleInputFocus}>
+                  {(inputProps) => <TextField {...inputProps} name="number" label="Número do Cartão" variant="outlined"
+                    sx={{
+                      "& .MuiInputBase-input": {
+                        color: theme.palette.secondary.main
+                      },
+                      "& .MuiFormLabel-root": {
+                        color: theme.palette.secondary.main
+                      },
+                      "& .MuiFormHelperText-root": {
+                        color: theme.palette.primary.main // Cor do texto de ajuda
+                      }
+                    }} />}
+                </InputMask>
+                {errors.number && <FormHelperText>{errors.number}</FormHelperText>}
+              </FormControl>
+            </Grid>
+
+            <Grid item xs={6}>
+              <FormControl fullWidth error={!!errors.expiry}>
+                <InputMask mask="99/9999" value={card.expiry.slice(0, 2) + '/' + card.expiry.slice(2)} onChange={handleSavedCard} onFocus={handleInputFocus}>
+                  {(inputProps) => (
+                    <TextField
+                      {...inputProps}
+                      name="expiry"
+                      label="Validade (MM/AAAA)"
+                      variant="outlined"
+                      sx={{
+                        "& .MuiInputBase-input": {
+                          color: theme.palette.secondary.main
+                        },
+                        "& .MuiFormLabel-root": {
+                          color: theme.palette.secondary.main
+                        },
+                        "& .MuiFormHelperText-root": {
+                          color: theme.palette.primary.main
+                        }
+                      }}
+                    />
+                  )}
+                </InputMask>
+                {errors.expiry && <FormHelperText>{errors.expiry}</FormHelperText>}
+              </FormControl>
+            </Grid>
+
+
+            <Grid item xs={6}>
+              <FormControl fullWidth error={!!errors.cvc}>
+                <InputMask mask="999" value={card.cvc} onChange={handleSavedCard} onFocus={handleInputFocus}>
+                  {(inputProps) => <TextField {...inputProps} name="cvc" label="CVV" variant="outlined"
+                    sx={{
+                      "& .MuiInputBase-input": {
+                        color: theme.palette.secondary.main
+                      },
+                      "& .MuiFormLabel-root": {
+                        color: theme.palette.secondary.main
+                      },
+                      "& .MuiFormHelperText-root": {
+                        color: theme.palette.primary.main // Cor do texto de ajuda
+                      }
+                    }} />}
+                </InputMask>
+                {errors.cvc && <FormHelperText>{errors.cvc}</FormHelperText>}
+              </FormControl>
+            </Grid>
+
+            <Grid item xs={12}>
+              <FormControl fullWidth error={!!errors.installments}>
+                <Autocomplete
+                  options={installmentOptions}
+                  value={card.installments}
+                  onChange={handleInstallmentsChange}
+                  renderOption={(props, option) => (
+                    <Box {...props} key={option}>
+                      <Typography color={theme.palette.primary.main}>
+                        {option}
+                      </Typography>
+                    </Box>
+                  )}
+                  sx={{
+                    '& .MuiAutocomplete-option': {
+                      backgroundColor: '#fff',
+                      color: theme.palette.primary.main,
+                    },
+                    '& .MuiAutocomplete-option.Mui-focused': {
+                      backgroundColor: theme.palette.primary.main,
+                      color: '#fff',
+                    },
+                  }}
+                  renderInput={(params) => <TextField {...params} label="Parcelas" variant="outlined"
+                    sx={{
+                      "& .MuiInputBase-input": {
+                        color: theme.palette.secondary.main
+                      },
+                      "& .MuiFormLabel-root": {
+                        color: theme.palette.secondary.main
+                      },
+                      "& .MuiFormHelperText-root": {
+                        color: theme.palette.primary.main // Cor do texto de ajuda
+                      }
+                    }} />}
+                />
+                {errors.installments && <FormHelperText>{errors.installments}</FormHelperText>}
+              </FormControl>
+            </Grid>
+
+            <Grid item xs={12}>
+              <Button variant="contained" color="primary" fullWidth onClick={handleSubmit} disabled={!isFormValid}>
+                Confirmar Compra
+              </Button>
+            </Grid>
+          </Grid>
+        )
+      }
+    }
+  }
+
+
+  return loading ? <Loading /> : (
+    <Box sx={{ p: 0 }}>
+      {renderComponent()}
     </Box>
   );
 };

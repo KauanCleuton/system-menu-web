@@ -64,6 +64,7 @@ const Checkout = () => {
         neighborhood: data.neighborhood,
         city: data.city,
         complement: data.complement,
+        postalCode: data.postalCode ? data.postalCode : ''
       });
 
     } catch (error) {
@@ -74,6 +75,7 @@ const Checkout = () => {
         neighborhood: '',
         city: '',
         complement: '',
+        postalCode: ''
       });
       setMode(true);
     }
@@ -120,6 +122,11 @@ const Checkout = () => {
       formData.append("orderItems", JSON.stringify(data.orderItems));
       formData.append("phone", dataForm.phone);
       formData.append("troco", dataForm.troco);
+    
+      if(dataForm.creditCard && dataForm.installmentCount) {
+        formData.append("creditCard", JSON.stringify(dataForm.creditCard))
+        formData.append("installmentCount", dataForm.installmentCount)
+      }
 
       if (dataForm.comprovante) {
         formData.append("comprovante", dataForm.comprovante);
@@ -138,11 +145,12 @@ const Checkout = () => {
 
       dispatch({
         type: SET_ALERT,
-        message: "Efetue o pagamento!",
+        message: dataForm.payment === 'PIX' ? 'Efetue o pagamento' : 'Pedido recebido com sucesso!',
         severity: "success",
       });
       setMessage("success");
       dispatch(clearCart());
+      handleNext()
     } catch (error) {
       console.error(error);
 
@@ -209,7 +217,7 @@ const Checkout = () => {
           <Grid item xs={12}>
             <Pagamento
               onPaymentMethodChange={handlePaymentMethodChange}
-              handleNext={handleNext}
+              handleNext={data.payment === 'Dinheiro' ? handleFinalize : handleNext}
             />
           </Grid>
         );
