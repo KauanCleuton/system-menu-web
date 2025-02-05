@@ -37,12 +37,13 @@ const Cart = () => {
         <Box
             sx={{
                 width: "100%",
-                height: "100vh",
+                height: "100%",
                 display: 'flex',
                 justifyContent: "center",
                 alignItems: "center",
                 py: 14,
                 px: 2,
+                mb: 40
             }}
         >
             <Container fixed sx={{

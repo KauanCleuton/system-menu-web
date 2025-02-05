@@ -149,8 +149,11 @@ const Checkout = () => {
         severity: "success",
       });
       setMessage("success");
+      setStatusPagamento("success")
       dispatch(clearCart());
-      handleNext()
+      if(dataForm.payment === 'CREDIT_CARD' || dataForm.payment === 'Dinheiro') {
+        handleNext()
+      }
     } catch (error) {
       console.error(error);
 
