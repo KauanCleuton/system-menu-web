@@ -53,18 +53,33 @@ const Orders = () => {
 
 
     useEffect(() => {
-        console.log("213")
-        getData();
+
+        getData()
+        const audio = new Audio('/notification.mp3');
+        audioRef.current = audio;
+
+        audio.oncanplaythrough = () => {
+            setAudioLoaded(true);
+        };
+
         const eventSource = new EventSource(`${process.env.NEXT_PUBLIC_BASE_URL}/events/admin`);
         eventSource.onmessage = (event) => {
             const newOrder = JSON.parse(event.data);
             setData((prevOrders) => [...prevOrders, newOrder]);
-
+            handlePlaySound()
+            if (audioLoaded) {
+                audioRef.current.play().catch((error) => {
+                    console.error('Erro ao tocar o som de notificação:', error);
+                });
+            } else {
+                console.error('Áudio não carregado corretamente');
+            }
         };
+
         return () => {
             eventSource.close();
         };
-    }, []);
+    }, [router, audioLoaded]);
 
 
     const handleSearchPedidoById = async () => {

@@ -19,6 +19,7 @@ const validationSchema = Yup.object({
     description: Yup.string().required('Descrição é obrigatória'),
     price: Yup.number().required('Preço é obrigatório').min(0, 'Preço deve ser maior que 0'),
     file_url: Yup.string().nullable(),
+    quantity: Yup.number().required('Quantidade é obrigatória'),
 });
 
 const ProductSv = new ProductsSv();
@@ -32,7 +33,7 @@ const EditProduct = () => {
     const router = useRouter();
     const [fileBase64, setFileBase64] = useState('');
     const [categories, setCategories] = useState([]);
-    const [productData, setProductData] = useState(null); // Armazena os dados do produto
+    const [productData, setProductData] = useState(null); 
     const [file, setFile] = useState(null)
 
 
@@ -47,6 +48,7 @@ const EditProduct = () => {
             form.append("title", values.title)
             form.append("description", values.description)
             form.append("price", values.price)
+            form.append("quantity", values.quantity)
             setLoading(true);
             await ProductSv.putEditProductById(slug, form);
             dispatch({ type: SET_ALERT, message: 'Produto editado com sucesso!', severity: 'success', alertType: 'product' });
@@ -131,6 +133,7 @@ const EditProduct = () => {
                                 description: productData.description || '',
                                 price: productData.price || '',
                                 file_url: productData.file_url || '',
+                                quantity: productData.quantity || ''
                             }}
                             validationSchema={validationSchema}
                             onSubmit={handleSubmit}
@@ -225,7 +228,7 @@ const EditProduct = () => {
                                                 </Field>
                                             </FormControl>
                                         </Grid>
-                                        <Grid item xs={12} lg={6} md={6} sm={12}>
+                                        <Grid item xs={12} lg={4} md={4} sm={12}>
                                             <FormControl fullWidth>
                                                 <Field name="description">
                                                     {({ field }) => (
@@ -247,7 +250,7 @@ const EditProduct = () => {
                                                 </Field>
                                             </FormControl>
                                         </Grid>
-                                        <Grid item xs={12} lg={6} md={6} sm={12}>
+                                        <Grid item xs={12} lg={4} md={4} sm={12}>
                                             <FormControl fullWidth>
                                                 <Field name="price">
                                                     {({ field }) => (
@@ -260,6 +263,29 @@ const EditProduct = () => {
                                                             type="text"
                                                             error={touched.price && Boolean(errors.price)}
                                                             helperText={<ErrorMessage name="price" component={FormHelperText} />}
+                                                            sx={{
+                                                                "& .MuiInputBase-input": { color: theme.palette.primary.main },
+                                                                "& .MuiFormLabel-root": { color: theme.palette.primary.main },
+                                                                "& .MuiFormHelperText-root": { color: theme.palette.primary.main },
+                                                            }}
+                                                        />
+                                                    )}
+                                                </Field>
+                                            </FormControl>
+                                        </Grid>
+                                        <Grid item xs={12} lg={4} md={4} sm={12}>
+                                            <FormControl fullWidth>
+                                                <Field name="quantity">
+                                                    {({ field }) => (
+                                                        <TextField
+                                                            {...field}
+                                                            label="Quantidade"
+                                                            variant="outlined"
+                                                            margin="normal"
+                                                            fullWidth
+                                                            type="text"
+                                                            error={touched.quantity && Boolean(errors.quantity)}
+                                                            helperText={<ErrorMessage name="quantity" component={FormHelperText} />}
                                                             sx={{
                                                                 "& .MuiInputBase-input": { color: theme.palette.primary.main },
                                                                 "& .MuiFormLabel-root": { color: theme.palette.primary.main },

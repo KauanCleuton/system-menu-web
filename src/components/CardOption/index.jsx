@@ -29,8 +29,8 @@ const CartOption = ({ img, title, description, price, item }) => {
                     <Box
                         sx={{
                             position: "relative",
-                            width: { lg: '134px', md: '125px', sm: '120px', xs: '100px' },
-                            height: { lg: '160px', md: '160px', sm: '150px', xs: '150px' },
+                            width: { lg: '170px', md: '140px', sm: '160px', xs: '140px' },
+                            height: { lg: '190px', md: '160px', sm: '160px', xs: '160px' },
                         }}
                     >
                         <Image
@@ -55,22 +55,34 @@ const CartOption = ({ img, title, description, price, item }) => {
                             py: 1
                         }}
                     >
-                        <Box>
+                        <Box sx={{
+                            display: "flex",
+                            justifyContent: "flex-start",
+                            alignItems: "flex-start",
+                            gap: 1,
+                            flexDirection:"column"
+                        }}>
                             <Typography
                                 variant="h6"
                                 sx={{
                                     fontWeight: "bold",
                                     color: theme.palette.primary.main,
-                                    fontSize: { xs: '13px', md: '18px' },
+                                    fontSize: { xs: '14px', sm: '17px',md: '20px', lg: '20px' },
                                 }}
                             >
                                 {title}
                             </Typography>
                             <Typography
                                 variant="body2"
-                                sx={{ fontSize: { xs: '13px', md: '16px' } }}
+                                sx={{ fontSize: { lg: '16px', md: '12px', sm: '10px', xs: '11px' } }}
                             >
                                 {description}
+                            </Typography>
+                            <Typography
+                                variant="body2"
+                                sx={{ fontSize: { lg: '16px', md: '12px', sm: '10px', xs: '11px' } }}
+                            >
+                                Quantidade disponível: {item.quantity}
                             </Typography>
                         </Box>
 
@@ -86,7 +98,7 @@ const CartOption = ({ img, title, description, price, item }) => {
                                 variant="body2"
                                 sx={{
                                     fontWeight: "bold",
-                                    fontSize: { xs: '13px', md: '16px' },
+                                    fontSize: { lg: '16px', md: '12px', sm: '10px', xs: '11px' },
                                 }}
                             >
                                 {Number(price).toLocaleString('pt-BR', {

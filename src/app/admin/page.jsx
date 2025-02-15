@@ -11,9 +11,12 @@ import Paginator from '@/components/Paginator'
 import TableTransactions from '@/components/TableTransactions'
 import { Formik, Form, Field } from 'formik';
 import { SET_ALERT } from '@/store/actions'
+import AsaasService from '@/service/asaas.service'
 
 const transactionsSv = new TransactionsService()
 
+
+const asaasSv = new AsaasService()
 const Caixa = () => {
     const theme = useTheme()
     const [loading, setLoading] = useState(false)
@@ -31,13 +34,16 @@ const Caixa = () => {
     const getData = async () => {
         try {
             setLoading(true)
-            const responseSaldo = await transactionsSv.getTransactionsSummary()
+            // const responseSaldo = await transactionsSv.getTransactionsSummary()
             const responseAll = await transactionsSv.getAllTransactions()
+
+            const responseSaldo = await asaasSv.getBalance()
+            const responseAllBilling = await asaasSv.getAllBillings()
             setData(responseAll)
-            const totalTransactions = responseAll.length;
+            const totalTransactions = responseAllBilling.length;
             setDataTransactions(state => ({
                 ...state,
-                saldoAtual: responseSaldo.saldoAtual,
+                saldoAtual: responseSaldo.balance,
                 totalTransactions: totalTransactions
             }))
         } catch (error) {

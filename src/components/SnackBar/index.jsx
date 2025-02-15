@@ -10,16 +10,20 @@ import LockOpenIcon from '@mui/icons-material/LockOpen';
 import KeyIcon from '@mui/icons-material/Key'
 import { useDispatch, useSelector } from 'react-redux';
 import { CLOSE_ALERT, hideAlert } from '@/store/actions';
-import { AdminPanelSettings, CategoryOutlined, Inventory2Outlined, Palette, PaletteOutlined } from '@mui/icons-material';
+import { AdminPanelSettings, CategoryOutlined, Inventory2Outlined, Palette, PaletteOutlined, WarningAmber } from '@mui/icons-material';
 import { useTheme } from '@mui/material';
 
-const SnackBar = ({ open, onClose, message, severity, type }) => {
+const SnackBar = ({ open, onClose, message, severity, type, timeStamp }) => {
     const theme = useTheme()
+
+    console.log(type, timeStamp, 69)
 
     const getIcon = () => {
         switch (type) {
             case 'user':
                 return <PersonIcon sx={{ color: theme.palette.primary.main }} />;
+            case 'notification':
+                return <WarningAmber sx={{ color: theme.palette.primary.main }} />;
             case 'key':
                 return <KeyIcon sx={{ color: theme.palette.primary.main }} />;
             case 'admin':
@@ -44,7 +48,7 @@ const SnackBar = ({ open, onClose, message, severity, type }) => {
     return (
         <Snackbar
             open={open}
-            autoHideDuration={6000}
+            autoHideDuration={timeStamp}
             onClose={onClose}>
             <Alert
                 variant='filled'

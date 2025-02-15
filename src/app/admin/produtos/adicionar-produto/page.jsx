@@ -22,6 +22,7 @@ const validationSchema = Yup.object({
     description: Yup.string().required('Descrição é obrigatória'),
     price: Yup.number().required('Preço é obrigatório').min(0, 'Preço deve ser maior que 0'),
     file_url: Yup.string().nullable(),
+    quantity: Yup.number().required('Quantidade é obrigatória'),
 });
 
 const ProductSv = new ProductsSv();
@@ -46,6 +47,7 @@ const AddNewAdmin = () => {
             form.append("title", values.title)
             form.append("description", values.description)
             form.append("price", values.price)
+            form.append("quantity", values.quantity)
 
             setLoading(true)
             const response = await ProductSv.postCreateNewProduct(form)
@@ -158,7 +160,7 @@ const AddNewAdmin = () => {
                     </Grid>
                     <Grid item xs={12}>
                         <Formik
-                            initialValues={{ category_id: '', title: '', description: '', price: '', file_url: '' }}
+                            initialValues={{ category_id: '', title: '', description: '', price: '', file_url: '', quantity: '' }}
                             validationSchema={validationSchema}
                             onSubmit={(values) => {
                                 handleSubmit(values);
@@ -185,7 +187,6 @@ const AddNewAdmin = () => {
                                                 />
                                             </FormControl>
                                         </Grid>
-                                        {/* Categoria */}
                                         <Grid item xs={12} lg={6} md={6} sm={12}>
                                             <FormControl fullWidth>
                                                 <Field name="category_id">
@@ -235,7 +236,6 @@ const AddNewAdmin = () => {
                                                 </Field>
                                             </FormControl>
                                         </Grid>
-                                        {/* Título */}
                                         <Grid item xs={12} lg={6} md={6} sm={12}>
                                             <FormControl fullWidth>
                                                 <Field name="title">
@@ -258,8 +258,7 @@ const AddNewAdmin = () => {
                                                 </Field>
                                             </FormControl>
                                         </Grid>
-                                        {/* Descrição */}
-                                        <Grid item xs={12} lg={6} md={6} sm={12}>
+                                        <Grid item xs={12} lg={4} md={4} sm={12}>
                                             <FormControl fullWidth>
                                                 <Field name="description">
                                                     {({ field }) => (
@@ -281,8 +280,7 @@ const AddNewAdmin = () => {
                                                 </Field>
                                             </FormControl>
                                         </Grid>
-                                        {/* Preço */}
-                                        <Grid item xs={12} lg={6} md={6} sm={12}>
+                                        <Grid item xs={12} lg={4} md={4} sm={12}>
                                             <FormControl fullWidth>
                                                 <Field name="price">
                                                     {({ field }) => (
@@ -305,7 +303,29 @@ const AddNewAdmin = () => {
                                                 </Field>
                                             </FormControl>
                                         </Grid>
-                                        {/* Botão de Enviar */}
+                                        <Grid item xs={12} lg={4} md={4} sm={12}>
+                                            <FormControl fullWidth>
+                                                <Field name="quantity">
+                                                    {({ field }) => (
+                                                        <TextField
+                                                            {...field}
+                                                            label="Quantidade"
+                                                            type="number"
+                                                            variant="outlined"
+                                                            margin="normal"
+                                                            fullWidth
+                                                            error={touched.quantity && Boolean(errors.quantity)}
+                                                            helperText={<ErrorMessage name="quantity" component={FormHelperText} />}
+                                                            sx={{
+                                                                "& .MuiInputBase-input": { color: theme.palette.primary.main },
+                                                                "& .MuiFormLabel-root": { color: theme.palette.primary.main },
+                                                                "& .MuiFormHelperText-root": { color: theme.palette.primary.main },
+                                                            }}
+                                                        />
+                                                    )}
+                                                </Field>
+                                            </FormControl>
+                                        </Grid>
                                         <Grid item xs={12}>
                                             <Box
                                                 sx={{

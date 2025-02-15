@@ -4,7 +4,8 @@ export const initialState = {
   open: false,
   message: '',
   severity: 'success',
-  alertType: "user"
+  alertType: "user",
+  timeStamp: 6000
 };
 
 const alertReducer = (state = initialState, action) => {
@@ -14,7 +15,8 @@ const alertReducer = (state = initialState, action) => {
         open: true,
         message: action.message,
         severity: action.severity || 'success',
-        alertType: action.alertType
+        alertType: action.alertType,
+        timeStamp: action.timeStamp
       };
     case actionTypes.CLOSE_ALERT:
       return { ...state, open: false };

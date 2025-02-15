@@ -26,7 +26,7 @@ const Menu = () => {
             setLoading(true);
             const response = await productSv.getProducts();
             if (response.data && typeof response.data === "object") {
-                setCategories(response.data); // Recebe um objeto diretamente
+                setCategories(response.data);
             } else {
                 setCategories({});
             }
@@ -105,6 +105,7 @@ const Menu = () => {
                                             description={product.description}
                                             price={product.price}
                                             item={product}
+                                            
                                         />
                                     </Grid>
                                 ))}

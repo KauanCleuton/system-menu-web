@@ -1,6 +1,6 @@
 "use client";
 import { Provider, useDispatch, useSelector } from "react-redux";
-import { SET_THEME, SYNC_THEME, SYNC_THEME_UPDATE } from "@/store/actions";
+import { CLOSE_ALERT, SET_ALERT, SET_THEME, SYNC_THEME, SYNC_THEME_UPDATE } from "@/store/actions";
 import React, { useEffect, useState } from "react";
 import { Box } from "@mui/material";
 import { ThemeProvider } from "@mui/material/styles";
@@ -12,8 +12,11 @@ import Footer from "@/components/Footer";
 import SnackBar from "@/components/SnackBar";
 import { createCustomTheme } from "@/theme";
 import { ThemeServiceNoAuth } from "@/service/theme.service";
+import { NotificationsUser } from "@/service/notifications.service";
 
 const themeSv = new ThemeServiceNoAuth();
+const notificationSv = new NotificationsUser()
+
 
 function AppTemplate({ children }) {
   const [colorsTheme, setColorsTheme] = useState({
@@ -24,6 +27,7 @@ function AppTemplate({ children }) {
 
   const favicon = useSelector((state) => state.theme.favicon);
   const title = useSelector((state) => state.theme.title);
+  const [notifications, setNotifications] = useState([])
 
   const dispatch = useDispatch();
 
@@ -110,13 +114,50 @@ function AppTemplate({ children }) {
     return (
       <SnackBar
         open={alert.open}
-        onClose={() => dispatch({ type: "CLOSE_ALERT" })}
+        onClose={() => dispatch({ type: CLOSE_ALERT })}
         message={alert.message}
         severity={alert.severity}
         type={alert.alertType}
+        timeStamp={alert.timeStamp}
       />
     );
   };
+
+  
+  const fetchNotifications = async () => {
+    try {
+      const response = await notificationSv.getNotification();
+  
+      if (response.length > 0) {
+        const audio = new Audio('/notification.mp3');
+        audio.play();
+  
+        // Atualizar o estado da notificação
+        dispatch({
+          type: SET_ALERT,
+          message: response[0].message,
+          timestamp: response[0].timestamp,
+          alertType: 'notification',
+        });
+  
+        console.log(response[0].message, '2391239129');
+        setNotifications(response); 
+      }
+    } catch (error) {
+      console.error('Erro ao buscar notificações:', error);
+    }
+  };
+  
+  
+  useEffect(() => {
+    fetchNotifications();
+    
+    const interval = setInterval(fetchNotifications, 20000);
+    return () => clearInterval(interval);
+  }, []);
+
+
+
 
   return (
     <ThemeProvider theme={createCustomTheme(colorsTheme.primary, colorsTheme.secondary)}>

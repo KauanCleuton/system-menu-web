@@ -3,7 +3,7 @@ import { Edit, Delete } from "@mui/icons-material";
 import Link from "next/link";
 import Image from "next/image";
 
-const TableProducts = ({ data, onDelete, toggleVisible }) => {
+const TableProducts = ({ data, onDelete, toggleVisible, page, limit }) => {
     const theme = useTheme()
     const isXs = useMediaQuery(theme.breakpoints.down("xs"));
     const formatPhoneNumber = (phoneNumber) => {
@@ -20,7 +20,7 @@ const TableProducts = ({ data, onDelete, toggleVisible }) => {
             <Table sx={{ minWidth: '100%' }}>
                 <TableHead>
                     <TableRow sx={{ bgcolor: theme.palette.secondary.main }}>
-                        {['Imagem', 'Título', 'Descrição', 'Preço', 'Categoria', 'Ações'].map((header, index) => (
+                        {['Imagem', 'Título', 'Descrição', 'Quantidade', 'Preço', 'Categoria', 'Ações'].map((header, index) => (
                             <TableCell
                                 key={index}
                                 sx={{
@@ -37,7 +37,7 @@ const TableProducts = ({ data, onDelete, toggleVisible }) => {
                     </TableRow>
                 </TableHead>
                 <TableBody>
-                    {data.map((item, index) => (
+                    {data && data.slice((page - 1) * limit, page * limit).map((item, index) => (
                         <TableRow key={index}>
                             <TableCell align="center">
                                 <Box sx={{
@@ -64,6 +64,11 @@ const TableProducts = ({ data, onDelete, toggleVisible }) => {
                             <TableCell align="center">
                                 <Typography variant="body1" sx={{ fontSize: { xs: 10, lg: 13 }, color: 'secondary.main' }}>
                                     {item.description}
+                                </Typography>
+                            </TableCell>
+                            <TableCell align="center">
+                                <Typography variant="body1" sx={{ fontSize: { xs: 10, lg: 13 }, color: 'secondary.main' }}>
+                                    {item.quantity}
                                 </Typography>
                             </TableCell>
                             <TableCell align="center">
