@@ -1,55 +1,59 @@
-"use client"
-import Menu from "@/components/Menu";
-import { Box, Container, Grid, Paper, Typography, useTheme } from "@mui/material"
+"use client";
+
+import { useState, useEffect } from "react";
+import BannerCard from "@/components/BannersCard";
+import { Box, Container, Grid } from "@mui/material";
+import BannerService from "@/service/banner.service";
 
 
 
+const bannerSv = new BannerService()
 const BannerSection = () => {
-    const theme = useTheme()
+    const [banners, setBanners] = useState([]);
+
+
+    useEffect(() => {
+        const getData = async () => {
+            try {
+                const response = await bannerSv.getAllBanners()
+
+                setBanners(response)
+            } catch (error) {
+                console.error(error)
+            }
+        }
+
+        getData()
+    }, [])
+
     return (
         <Box
             sx={{
-                width: "100vw",
+                width: "100%",
                 height: "100%",
                 display: "flex",
                 justifyContent: "center",
-                py: 3,
-                mb: 8
             }}
         >
-            <Container fixed sx={{ py: '46px', paddingBottom: '60px'}}>
-                <Grid container spacing={'34px'}>
-                    <Grid item xs={12} >
-                        <Box sx={{
-                            width: "100%",
-                            display: "flex",
-                            justifyContent: "center"
-                        }}>
-                            <Typography variant="h1"
-                                sx={{
-                                    fontSize: 34,
-                                    fontWeight: "bold",
-                                    textAlign: "center",
-                                    color: theme.palette.secondary.main
-                                }}
-                            >
-                                Conheça nosso menu de opções
-                            </Typography>
+            <Container fixed>
+                <Grid container spacing={"34px"} sx={{
+                    mt: 1
+                }}>
+                    <Grid item xs={12}>
+                        <Box
+                            sx={{
+                                width: "100%",
+                                borderRadius: "10px",
+                                overflow: "hidden",
+                            }}
+                        >
+                            {banners.length > 0 && <BannerCard data={banners} />}
                         </Box>
                     </Grid>
-
-                    <Grid item xs={12} sx={{
-                        height: '100%',
-                        overflow: "auto",
-                        paddingBottom: '50px'
-                    }}>
-                        <Menu
-                        />
-                    </Grid>
-
                 </Grid>
             </Container>
         </Box>
-    )
-}
-export default BannerSection
+    );
+};
+
+export default BannerSection;

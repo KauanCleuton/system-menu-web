@@ -16,8 +16,6 @@ import { useTheme } from '@mui/material';
 const SnackBar = ({ open, onClose, message, severity, type, timeStamp }) => {
     const theme = useTheme()
 
-    console.log(type, timeStamp, 69)
-
     const getIcon = () => {
         switch (type) {
             case 'user':
