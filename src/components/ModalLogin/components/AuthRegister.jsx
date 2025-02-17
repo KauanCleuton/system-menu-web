@@ -33,9 +33,9 @@ const AuthRegister = ({ setMode }) => {
 
             const { accessToken, refreshToken, role, message } = response.data.data;
             console.log(accessToken, refreshToken, role, message)
-            sessionStorage.setItem("accessToken", accessToken);
-            sessionStorage.setItem("refreshToken", refreshToken);
-            sessionStorage.setItem("role", role)
+            localStorage.setItem("accessToken", accessToken);
+            localStorage.setItem("refreshToken", refreshToken);
+            localStorage.setItem("role", role)
             console.log(response.data, '11')
             console.log(response, 123232939239291392n)
             dispatch({ type: SET_ALERT, message: message, severity: "success", alertType: "user" })

@@ -20,13 +20,13 @@ export default function BannerCard({ data }) {
     return (
         <Grid container>
             <Grid item xs={12}>
-                <Box sx={{ width: "100%", position: "relative" }}>
+                <Box sx={{ width: "100%", position: "relative"}}>
                     <Swiper
                         modules={[Pagination]}
                         pagination={{ clickable: true }}
                         spaceBetween={50}
                         slidesPerView={1}
-                        autoplay={{ delay: 3000 }} 
+                        autoplay={{ delay: 2000 }} 
                         style={{ "--swiper-navigation-color": "transparent" }} 
                     >
                         {data.map((banner, index) => (
@@ -34,7 +34,7 @@ export default function BannerCard({ data }) {
                                 <Box
                                     sx={{
                                         width: "100%",
-                                        height: { xs: "350px", sm: "350px", md: "350px", lg: "350px" },
+                                        height: { xs: "250px", sm: "250px", md: "250px", lg: "350px" },
                                         position: "relative",
                                         cursor: "pointer",
                                     }}

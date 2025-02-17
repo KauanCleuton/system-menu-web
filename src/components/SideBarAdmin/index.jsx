@@ -10,11 +10,11 @@ import InventoryIcon from '@mui/icons-material/Inventory';
 import LocalShippingIcon from '@mui/icons-material/LocalShipping';
 import AttachMoneyIcon from '@mui/icons-material/AttachMoney'; // Novo ícone para "Caixa"
 import { usePathname } from 'next/navigation';
-import { Palette, Person, PersonOutline } from '@mui/icons-material';
+import { Palette, Person, PersonOutline, ViewCarousel, ViewCarouselOutlined } from '@mui/icons-material';
 
 const routesComponent = [
     { title: "Dashboard", icon: <DashboardIcon sx={{ width: 20, height: 20 }} />, route: "/admin" },
-    // { title: "Caixa", icon: <AttachMoneyIcon sx={{ width: 20, height: 20 }} />, route: "/admin/caixa" },
+    { title: "Banners", icon: <ViewCarouselOutlined sx={{ width: 20, height: 20 }} />, route: "/admin/banners" },
     { title: "Administradores", icon: <AdminPanelSettingsIcon sx={{ width: 20, height: 20 }} />, route: "/admin/administradores" },
     { title: "Usuários", icon: <PeopleIcon sx={{ width: 20, height: 20 }} />, route: "/admin/usuarios" },
     { title: "Categorias", icon: <CategoryIcon sx={{ width: 20, height: 20 }} />, route: "/admin/categorias" },

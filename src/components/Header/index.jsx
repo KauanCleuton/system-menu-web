@@ -31,8 +31,8 @@ const Header = () => {
     const handleClose = () => process.env.NODE_ENV !== 'production' && console.log('teste2');
 
     const handleLogout = () => {
-        sessionStorage.removeItem("accessToken");
-        sessionStorage.removeItem("refreshToken");
+        localStorage.removeItem("accessToken");
+        localStorage.removeItem("refreshToken");
         router.push("/")
     };
 

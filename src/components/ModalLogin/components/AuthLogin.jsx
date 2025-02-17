@@ -53,9 +53,9 @@ const AuthLogin = ({ modal, setMode }) => {
       
       const { accessToken, refreshToken, role, message } = response.data;
       console.log(message)
-      sessionStorage.setItem("accessToken", accessToken);
-      sessionStorage.setItem("refreshToken", refreshToken);
-      sessionStorage.setItem("role", role)
+      localStorage.setItem("accessToken", accessToken);
+      localStorage.setItem("refreshToken", refreshToken);
+      localStorage.setItem("role", role)
       console.log(response.data, '11')
       if (role === "ADMIN") {
         router.push("/admin");
