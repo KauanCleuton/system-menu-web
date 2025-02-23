@@ -8,13 +8,14 @@ import { CloseOutlined } from '@mui/icons-material';
 import Image from 'next/image';
 
 const ModalAddItemCart = () => {
-    const theme = useTheme()
+    const theme = useTheme();
     const dispatch = useDispatch();
     const { selectedItem: item, quantity, deliveryDescription } = useSelector(state => state.modal);
 
     const handleQuantityChange = (newQuantity) => {
-        if (newQuantity > 0) {
-            dispatch(updateQuantity(newQuantity));
+        const parsedQuantity = Number(newQuantity);
+        if (parsedQuantity > 0) {
+            dispatch(updateQuantity(parsedQuantity));
         }
     };
 
@@ -29,10 +30,10 @@ const ModalAddItemCart = () => {
 
     return (
         <Grid container justifyContent="center" alignItems="center" sx={{ height: "100vh" }}>
-            <Grid item >
+            <Grid item>
                 <AuthCard>
                     <Grid container alignItems="center" justifyContent="center" spacing={2}>
-                        <Grid item xs={12} >
+                        <Grid item xs={12}>
                             <Box sx={{
                                 width: "100%",
                                 display: "flex",
@@ -44,7 +45,7 @@ const ModalAddItemCart = () => {
                             </Box>
                         </Grid>
                         <Grid item xs={12}>
-                            <Grid container spacing={2} order={2} >
+                            <Grid container spacing={2} order={2}>
                                 <Grid item xs={12} alignItems={"center"}>
                                     <Box sx={{
                                         width: "100%",
@@ -80,22 +81,12 @@ const ModalAddItemCart = () => {
                             <TextField
                                 label="Observação"
                                 sx={{
-                                    '& .MuiInputLabel-root': { // Estilo para o label
-                                        color: theme.palette.primary.main,
-                                    },
+                                    '& .MuiInputLabel-root': { color: theme.palette.primary.main },
                                     '& .MuiOutlinedInput-root': {
-                                        '& fieldset': { // Estilo para o outline
-                                            borderColor: theme.palette.primary.main,
-                                        },
-                                        '&:hover fieldset': { // Estilo para o outline no hover
-                                            borderColor: theme.palette.primary.main,
-                                        },
-                                        '&.Mui-focused fieldset': { // Estilo para o outline quando o campo está focado
-                                            borderColor: theme.palette.primary.main,
-                                        },
-                                        '& input': { // Estilo para o texto de entrada
-                                            color: theme.palette.primary.main,
-                                        },
+                                        '& fieldset': { borderColor: theme.palette.primary.main },
+                                        '&:hover fieldset': { borderColor: theme.palette.primary.main },
+                                        '&.Mui-focused fieldset': { borderColor: theme.palette.primary.main },
+                                        '& input': { color: theme.palette.primary.main },
                                     },
                                 }}
                                 fullWidth
@@ -118,10 +109,32 @@ const ModalAddItemCart = () => {
                                             bgcolor: theme.palette.error.main
                                         }
                                     }}
-                                    onClick={() => handleQuantityChange(quantity - 1)}>
+                                    onClick={() => handleQuantityChange(quantity - 1)}
+                                >
                                     -
                                 </Button>
-                                <Typography sx={{ mx: 2 }}>{quantity}</Typography>
+
+                                <TextField
+                                    type="number"
+                                    value={quantity}
+                                    onChange={(e) => handleQuantityChange(e.target.value)}
+                                    inputProps={{ min: 1 }}
+                                    sx={{
+                                        mx: 2,
+                                        width: 100,
+                                        '& input': {
+                                            textAlign: 'center'
+                                        },
+                                        '& .MuiInputLabel-root': { color: theme.palette.primary.main },
+                                        '& .MuiOutlinedInput-root': {
+                                            '& fieldset': { borderColor: theme.palette.primary.main },
+                                            '&:hover fieldset': { borderColor: theme.palette.primary.main },
+                                            '&.Mui-focused fieldset': { borderColor: theme.palette.primary.main },
+                                            '& input': { color: theme.palette.primary.main },
+                                        },
+                                    }}
+                                />
+
                                 <Button
                                     variant='contained'
                                     sx={{
@@ -130,7 +143,8 @@ const ModalAddItemCart = () => {
                                             bgcolor: theme.palette.success.main
                                         }
                                     }}
-                                    onClick={() => handleQuantityChange(quantity + 1)}>
+                                    onClick={() => handleQuantityChange(quantity + 1)}
+                                >
                                     +
                                 </Button>
                             </Box>

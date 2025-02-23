@@ -64,14 +64,14 @@ const CheckoutPreviewAndEdit = ({ data, handleFinalize, qrCodeGenerated, qrCodeI
       setCard((prev) => ({ ...prev, [name]: value }));
     }
   };
-  
+
   const validateFields = () => {
     const newErrors = {};
-  
+
     if (!card.name || card.name.trim() === '') newErrors.name = 'Nome do titular é obrigatório';
-  
+
     if (!card.number || card.number.replace(/\s/g, '').length !== 16) newErrors.number = 'Número do cartão inválido';
-  
+
     if (!card.expiry || card.expiry.trim() === '') {
       newErrors.expiry = 'Data de validade é obrigatória';
     } else if (!/^\d{2}\/\d{4}$/.test(card.expiry)) {
@@ -83,45 +83,45 @@ const CheckoutPreviewAndEdit = ({ data, handleFinalize, qrCodeGenerated, qrCodeI
       }
     } else {
       const [expiryMonth, expiryYear] = card.expiry.split('/');
-  
+
       const month = parseInt(expiryMonth, 10);
       const year = parseInt(expiryYear, 10);
-  
+
       if (month < 1 || month > 12) {
         newErrors.expiry = 'Mês inválido';
       } else {
         const currentDate = new Date();
-        const expiryDate = new Date(`20${expiryYear}`, month, 0); 
-  
+        const expiryDate = new Date(`20${expiryYear}`, month, 0);
+
         if (expiryDate < currentDate) {
           newErrors.expiry = 'Data de validade expirada';
         }
       }
     }
-  
+
     if (!card.cvc || card.cvc.length !== 3) newErrors.cvc = 'CVV inválido';
-  
+
     if (!card.installments) newErrors.installments = 'Selecione o número de parcelas';
-  
+
     setErrors(newErrors);
     return Object.keys(newErrors).length === 0;
   };
-  
-  
-  
 
-  
+
+
+
+
   useEffect(() => {
     setIsFormValid(validateFields());
   }, [card]);
-  
+
   const handleSubmit = () => {
     if (validateFields()) {
       const formattedCard = {
         holderName: card.name,
         number: card.number.replace(/\s/g, ''),
         expiryMonth: card.expiry.slice(0, 2),
-        expiryYear: card.expiry.slice(3, 7), 
+        expiryYear: card.expiry.slice(3, 7),
         cvv: card.cvc,
       };
 
@@ -133,15 +133,15 @@ const CheckoutPreviewAndEdit = ({ data, handleFinalize, qrCodeGenerated, qrCodeI
         ...data
 
       }
-  
+
       console.log('Compra confirmada:', {
         payload
       });
       handleFinalize(payload)
     }
   };
-  
-  
+
+
 
 
   const generateWhatsAppMessage = () => {
@@ -651,7 +651,193 @@ const CheckoutPreviewAndEdit = ({ data, handleFinalize, qrCodeGenerated, qrCodeI
 
   return loading ? <Loading /> : (
     <Box sx={{ p: 0 }}>
-      {renderComponent()}
+      {/* {renderComponent()} */}
+      <Grid container spacing={2}>
+        <Grid item xs={12} sm={6}>
+          <Typography variant="body1" sx={{ color: theme.palette.secondary.main }}>
+            <strong>Nome:</strong> {data.name}
+          </Typography>
+          <Typography variant="body1" sx={{ color: theme.palette.secondary.main }}>
+            <strong>Telefone:</strong> {data.phone}
+          </Typography>
+          <Typography variant="body1" sx={{ color: theme.palette.secondary.main }}>
+            <strong>Endereço:</strong>{" "}
+            {data?.address
+              ? `${data?.address.road}, ${data?.address.house_number}, ${data?.address.neighborhood}, ${data?.address.city}, ${data?.address.complement}`
+              : "Não disponível"}
+          </Typography>
+          <Typography variant="body1" sx={{ color: theme.palette.secondary.main }}>
+            <strong>Data:</strong> {new Date().toLocaleDateString()}
+          </Typography>
+          {data?.orderItems.map((item, index) => (
+            <Box key={index} sx={{ mb: 2, mt: 2 }}>
+              <Typography variant="body1" sx={{ color: theme.palette.secondary.main }}>
+                <strong>Produto:</strong> {item.title}
+              </Typography>
+              <Typography variant="body1" sx={{ color: theme.palette.secondary.main }}>
+                <strong>Quantidade:</strong> {item.quantity}
+              </Typography>
+              <Typography variant="body1" sx={{ color: theme.palette.secondary.main }}>
+                <strong>Observação:</strong> {item.observation}
+              </Typography>
+              <Typography variant="body1" sx={{ color: theme.palette.secondary.main }}>
+                <strong>Preço:</strong>{" "}
+                {Number(item.price).toLocaleString("pt-BR", { style: "currency", currency: "BRL" })}
+              </Typography>
+            </Box>
+          ))}
+
+          <Typography variant="h6" color="secondary">
+            <strong>Tipo do pagamento:</strong>{" "}
+            {data.payment}
+          </Typography>
+
+          <Typography variant="h6" color="secondary">
+            <strong>Total:</strong>{" "}
+            {Number(data?.total_price).toLocaleString("pt-BR", { style: "currency", currency: "BRL" })}
+          </Typography>
+        </Grid>
+
+
+        {data.payment === 'PIX' ? (
+          <Grid item xs={12}>
+            <Formik
+              initialValues={{ file: null }}
+              validationSchema={validationSchema}
+              onSubmit={(values) => {
+                const finalData = {
+                  ...data,
+                  comprovante: values.file,
+                };
+                handleFinalize(finalData);
+              }}
+            >
+              {({ setFieldValue, errors, touched, values }) => (
+                <Form>
+                  <Grid container spacing={2}>
+                    <Grid item xs={12}>
+                      <Typography variant="h6" color="secondary" fontWeight='bold'>
+                        Envie o comprovante
+                      </Typography>
+                    </Grid>
+
+                    <Grid item xs={12}>
+                      <FormControl fullWidth error={touched.file && Boolean(errors.file)}>
+                        <InputLabel htmlFor="file-input">Arquivo</InputLabel>
+                        <TextField
+                          id="file-input"
+                          type="file"
+                          inputProps={{ accept: "image/jpeg,image/png,application/pdf" }}
+                          onChange={(e) => {
+                            const file = e.target.files[0];
+                            setFieldValue("file", file);
+                            handleChangeForm(e)
+                          }}
+                          sx={{
+                            "& .MuiInputBase-input": { color: theme.palette.secondary.main },
+                            "& .MuiFormLabel-root": { color: theme.palette.secondary.main },
+                            "& .MuiFormHelperText-root": { color: theme.palette.primary.main }
+                          }}
+                          label="Arquivo"
+                          InputProps={{
+                            sx: {
+                              flexShrink: 0,
+                            },
+                          }}
+                          helperText={loading ? "Carregando arquivo..." : "Selecione um arquivo para upload"}
+                        />
+                        {touched.file && errors.file && (
+                          <FormHelperText>{errors.file}</FormHelperText>
+                        )}
+                      </FormControl>
+                    </Grid>
+                    {comprovante.status && (
+                      <Grid item xs={12}>
+                        <Typography
+                          variant="body1"
+                          sx={{
+                            display: "flex",
+                            alignItems: "center",
+                            color: comprovante.status === "valido"
+                              ? theme.palette.success.main
+                              : theme.palette.error.main,
+                            fontSize: 18,
+                          }}
+                        >
+                          {comprovante.status === "valido" ? (
+                            <>
+                              <CheckCircleIcon sx={{ marginRight: 1 }} /> Status: Válido
+                            </>
+                          ) : (
+                            <>
+                              <ErrorIcon sx={{ marginRight: 1 }} /> Status: Inválido
+                            </>
+                          )}
+                        </Typography>
+                      </Grid>
+                    )}
+                    <Grid item xs={12}>
+                      <Grid container spacing={2} alignItems="center" justifyContent="flex-start">
+                        <Grid item>
+                          <Button variant="contained" color="primary" type="submit" sx={{
+                            fontSize: 11
+                          }}>
+                            Finalizar Compra
+                          </Button>
+                        </Grid>
+
+                        <Grid item>
+                          <Button
+                            variant="contained"
+                            color="success"
+                            component="a"
+                            href={`https://wa.me/558592985693?text=${generateWhatsAppMessage()}`}
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            sx={{
+                              fontSize: 11
+                            }}
+                          >
+                            Enviar para WhatsApp
+                          </Button>
+                        </Grid>
+                      </Grid>
+                    </Grid>
+                  </Grid>
+                </Form>
+              )}
+            </Formik>
+          </Grid>
+        ) : (
+          <Grid item xs={12}>
+            <Grid container spacing={2} alignItems="center" justifyContent="flex-start">
+              <Grid item>
+                <Button variant="contained" color="primary" onClick={() => handleFinalize(data)} sx={{
+                  fontSize: 11
+                }}>
+                  Finalizar Compra
+                </Button>
+              </Grid>
+
+              <Grid item>
+                <Button
+                  variant="contained"
+                  color="success"
+                  component="a"
+                  href={`https://wa.me/558592985693?text=${generateWhatsAppMessage()}`}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  sx={{
+                    fontSize: 11
+                  }}
+                >
+                  Enviar para WhatsApp
+                </Button>
+              </Grid>
+            </Grid>
+          </Grid>
+        )}
+      </Grid>
     </Box>
   );
 };

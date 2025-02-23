@@ -220,7 +220,7 @@ const Checkout = () => {
           <Grid item xs={12}>
             <Pagamento
               onPaymentMethodChange={handlePaymentMethodChange}
-              handleNext={data.payment === 'Dinheiro' ? handleFinalize : handleNext}
+              handleNext={handleNext}
             />
           </Grid>
         );

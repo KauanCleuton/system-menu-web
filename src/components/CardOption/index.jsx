@@ -29,8 +29,8 @@ const CartOption = ({ img, title, description, price, item }) => {
                     <Box
                         sx={{
                             position: "relative",
-                            width: { lg: '170px', md: '140px', sm: '160px', xs: '140px' },
-                            height: { lg: '190px', md: '160px', sm: '160px', xs: '160px' },
+                            width: { lg: '170px', md: '140px', sm: '160px', xs: '160px' },
+                            height: { lg: '180px', md: '180px', sm: '170px', xs: '160px' },
                         }}
                     >
                         <Image
@@ -60,14 +60,14 @@ const CartOption = ({ img, title, description, price, item }) => {
                             justifyContent: "flex-start",
                             alignItems: "flex-start",
                             gap: 1,
-                            flexDirection:"column"
+                            flexDirection: "column"
                         }}>
                             <Typography
                                 variant="h6"
                                 sx={{
                                     fontWeight: "bold",
                                     color: theme.palette.primary.main,
-                                    fontSize: { xs: '14px', sm: '17px',md: '20px', lg: '20px' },
+                                    fontSize: { xs: '14px', sm: '17px', md: '20px', lg: '20px' },
                                 }}
                             >
                                 {title}
@@ -106,24 +106,38 @@ const CartOption = ({ img, title, description, price, item }) => {
                                     currency: 'BRL',
                                 })}
                             </Typography>
-                            <IconButton
-                                onClick={handleOpenModal}
-                                sx={{
-                                    color: "#fff",
-                                    bgcolor: theme.palette.primary.main,
-                                    borderRadius: '4px',
-                                    width: 36,
-                                    height: 36,
-                                    ":hover": {
-                                        bgcolor: "transparent",
+                            {Number(item.quantity) >= 1 ? (
+                                <IconButton
+                                    onClick={handleOpenModal}
+                                    sx={{
+                                        color: "#fff",
+                                        bgcolor: theme.palette.primary.main,
+                                        borderRadius: '4px',
+                                        width: 36,
+                                        height: 36,
+                                        ":hover": {
+                                            bgcolor: "transparent",
+                                            color: theme.palette.primary.main,
+                                        },
+                                    }}
+                                    aria-label="Adicionar ao carrinho"
+                                >
+                                    <AddShoppingCartOutlined sx={{ fontSize: 18 }} />
+                                </IconButton>
+                            ) : (
+                                <Typography
+                                    variant="body2"
+                                    sx={{
+                                        fontWeight: "bold",
+                                        fontSize: { lg: '16px', md: '12px', sm: '10px', xs: '11px' },
                                         color: theme.palette.primary.main,
-                                    },
-                                }}
-                                aria-label="Adicionar ao carrinho"
-                            >
-                                <AddShoppingCartOutlined sx={{ fontSize: 18 }} />
-                            </IconButton>
+                                    }}
+                                >
+                                    Produto indisponível no momento
+                                </Typography>
+                            )}
                         </Box>
+
                     </Box>
                 </Grid>
             </Grid>
