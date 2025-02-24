@@ -6,6 +6,7 @@ import Link from 'next/link';
 
 const UserMenu = ({ anchorEl, handleClose, handleLogout, user}) => {
 
+    const role = localStorage.getItem("role")
     const theme = useTheme()
     return (
         <Box sx={{ flexGrow: 0 }}>
@@ -35,7 +36,7 @@ const UserMenu = ({ anchorEl, handleClose, handleLogout, user}) => {
                     horizontal: 'right',
                 }}
             >
-                <Link href="/profile" passHref>
+                <Link href={role === 'ADMIN' ? "/admin" : "/perfil"} passHref>
                     <MenuItem onClick={handleClose} sx={{ color: theme.palette.primary.main, px: 3 }}>Perfil</MenuItem>
                 </Link>
                 <MenuItem onClick={() => {

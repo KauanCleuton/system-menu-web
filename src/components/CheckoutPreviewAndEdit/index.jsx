@@ -341,7 +341,7 @@ const CheckoutPreviewAndEdit = ({ data, handleFinalize, qrCodeGenerated, qrCodeI
               <Typography variant="body1" sx={{ color: theme.palette.secondary.main }}>
                 <strong>Endereço:</strong>{" "}
                 {data?.address
-                  ? `${data?.address.road}, ${data?.address.house_number}, ${data?.address.neighborhood}, ${data?.address.city}, ${data?.address.complement}`
+                  ? `${data?.address.postalCode}, ${data?.address.house_number}, ${data?.address.neighborhood}, ${data?.address.city}, ${data?.address.postalCode}, ${data?.address.complement}`
                   : "Não disponível"}
               </Typography>
               <Typography variant="body1" sx={{ color: theme.palette.secondary.main }}>
@@ -663,7 +663,7 @@ const CheckoutPreviewAndEdit = ({ data, handleFinalize, qrCodeGenerated, qrCodeI
           <Typography variant="body1" sx={{ color: theme.palette.secondary.main }}>
             <strong>Endereço:</strong>{" "}
             {data?.address
-              ? `${data?.address.road}, ${data?.address.house_number}, ${data?.address.neighborhood}, ${data?.address.city}, ${data?.address.complement}`
+              ? `${data?.address.road}, ${data?.address.house_number}, ${data?.address.neighborhood}, ${data?.address.city}, ${data?.address.postalCode}, ${data?.address.complement}`
               : "Não disponível"}
           </Typography>
           <Typography variant="body1" sx={{ color: theme.palette.secondary.main }}>

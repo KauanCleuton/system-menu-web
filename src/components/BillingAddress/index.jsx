@@ -12,7 +12,7 @@ const validationSchema = Yup.object({
     neighborhood: Yup.string().required('Bairro é obrigatório'),
     city: Yup.string().required('Cidade é obrigatória'),
     complement: Yup.string(),
-    postalCode: Yup.string().matches(/^\d{5}-\d{3}$/, 'CEP inválido').required('CEP é obrigatório'),
+    postalCode: Yup.string().required('CEP é obrigatório'),
 });
 
 const BillingAddress = ({ handleSubmit, initialValues }) => {

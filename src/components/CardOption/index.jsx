@@ -29,7 +29,7 @@ const CartOption = ({ img, title, description, price, item }) => {
                     <Box
                         sx={{
                             position: "relative",
-                            width: { lg: '170px', md: '140px', sm: '160px', xs: '160px' },
+                            width: { lg: '170px', md: '140px', sm: '160px', xs: '130px' },
                             height: { lg: '180px', md: '180px', sm: '170px', xs: '160px' },
                         }}
                     >
@@ -90,8 +90,8 @@ const CartOption = ({ img, title, description, price, item }) => {
                             sx={{
                                 display: "flex",
                                 justifyContent: "space-between",
-                                alignItems: "center",
                                 mt: "auto",
+                                flexDirection: {lg: 'row', md: 'row', sm: Number(item.quantity) === 0 ? 'column-reverse' : 'row', xs: Number(item.quantity) === 0 ? 'column-reverse' : 'row'}
                             }}
                         >
                             <Typography
@@ -113,8 +113,8 @@ const CartOption = ({ img, title, description, price, item }) => {
                                         color: "#fff",
                                         bgcolor: theme.palette.primary.main,
                                         borderRadius: '4px',
-                                        width: 36,
-                                        height: 36,
+                                        width: {lg: 36, md: 36, sm: 26, xs: 26},
+                                        height: {lg: 36, md: 36, sm: 26, xs: 26},
                                         ":hover": {
                                             bgcolor: "transparent",
                                             color: theme.palette.primary.main,
@@ -122,7 +122,7 @@ const CartOption = ({ img, title, description, price, item }) => {
                                     }}
                                     aria-label="Adicionar ao carrinho"
                                 >
-                                    <AddShoppingCartOutlined sx={{ fontSize: 18 }} />
+                                    <AddShoppingCartOutlined sx={{ fontSize: {lg: 18, md: 18, sm: 14, xs: 14} }} />
                                 </IconButton>
                             ) : (
                                 <Typography

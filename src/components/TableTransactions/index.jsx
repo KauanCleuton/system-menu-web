@@ -22,42 +22,42 @@ const TableTransactions = ({ data, onDelete }) => {
             <Grid item xs={12}>
                 <Grid container spacing={2} alignItems="center">
                     {/* Data */}
-                    <Grid item xs={2} sx={{ display: 'flex', justifyContent: 'center' }}>
+                    <Grid item xs={2.4} sx={{ display: 'flex', justifyContent: 'center' }}>
                         <Typography variant="body1" sx={{ fontWeight: 700, textAlign: 'center', color: theme.palette.text.secondary }}>
                             {new Date(data.createdAt).toLocaleDateString()}
                         </Typography>
                     </Grid>
 
                     {/* Category */}
-                    <Grid item xs={2} sx={{ display: 'flex', justifyContent: 'center' }}>
+                    <Grid item xs={2.4} sx={{ display: 'flex', justifyContent: 'center' }}>
                         <Typography variant="body1" sx={{ fontWeight: 700, color: theme.palette.text.secondary }}>
                             {data.category}
                         </Typography>
                     </Grid>
 
                     {/* Payment Method */}
-                    <Grid item xs={2} sx={{ display: 'flex', justifyContent: 'center' }}>
+                    <Grid item xs={2.4} sx={{ display: 'flex', justifyContent: 'center' }}>
                         <Typography variant="body1" sx={{ fontWeight: 700, color: theme.palette.text.secondary }}>
                             {data.paymentMethod}
                         </Typography>
                     </Grid>
 
                     {/* Phone Number */}
-                    <Grid item xs={2} sx={{ display: 'flex', justifyContent: 'center' }}>
+                    <Grid item xs={2.4} sx={{ display: 'flex', justifyContent: 'center' }}>
                         <Typography variant="body1" sx={{ fontWeight: 700, color: theme.palette.text.secondary }}>
                             {formatPhoneNumber(data.customerPhone)}
                         </Typography>
                     </Grid>
 
                     {/* Amount */}
-                    <Grid item xs={2} sx={{ display: 'flex', justifyContent: 'center' }}>
+                    <Grid item xs={2.4} sx={{ display: 'flex', justifyContent: 'center' }}>
                         <Typography variant="body1" sx={{ fontWeight: 700, color: theme.palette.text.secondary }}>
                             {parseFloat(data.amount).toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' })}
                         </Typography>
                     </Grid>
 
                     {/* Actions */}
-                    <Grid item xs={2} sx={{ display: 'flex', justifyContent: 'center' }}>
+                    {/* <Grid item xs={2} sx={{ display: 'flex', justifyContent: 'center' }}>
                         <Grid container direction="row" justifyContent="center" alignItems="center" spacing={1}>
                             <Grid item>
                                 <IconButton LinkComponent={Link} href={`/admin/transactions/${data.idCaixa}`}>
@@ -70,7 +70,7 @@ const TableTransactions = ({ data, onDelete }) => {
                                 </IconButton>
                             </Grid>
                         </Grid>
-                    </Grid>
+                    </Grid> */}
                 </Grid>
             </Grid>
         </Grid>

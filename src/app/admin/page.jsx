@@ -34,16 +34,16 @@ const Caixa = () => {
     const getData = async () => {
         try {
             setLoading(true)
-            // const responseSaldo = await transactionsSv.getTransactionsSummary()
+            const responseSaldo = await transactionsSv.getTransactionsSummary()
             const responseAll = await transactionsSv.getAllTransactions()
 
-            const responseSaldo = await asaasSv.getBalance()
-            const responseAllBilling = await asaasSv.getAllBillings()
+            // const responseSaldo = await asaasSv.getBalance()
+            // const responseAllBilling = await asaasSv.getAllBillings()
             setData(responseAll)
-            const totalTransactions = responseAllBilling.length;
+            const totalTransactions = responseAll.length;
             setDataTransactions(state => ({
                 ...state,
-                saldoAtual: responseSaldo.balance,
+                saldoAtual: responseSaldo.saldoAtual,
                 totalTransactions: totalTransactions
             }))
         } catch (error) {
@@ -415,7 +415,7 @@ const Caixa = () => {
                                     }} >
                                         <Grid container alignItems={"center"} justifyContent="space-between">
 
-                                            <Grid item xs={2} lg={2} sm={2} md={2}>
+                                            <Grid item xs={2.4} lg={2.4} sm={2.4} md={2.4}>
                                                 <Box sx={{
                                                     width: "100%",
                                                     display: "flex",
@@ -432,7 +432,7 @@ const Caixa = () => {
                                                     </Typography>
                                                 </Box>
                                             </Grid>
-                                            <Grid item xs={2} lg={2} sm={2} md={2}>
+                                            <Grid item xs={2.4} lg={2.4} sm={2.4} md={2.4}>
                                                 <Box sx={{
                                                     width: "100%",
                                                     display: "flex",
@@ -449,7 +449,7 @@ const Caixa = () => {
                                                     </Typography>
                                                 </Box>
                                             </Grid>
-                                            <Grid item xs={2} lg={2} sm={2} md={2}>
+                                            <Grid item xs={2.4} lg={2.4} sm={2.4} md={2.4}>
                                                 <Box sx={{
                                                     width: "100%",
                                                     display: "flex",
@@ -466,7 +466,7 @@ const Caixa = () => {
                                                     </Typography>
                                                 </Box>
                                             </Grid>
-                                            <Grid item xs={2} lg={2} sm={2} md={2}>
+                                            <Grid item xs={2.4} lg={2.4} sm={2.4} md={2.4}>
                                                 <Box sx={{
                                                     width: "100%",
                                                     display: "flex",
@@ -483,7 +483,7 @@ const Caixa = () => {
                                                     </Typography>
                                                 </Box>
                                             </Grid>
-                                            <Grid item xs={2} lg={2} sm={2} md={2}>
+                                            <Grid item xs={2.4} lg={2.4} sm={2.4} md={2.4}>
                                                 <Box sx={{
                                                     width: "100%",
                                                     display: "flex",
@@ -500,7 +500,7 @@ const Caixa = () => {
                                                     </Typography>
                                                 </Box>
                                             </Grid>
-                                            <Grid item xs={2} lg={2} sm={2} md={2}>
+                                            {/* <Grid item xs={2.4} lg={2.4} sm={2.4} md={2.4}>
                                                 <Box sx={{
                                                     width: "100%",
                                                     display: "flex",
@@ -516,7 +516,7 @@ const Caixa = () => {
                                                         Ações
                                                     </Typography>
                                                 </Box>
-                                            </Grid>
+                                            </Grid> */}
                                         </Grid>
                                     </Box>
                                 </Grid>

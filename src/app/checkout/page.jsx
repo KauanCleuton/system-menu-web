@@ -57,6 +57,8 @@ const Checkout = () => {
       console.log(data, 231321)
       setAddress(data);
 
+
+      const formattedPostalCode = data.postalCode.replace('-', '');
       setMode(true);
       setInitialValues({
         house_number: Number(data.house_number),
@@ -64,7 +66,7 @@ const Checkout = () => {
         neighborhood: data.neighborhood,
         city: data.city,
         complement: data.complement,
-        postalCode: data.postalCode ? data.postalCode : ''
+        postalCode: formattedPostalCode
       });
 
     } catch (error) {
