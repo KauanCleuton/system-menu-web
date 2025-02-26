@@ -46,15 +46,15 @@ const TextInput = (props) => {
               helperText={touched[name] && errors[name]}
               InputProps={{
                 sx: {
-                  color: '#000',
+                  color: theme.palette.secondary.main,
                   '&::placeholder': {
-                    color: '#000',
+                    color: theme.palette.secondary.main,
                   },
                 },
               }}
               sx={{
                 borderRadius: '5px',
-                color: '#000',
+                color: theme.palette.secondary.main,
               }}
             />
           )}
@@ -92,15 +92,15 @@ const TextInput = (props) => {
           </InputAdornment>
         ),
         sx: {
-          color: '#000',
+          color: theme.palette.secondary.main,
           '&::placeholder': {
-            color: '#000',
+            color: theme.palette.secondary.main,
           },
         },
       }}
       sx={{
         borderRadius: '5px',
-        color: '#000',
+        color: theme.palette.secondary.main,
       }}
       //{...rest}
     />

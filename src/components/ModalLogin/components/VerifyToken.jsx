@@ -1,10 +1,12 @@
-import { Box, Button, Grid, TextField, Typography } from "@mui/material";
+import { Box, Button, Grid, TextField, Typography, useTheme } from "@mui/material";
 import { useState, useRef } from "react";
 import customAxios from "@/service/middleware";
 import { showAlert } from "@/store/actions";
 import { useDispatch } from "react-redux";
+import { VerifyTokenUser } from "@/service/auth.service";
 
 const VerifyToken = ({ setMode }) => {
+  const theme = useTheme()
   const [token, setToken] = useState(Array(6).fill(""));
   const dispatch = useDispatch();
   const inputsRef = useRef([]);
@@ -13,7 +15,7 @@ const VerifyToken = ({ setMode }) => {
     event.preventDefault();
     try {
       const tokenStr = token.join("");
-      const response = await customAxios.post('/verifyToken', { token: tokenStr });
+      const response = await VerifyTokenUser(tokenStr)
       console.log(response.data);
       if (response.data.valid) {
         setMode('resetPassword');
@@ -54,21 +56,21 @@ const VerifyToken = ({ setMode }) => {
               fullWidth
               sx={{
                 '& .MuiInputBase-root': {
-                  color: '#FF4D00',
+                  color: theme.palette.primary.main,
                 },
                 '& .MuiOutlinedInput-root': {
                   '& fieldset': {
-                    borderColor: '#FF4D00',
+                    borderColor: theme.palette.primary.main,
                   },
                   '&:hover fieldset': {
-                    borderColor: '#FF4D00',
+                    borderColor: theme.palette.primary.main,
                   },
                   '&.Mui-focused fieldset': {
-                    borderColor: '#FF4D00',
+                    borderColor: theme.palette.primary.main,
                   },
                 },
                 '& .MuiInputLabel-root': {
-                  color: '#FF4D00',
+                  color: theme.palette.primary.main,
                 },
               }}
               inputRef={(el) => (inputsRef.current[index] = el)}
@@ -84,12 +86,12 @@ const VerifyToken = ({ setMode }) => {
       <Button type="submit" fullWidth variant="contained" sx={{ 
         mt: 3, 
         mb: 2, 
-        backgroundColor: "#FF4D00", 
+        backgroundColor: theme.palette.primary.main, 
         color: "#FFF",
-        border: `1px solid #FF4D00`,
+        border: `1px solid ${theme.palette.primary.main}`,
         ":hover": {
           bgcolor: 'transparent',
-          color: "#FF4D00"
+          color: theme.palette.primary.main
         }
         
         }}>

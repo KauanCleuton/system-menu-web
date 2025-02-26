@@ -16,7 +16,7 @@ const setclientCredentials = async () => {
       client_id: process.env.REACT_APP_CLIENT_ID,
     }
   );
-  sessionStorage.setItem('clientCredentials', data.client_token);
+  localStorage.setItem('clientCredentials', data.client_token);
 };
 
 let isclientCredentialsRefreshed = false;
@@ -26,8 +26,8 @@ customAxios.interceptors.response.use(
     process.env.NODE_ENV !== 'production' && console.log('kkk2');
     if (response.status === 401) {
       window.location = '/login';
-      sessionStorage.removeItem('accessToken');
-      sessionStorage.removeItem('refreshToken');
+      localStorage.removeItem('accessToken');
+      localStorage.removeItem('refreshToken');
     } else if (response.status === 402) {
       window.location = '/pagamento';
     }
@@ -41,7 +41,7 @@ customAxios.interceptors.response.use(
           await setclientCredentials();
           isclientCredentialsRefreshed = true;
           const { request } = error;
-          request.config.headers.Authorization = `Bearer ${sessionStorage.getItem(
+          request.config.headers.Authorization = `Bearer ${localStorage.getItem(
             'clientCredentials'
           )}`;
           const ret = await customAxios.request(request.config);
@@ -63,7 +63,7 @@ customAxios.interceptors.request.use(
       process.env.NODE_ENV !== 'production' && console.log('kkk34');
       if (!isLoggedIn('accessToken')) {
         process.env.NODE_ENV !== 'production' && console.log('kkk35');
-        const refreshToken = sessionStorage.getItem('refreshToken');
+        const refreshToken = localStorage.getItem('refreshToken');
         if (refreshToken) {
           try {
             const { data } = await customAxios.post(
@@ -78,25 +78,25 @@ customAxios.interceptors.request.use(
               console.log(data.accessToken, 100);
             process.env.NODE_ENV !== 'production' &&
               console.log(data.refreshToken, 200);
-            sessionStorage.setItem('accessToken', data.accessToken);
-            sessionStorage.setItem('refreshToken', data.refreshToken);
+            localStorage.setItem('accessToken', data.accessToken);
+            localStorage.setItem('refreshToken', data.refreshToken);
           } catch (e) {
             process.env.NODE_ENV !== 'production' &&
               console.log('erro refreshtoken', e);
-            sessionStorage.removeItem('accessToken');
-            sessionStorage.removeItem('refreshToken');
-            sessionStorage.setItem('redirectUrl', window.location.pathname);
+            localStorage.removeItem('accessToken');
+            localStorage.removeItem('refreshToken');
+            localStorage.setItem('redirectUrl', window.location.pathname);
             window.location = '/login';
             throw new ServiceError('Usuário não autenticado', 'not_auth');
           }
         } else {
-          sessionStorage.setItem('redirectUrl', window.location.pathname);
+          localStorage.setItem('redirectUrl', window.location.pathname);
           window.location = '/login';
           throw new ServiceError('Usuário não autenticado', 'not_auth');
         }
       }
       process.env.NODE_ENV !== 'production' && console.log('kkk19');
-      request.headers.Authorization = `Bearer ${sessionStorage.getItem(
+      request.headers.Authorization = `Bearer ${localStorage.getItem(
         'accessToken'
       )}`;
       return request;

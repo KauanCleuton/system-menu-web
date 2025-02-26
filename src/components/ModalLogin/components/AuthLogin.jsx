@@ -21,9 +21,9 @@ import Visibility from "@mui/icons-material/Visibility";
 import VisibilityOff from "@mui/icons-material/VisibilityOff";
 import ReactInputMask from "react-input-mask";
 import { login } from "@/service/auth.service";
-import { useDispatch } from "react-redux";
-import { SET_LOGIN_DATA, SET_LOGIN_MENU, showAlert } from "@/store/actions";
-import { useRouter } from "next/navigation";
+import { useDispatch, useSelector } from "react-redux";
+import { SET_ALERT, SET_LOGIN_DATA, SET_LOGIN_MENU, showAlert } from "@/store/actions";
+import { usePathname, useRouter } from "next/navigation";
 
 const numberMask = "(99) 99999-9999";
 
@@ -31,7 +31,9 @@ const AuthLogin = ({ modal, setMode }) => {
   const theme = useTheme();
   const router = useRouter();
   const dispatch = useDispatch();
-
+  const path = usePathname()
+  const alert = useSelector(state => state.alert)
+  console.log(alert, '901239293921932939')
   const [showPassword, setShowPassword] = useState(false);
 
   const togglePasswordVisibility = () => {
@@ -47,20 +49,27 @@ const AuthLogin = ({ modal, setMode }) => {
 
 
       const response = await login(formattedValues);
+      
+      
       const { accessToken, refreshToken, role, message } = response.data;
-      sessionStorage.setItem("accessToken", accessToken);
-      sessionStorage.setItem("refreshToken", refreshToken);
-      sessionStorage.setItem("role", role)
+      console.log(message)
+      localStorage.setItem("accessToken", accessToken);
+      localStorage.setItem("refreshToken", refreshToken);
+      localStorage.setItem("role", role)
       console.log(response.data, '11')
       if (role === "ADMIN") {
         router.push("/admin");
-        dispatch(showAlert(response.data.message, "success", "user"))
+        dispatch({ type: SET_ALERT, message: message, severity: "success", alertType: "user" })
+      }
+      console.log(response, 123232939239291392n)
+      dispatch({ type: SET_ALERT, message: message, severity: "success", alertType: "user" })
+      dispatch({ type: SET_LOGIN_DATA })
+      if (path === '/login') {
+        router.replace("/")
       }
       closeModal();
-      dispatch(showAlert(response.data.message, "success", "user"))
-      dispatch({ type: SET_LOGIN_DATA })
     } catch (error) {
-      dispatch(showAlert(error.message, "error", "key"))
+      dispatch({ type: SET_ALERT, message: 'Erro ao fazer login! Tente Novamente', severity: "error", alertType: "user" })
       console.error("Erro ao fazer login!", error);
     } finally {
       setSubmitting(false);
@@ -102,7 +111,7 @@ const AuthLogin = ({ modal, setMode }) => {
                   variant="titleLogin"
                   fontWeight="400"
                   lineHeight={"40px"}
-                  sx={{ color: "#FF4D00" }}
+                  sx={{ color: theme.palette.primary.main }}
                 >
                   Login
                 </Typography>
@@ -125,7 +134,7 @@ const AuthLogin = ({ modal, setMode }) => {
                     sx={{
                       textTransform: "inherit",
                       p: 0,
-                      color: "#FF4D00",
+                      color: theme.palette.primary.main,
                     }}
                     onClick={() => setMode("register")}
                   >
@@ -174,13 +183,13 @@ const AuthLogin = ({ modal, setMode }) => {
                                   sx={{
                                     mt: 1,
                                     borderRadius: "8px",
-                                    border: `2px solid #FF4D00`,
+                                    border: `2px solid ${theme.palette.primary.main}`,
                                     p: 1,
                                     "&:hover": {
                                       borderColor: "#fff",
                                     },
                                     "&:focus": {
-                                      borderColor: "#FF4D00",
+                                      borderColor: theme.palette.primary.main,
                                     },
                                   }}
                                   InputProps={{
@@ -231,13 +240,13 @@ const AuthLogin = ({ modal, setMode }) => {
                               placeholder="Insira sua senha"
                               sx={{
                                 borderRadius: "8px",
-                                border: `2px solid #FF4D00`,
+                                border: `2px solid ${theme.palette.primary.main}`,
                                 p: 1,
                                 "&:hover": {
                                   borderColor: "#fff",
                                 },
                                 "&:focus": {
-                                  borderColor: "#FF4D00",
+                                  borderColor: theme.palette.primary.main,
                                 },
                               }}
                               InputProps={{
@@ -299,7 +308,7 @@ const AuthLogin = ({ modal, setMode }) => {
                               sx={{
                                 color: "#FFF",
                                 "&.Mui-checked": {
-                                  color: "#FF4D00",
+                                  color: theme.palette.primary.main,
                                 },
                               }}
                             />
@@ -339,11 +348,11 @@ const AuthLogin = ({ modal, setMode }) => {
                           variant="contained"
                           disabled={isSubmitting}
                           sx={{
-                            backgroundColor: "#FF4D00", color: "#FFF",
-                            border: `1px solid #FF4D00`,
+                            backgroundColor: theme.palette.primary.main, color: "#FFF",
+                            border: `1px solid ${theme.palette.primary.main}`,
                             ":hover": {
                               bgcolor: 'transparent',
-                              color: "#FF4D00"
+                              color: theme.palette.primary.main
                             }
                           }}
 

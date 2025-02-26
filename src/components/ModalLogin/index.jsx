@@ -18,12 +18,13 @@ const ModalLogin = () => {
     const dispatch = useDispatch();
     const theme = useTheme();
     const mode = useSelector((state) => state.login.mode);
+    const logo = useSelector(state => state.theme.logo)
     //const [mode, setMode] = useState('login');
     const setMode = (mode) => dispatch({ type: SET_LOGIN_MENU, mode: mode });
     const closeModal = () => dispatch({ type: SET_LOGIN_MENU, opened: false });
     const [phone, setPhone] = useState("")
     return (
-        <Grid container justifyContent="center" alignItems="center" sx={{ minHeight: 'calc(100vh - 68px)' }}>
+        <Grid container justifyContent="center" alignItems="center" sx={{ minHeight: 'calc(100vh - 68px)',  }}>
             <Grid item  >
                 <AuthCard >
                     <Grid container alignItems="center" justifyContent="center">
@@ -41,7 +42,7 @@ const ModalLogin = () => {
                                             sx={{
                                                 width: 50,
                                                 height: 50,
-                                                color: '#FF4D00'
+                                                color: theme.palette.primary.main
                                             }}>
                                             <CloseOutlined sx={{ fontSize: 35 }} />
                                         </IconButton>
@@ -52,8 +53,8 @@ const ModalLogin = () => {
                                         width: 160, height: 160, position: 'relative',
                                     }}>
                                         <Image
-                                            src={`/img/logo.svg`}
-                                            alt="EADY"
+                                            src={logo ? logo : theme.palette.primary.logo}
+                                            alt="Logo do Sistema"
                                             layout="fill"
                                             objectFit="contain"
                                             style={{ cursor: "pointer" }}
@@ -63,7 +64,7 @@ const ModalLogin = () => {
                             </Grid>
                         </Grid>
                         <Grid item xs={12} >
-                            {mode === 'login' && <AuthLogin modal setMode={setMode} />}
+                        {mode === 'login' && <AuthLogin modal setMode={setMode} />}
                             {mode === 'register' && <AuthRegister modal setMode={setMode} />}
 
                             {mode === 'forgotPassword' && <AuthForgotPassword modal setPhone={setPhone} setMode={setMode} />}

@@ -1,5 +1,5 @@
 "use client"
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { Container, Box, Grid } from '@mui/material';
 import CheckoutSteps from '@/components/StepsCheckout';
 import PhoneNumberInput from '@/components/PhoneNumberInput';
@@ -13,7 +13,7 @@ import { clearCart } from '@/store/cartSlice';
 import { useRouter } from 'next/navigation';
 import Finalizado from '@/components/Finalizado';
 
-const UserSv = new userService.UserNoAuthSv();
+const UserSv = new userService();
 
 const Checkout = () => {
   const dispatch = useDispatch()
@@ -28,15 +28,20 @@ const Checkout = () => {
   const [message, setMessage] = useState('')
   const router = useRouter()
   const [data, setData] = useState({
+    name: '',
     quantity: '',
     total_price: '',
     payment: '',
     address: '',
     orderItems: '',
     phone: '',
-    troco: ''  // Added troco field
+    troco: '',
+    email: '',
+    document: ''
   });
 
+  const [billing, setBilling] = useState([])
+  const [qrCodeGenerate, setQrCodeGenerate] = useState(false)
   const handleNext = () => {
     setActiveStep((prevStep) => prevStep + 1);
   };
@@ -45,33 +50,34 @@ const Checkout = () => {
     setActiveStep((prevStep) => prevStep - 1);
   };
 
-  const fetchAddress = async (phoneNumber) => {
+  const fetchAddress = async (phoneNumber, nameUser) => {
     try {
       setPhoneNumber(phoneNumber);
       const data = await UserSv.getAddress(phoneNumber);
-      if (data) {
-        setAddress(data);
-        setInitialValues(data);
-        handleNext();
-        setMode(false);
-      } else {
-        setInitialValues({
-          road: '',
-          house_number: '',
-          neighborhood: '',
-          city: '',
-          complement: '',
-        });
-        setMode(true);
-      }
+      console.log(data, 231321)
+      setAddress(data);
+
+
+      const formattedPostalCode = data.postalCode.replace('-', '');
+      setMode(true);
+      setInitialValues({
+        house_number: Number(data.house_number),
+        road: data.road,
+        neighborhood: data.neighborhood,
+        city: data.city,
+        complement: data.complement,
+        postalCode: formattedPostalCode
+      });
+
     } catch (error) {
       console.error('Erro ao buscar o endereço:', error);
       setInitialValues({
         road: '',
-        house_number: '',
+        house_number: 0,
         neighborhood: '',
         city: '',
         complement: '',
+        postalCode: ''
       });
       setMode(true);
     }
@@ -104,19 +110,97 @@ const Checkout = () => {
     }));
   };
 
-  const handleFinalize = async () => {
+
+  const handleFinalize = async (dataForm) => {
     try {
-      const response = await UserSv.createPedido(data)
-      handleNext()
-      dispatch({ type: SET_ALERT, message: response.message, severity: 'error' })
-      setMessage('success')
+      const formData = new FormData();
+      formData.append("name", dataForm.name);
+      formData.append("email", dataForm.email);
+      formData.append("document", dataForm.document);
+      formData.append("quantity", dataForm.quantity);
+      formData.append("total_price", dataForm.total_price);
+      formData.append("payment", dataForm.payment);
+      formData.append("address", JSON.stringify(data.address));
+      formData.append("orderItems", JSON.stringify(data.orderItems));
+      formData.append("phone", dataForm.phone);
+      formData.append("troco", dataForm.troco);
+    
+      if(dataForm.creditCard && dataForm.installmentCount) {
+        formData.append("creditCard", JSON.stringify(dataForm.creditCard))
+        formData.append("installmentCount", dataForm.installmentCount)
+      }
+
+      if (dataForm.comprovante) {
+        formData.append("comprovante", dataForm.comprovante);
+      }
+
+      const response = await UserSv.createPedido(formData);
+
+      if (response?.cobranca) {
+        setQrCodeGenerate(true);
+        localStorage.setItem("idPayment", response?.cobranca.id)
+        setBilling(response.cobranca);
+        console.log(response.cobranca);
+      } else {
+        console.warn("Cobranca não retornada pela API");
+      }
+
+      dispatch({
+        type: SET_ALERT,
+        message: dataForm.payment === 'PIX' ? 'Efetue o pagamento' : 'Pedido recebido com sucesso!',
+        severity: "success",
+      });
+      setMessage("success");
+      setStatusPagamento("success")
       dispatch(clearCart());
+      if(dataForm.payment === 'CREDIT_CARD' || dataForm.payment === 'Dinheiro') {
+        handleNext()
+      }
     } catch (error) {
-      console.error(error)
-      setMessage('error')
-      dispatch({ type: SET_ALERT, message: 'Erro ao finalizar compra', severity: 'error' })
+      console.error(error);
+
+      setMessage("error");
+      dispatch({
+        type: SET_ALERT,
+        message: "Erro ao finalizar compra",
+        severity: "error",
+      });
     }
-  }
+  };
+
+
+
+  const [statusPagamento, setStatusPagamento] = useState(null);
+
+  useEffect(() => {
+    if (!billing?.id) {
+      console.warn("billing.id não está definido.");
+      return;
+    }
+  
+    const eventSource = new EventSource(`${process.env.NEXT_PUBLIC_BASE_URL}/events/payment/${billing.id}`);
+  
+    eventSource.onmessage = (event) => {
+      const data = JSON.parse(event.data);
+  
+      if (data.status === "PAGO") {
+        setStatusPagamento("success");
+        handleNext();
+      } else if (data.status !== "PAGO" && data.reload) {
+        setStatusPagamento("error");
+        handleNext();
+      }
+    };
+  
+    eventSource.onerror = (error) => {
+      console.error("Erro na conexão SSE:", error);
+    };
+  
+    return () => {
+      eventSource.close();
+    };
+  }, [billing?.id]);
+
 
   const getStepContent = (step) => {
     switch (step) {
@@ -129,7 +213,7 @@ const Checkout = () => {
                 initialValues={initialValues}
               />
             ) : (
-              <PhoneNumberInput onFetchAddress={fetchAddress} />
+              <PhoneNumberInput onFetchAddress={fetchAddress} setData={setData} />
             )}
           </Grid>
         );
@@ -148,14 +232,18 @@ const Checkout = () => {
             <CheckoutPreviewAndEdit
               data={data}
               handleFinalize={handleFinalize}
+              pixCola={billing?.pixInfo?.payload || ""}
+              qrCodeImage={billing?.pixInfo?.encodedImage || ""}
+              qrCodeGenerated={qrCodeGenerate}
             />
+
           </Grid>
         )
       case 3:
         return (
           <Grid item xs={12}>
             <Finalizado
-              status={message}
+              status={statusPagamento}
             />
           </Grid>
         )
@@ -166,8 +254,8 @@ const Checkout = () => {
 
   console.log(data)
   return (
-    <Box sx={{ width: '100%', height: 'auto', py: 13 }}>
-      <Container fixed>
+    <Box sx={{ width: '100%', height: { xs: "100%", sm: "100%", md: '100%', lg: '100%' }, py: 13, mb: 20 }}>
+      <Container fixed sx={{ paddingBottom: "90px" }}>
         <Grid container spacing={3}>
           <Grid item xs={12}>
             <Box sx={{ bgcolor: '#fff', p: 2 }}>
@@ -175,7 +263,7 @@ const Checkout = () => {
             </Box>
           </Grid>
           <Grid item xs={12}>
-            <Box sx={{ bgcolor: '#fff', p: 2 }}>
+            <Box sx={{ bgcolor: '#fff', p: 0 }}>
               {getStepContent(activeStep)}
             </Box>
           </Grid>

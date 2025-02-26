@@ -21,7 +21,7 @@ function getStoredItems() {
 function getStoredAmount() {
   try {
     const storedAmount = window.localStorage.getItem('totalAmount');
-    return storedAmount ? parseFloat(storedAmount).toFixed(2) : 0;
+    return storedAmount ? Number(storedAmount).toFixed(2) : 0;
   } catch (error) {
     console.error('Error retrieving total amount from localStorage:', error);
     return 0;

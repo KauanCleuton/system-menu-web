@@ -2,10 +2,6 @@ import customAxios from "./middleware";
 import ServiceBase from "./service.base";
 
 
-class UserSv extends ServiceBase {
-
-}
-
 class UserNoAuthSv extends ServiceBase {
     constructor() {
         super("noAuth")
@@ -15,13 +11,23 @@ class UserNoAuthSv extends ServiceBase {
         return this.get(`/address/${phone}`)
     }
     createPedido(data) {
-        return this.post("/create-pedido", data)
+        return this.post("/create-pedido", data, {
+            headers: {
+                "Content-Type": "multipart/form-data",
+            },
+        })
+    }
+    postPixReceiptAnalysis(payload) {
+        return this.post("/comprovante", payload, {
+            headers: {
+                "Content-Type": "multipart/form-data",
+            },
+        })
     }
 }
 
 
 
-export default {
-    UserSv,
-    UserNoAuthSv
-}
+
+
+export default UserNoAuthSv

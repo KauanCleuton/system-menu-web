@@ -6,7 +6,7 @@ import IconButton from '@mui/material/IconButton';
 import ShoppingCartIcon from '@mui/icons-material/ShoppingCart';
 import { useSelector } from 'react-redux';
 import { usePathname } from 'next/navigation';
-import { useScrollTrigger } from '@mui/material';
+import { useScrollTrigger, useTheme } from '@mui/material';
 
 const StyledBadge = styled(Badge)(({ theme }) => ({
   '& .MuiBadge-badge': {
@@ -20,6 +20,7 @@ const StyledBadge = styled(Badge)(({ theme }) => ({
 
 export default function BadgeCart() {
   const path = usePathname()
+  const theme = useTheme()
   const totalItems = useSelector(state => state.cart.totalItems);
   const item = useSelector(state => state.cart.items);
   const trigger = useScrollTrigger({ disableHysteresis: true, threshold: 0 });
@@ -30,7 +31,7 @@ export default function BadgeCart() {
   }, []);
 
   if (!hydrated) {
-    return null; // ou um placeholder enquanto está hidratando
+    return null; 
   }
 
   return (
@@ -38,20 +39,20 @@ export default function BadgeCart() {
       aria-label="cart"
       LinkComponent={'a'}
       href='/cart'
-      sx={{ color: "#FF4D00" }}
+      sx={{ color: theme.palette.primary.main }}
     >
       <StyledBadge
         badgeContent={totalItems}
         sx={{
           '& .MuiBadge-badge': {
-            backgroundColor: trigger || path !== '/' ? "transparent" : "#FF4D00",
-            color: trigger || path !== '/' ? "#FF4D00" : "#fff",
+            backgroundColor: trigger || path !== '/' ? "transparent" : theme.palette.primary.main,
+            color: trigger || path !== '/' ? theme.palette.primary.main : "#fff",
           }
         }}
       >
         <ShoppingCartIcon
           sx={{
-            color: trigger || path !== '/' ? "#FF4D00" : "#fff",
+            color: trigger || path !== '/' ? theme.palette.primary.main : "#fff",
           }}
         />
       </StyledBadge>

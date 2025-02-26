@@ -24,7 +24,7 @@ export default class ServiceBase {
   }
 
   patch(url, payload, config = {}) {
-    return this.request('put', url, payload, config);
+    return this.request('patch', url, payload, config);
   }
 
   delete(url, config = {}) {

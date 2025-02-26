@@ -1,5 +1,5 @@
 import React, { useEffect } from 'react';
-import { Box, Typography, Button, Grid, useTheme } from '@mui/material';
+import { Box, Typography, Grid, useTheme } from '@mui/material';
 import CheckCircleIcon from '@mui/icons-material/CheckCircle';
 import CancelIcon from '@mui/icons-material/Cancel';
 import HourglassEmptyIcon from '@mui/icons-material/HourglassEmpty';
@@ -8,29 +8,27 @@ import { useDispatch } from 'react-redux';
 import { clearCart } from '@/store/cartSlice';
 
 const Finalizado = ({ status }) => {
-    const theme = useTheme();
-    const router = useRouter()
-    const dispatch = useDispatch()
-
-
+    const router = useRouter();
+    const dispatch = useDispatch();
+    const theme = useTheme()
 
     useEffect(() => {
         const timer = setTimeout(() => {
             dispatch(clearCart());
             router.push("/");
-        }, 3000);
+        }, 60000);
 
         return () => clearTimeout(timer);
     }, [dispatch, router]);
 
     const renderStatusIcon = () => {
         switch (status) {
-            case 'finalizado':
-                return <CheckCircleIcon style={{ color: 'green', fontSize: 50 }} />;
-            case 'cancelado':
-                return <CancelIcon style={{ color: 'red', fontSize: 50 }} />;
-            case 'pendente':
-                return <HourglassEmptyIcon style={{ color: 'orange', fontSize: 50 }} />;
+            case 'success':
+                return <CheckCircleIcon style={{ color: 'green', width: 140, height: 140 }} />; 
+            case 'pending':
+                return <HourglassEmptyIcon style={{ color: 'orange', width: 140, height: 140 }} />;
+            case 'error':
+                return <CancelIcon style={{ color: 'red', width: 140, height: 140 }} />;
             default:
                 return null;
         }
@@ -39,9 +37,17 @@ const Finalizado = ({ status }) => {
     const renderStatusMessage = () => {
         switch (status) {
             case 'success':
-                return 'Seu pedido foi finalizado com sucesso! Agradecemos a sua compra.';
+                return (
+                    <>
+                        Pagamento confirmado com sucesso! Estamos preparando o seu pedido.
+                        <br />
+                        Em breve, você receberá uma notificação quando o pedido estiver pronto.
+                    </>
+                );
+            case 'pending':
+                return 'Pagamento pendente. Estamos aguardando a confirmação. Por favor, aguarde.';
             case 'error':
-                return 'Seu pedido foi cancelado. Por favor, tente novamente mais tarde.';
+                return 'Falha no pagamento. Tente novamente ou entre em contato com o suporte.';
             default:
                 return 'Status desconhecido. Por favor, entre em contato com o suporte.';
         }
@@ -54,7 +60,10 @@ const Finalizado = ({ status }) => {
                     {renderStatusIcon()}
                 </Grid>
                 <Grid item xs={12}>
-                    <Typography variant="h5" gutterBottom>
+                    <Typography gutterBottom sx={{
+                        color: theme.palette.primary.main,
+                        fontSize: {lg: 30, md: 27, sm: 23, xs: 15}
+                    }}>
                         {renderStatusMessage()}
                     </Typography>
                 </Grid>
