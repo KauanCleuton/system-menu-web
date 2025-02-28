@@ -6,8 +6,8 @@ class PedidosMesasService extends ServiceBase {
         super('user')
     }
 
-    create(){
-        return this.create("/pedidosMesas")
+    create(payload){
+        return this.post("/pedidosMesas", payload)
     }
 
     getAllOrders() {
@@ -17,8 +17,8 @@ class PedidosMesasService extends ServiceBase {
     getOrderById(id) {
         return this.get(`/pedidosMesas/${id}`)
     }
-    putOrderById(id) {
-        return this.put(`/pedidosMesas/${id}`)
+    putOrderById(id,payload) {
+        return this.put(`/pedidosMesas/${id}`,payload)
     }
     deleteOrderById(id) {
         return this.delete(`/pedidosMesas/${id}`)

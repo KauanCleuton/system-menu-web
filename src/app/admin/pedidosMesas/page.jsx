@@ -22,11 +22,13 @@ import CheckCircleIcon from '@mui/icons-material/CheckCircle';
 import HourglassEmptyIcon from '@mui/icons-material/HourglassEmpty';
 import PedidosMesasComponent from "@/components/PedidosMesasComponent";
 import PedidosMesasServices from "@/service/pedidosMesas.service";
+import PedidosMesasEditComponent from "@/components/PedidosMesasEditComponent";
 
 const PedidosMesasSv = new PedidosMesasServices()
 const PedidosMesast = () => {
     const theme = useTheme()
-    const [data, setData] = useState([])
+    //const [data, setData] = useState([])
+    const [dataPedido, setDataPedido] = useState([])
     const [dataCerta, setDataCerta] = useState([])
     const [loading, setLoading] = useState(false)
     const limit = 6;
@@ -39,23 +41,12 @@ const PedidosMesast = () => {
     const [isModalOpen, setIsModalOpen] = useState(false);
     const [modalIndex, setModalIndex] = useState(0);
     const [openModal, setOpenModal] = useState(false)
+    const [openModalEdit, setOpenModalEdit] = useState(false)
     const [functionStates, setFuncionStates] = useState("")
     
 
 
-    const getData = async () => {
-        try {
-            const response = await orderSv.getAllOrders()
-            setData(response)
-            dispatch({ type: SET_ALERT, message: `Total de pedido: ${response.length}`, severity: 'success' })
-        } catch (error) {
-            console.log('Erro ao buscar os pedidos!', error)
-            dispatch({ type: SET_ALERT, message: 'Erro ao buscar todos os pedidos!', severity: 'error' })
-        }
-        finally {
-            setLoading()
-        }
-    }
+   
 
     const getDataCerta = async () => {
         try {
@@ -76,7 +67,7 @@ const PedidosMesast = () => {
 
     useEffect(() => {
 
-        getData()
+       
         getDataCerta()   
         const audio = new Audio('/notification.mp3');
         audioRef.current = audio;
@@ -104,6 +95,31 @@ const PedidosMesast = () => {
         };
     }, [router, audioLoaded]);
 
+     const handleDelete = async (id) => {
+            try {
+                setLoading(true)
+                const response = await PedidosMesasSv.deleteOrderById(id)
+                dispatch({
+                    type: SET_ALERT,
+                    message: response?.message || "Pedido deletado com sucesso!",
+                    severity: 'success',
+                    alertType: 'category'
+                })
+            } catch (error) {
+                console.error("Erro ao deletar Pedido.", error)
+                dispatch({
+                    type: SET_ALERT,
+                    message: error.message || 'Erro ao deletar Pedido.',
+                    severity: 'error',
+                    alertType: 'category'
+                })
+            }
+            finally {
+                setLoading(false)
+                getDataCerta()
+            }
+        }
+
 
     const handleSearchPedidoById = async () => {
         let dataById = [];
@@ -129,25 +145,44 @@ const PedidosMesast = () => {
         }
     }
 
-    const handleSubmitCreateCategory = async (values) => {
-            try {
-                //const response = await MesasSv.postCreateMesas(values);
-                console.log(values,"valoresssss");
-                //dispatch({ type: SET_ALERT, message: response.message, severity: "success", alertType: "category" });
-                setOpenModal(false)
-                setLoading(true)
-            } catch (error) {
-                console.error("Error ao criar novo uma mesa", error);
-                dispatch({ type: SET_ALERT, message: error.message, severity: "error", alertType: "category" });
-            }
-            finally {
-                setLoading(false)
-                getData()
-            }
-        };
+    const handleSubmitCreatePedido = async (values) => {
+        try {
+            setLoading(true); // Marque o carregamento para evitar múltiplas chamadas enquanto carrega
+            const response = await PedidosMesasSv.create(values); // Chamada para criar a mesa
+            console.log(response, "resposta");
+            
+            setOpenModal(false); // Feche o modal após a criação
+        } catch (error) {
+            console.error("Error ao criar novo uma mesa", error);
+            dispatch({ type: SET_ALERT, message: error.message, severity: "error", alertType: "category" });
+        } finally {
+            setLoading(false); // Finalize o carregamento
+            getDataCerta(); // A chamada para pegar os dados deve ser feita uma vez que a criação tenha sido concluída
+        }
+    };
+    const handleSubmitPutPedido = async (values) => {
+        try {
+            setLoading(true); // Marque o carregamento para evitar múltiplas chamadas enquanto carrega
+            //const response = await PedidosMesasSv.create(values); // Chamada para criar a mesa
+            //console.log(response, "resposta");
+            
+            setOpenModal(false); // Feche o modal após a criação
+        } catch (error) {
+            console.error("Error ao criar novo uma mesa", error);
+            dispatch({ type: SET_ALERT, message: error.message, severity: "error", alertType: "category" });
+        } finally {
+            setLoading(false); // Finalize o carregamento
+            getDataCerta(); // A chamada para pegar os dados deve ser feita uma vez que a criação tenha sido concluída
+        }
+    };
+    
 
     const handleCloseModal = () => {
         setOpenModal(false);
+        setModalIndex(0);
+    };
+    const handleCloseModalEdit = () => {
+        setOpenModalEdit(false);
         setModalIndex(0);
     };
 
@@ -159,6 +194,12 @@ const PedidosMesast = () => {
     const handleOpenModalCreate = () => {
         setOpenModal(true)
         setFuncionStates("create")
+    }
+    const handleOpenModalEdit = (pedidoModal) => {
+        setOpenModalEdit(true)
+        setFuncionStates("edit")
+        setDataPedido(pedidoModal)
+        console.log(dataPedido,"dataaaaaaa");
     }
 
     return (
@@ -173,7 +214,21 @@ const PedidosMesast = () => {
                 <PedidosMesasComponent
                     functionStates={functionStates}
                     onClose={handleCloseModal}
-                    onSubmit={handleSubmitCreateCategory}
+                    onSubmit={handleSubmitCreatePedido}
+                />
+            </Modal>
+            <Modal
+                open={openModalEdit}
+                onClose={handleCloseModalEdit}
+                aria-labelledby="modal-modal-title"
+                aria-describedby="modal-modal-description"
+
+            >
+                <PedidosMesasEditComponent
+                    functionStates={functionStates}
+                    onClose={handleCloseModalEdit}
+                    onSubmit={handleSubmitPutPedido}
+                    data={dataPedido}
                 />
             </Modal>
 
@@ -454,14 +509,14 @@ const PedidosMesast = () => {
                                                                     }}
                                                                 >
                                                                      <IconButton
-                                                                    // onClick={() => handleDelete(order.id)}
+                                                                     onClick={() => handleDelete(order.id)}
                                                                     color="error"
                                                                    
                                                                 >
                                                                     <Delete />
                                                                 </IconButton> 
                                                                      <IconButton
-                                                                        onClick={() => handleOpenModal(index)}
+                                                                        onClick={() => handleOpenModalEdit(order)}
                                                                         color="primary"
 
                                                                     >
@@ -488,9 +543,9 @@ const PedidosMesast = () => {
 
                             <Grid item xs={12} mt={4}>
                                 <Grid container>
-                                    {data.length > 0 && (
+                                    {dataCerta.length > 0 && (
                                         <Grid item xs={12}>
-                                            <Paginator count={data.length} limit={limit} setPage={setPage} page={page} />
+                                            <Paginator count={dataCerta.length} limit={limit} setPage={setPage} page={page} />
                                         </Grid>
                                     )}
                                 </Grid>
@@ -499,7 +554,7 @@ const PedidosMesast = () => {
                     </Grid>
                 </Grid>
             </Box>
-            <SeeProofPix close={handleCloseModal} data={data} open={isModalOpen} index={modalIndex} />
+            <SeeProofPix close={handleCloseModal} data={dataCerta} open={isModalOpen} index={modalIndex} />
         </>
 
     );

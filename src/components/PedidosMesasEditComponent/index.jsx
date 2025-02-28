@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import { Box, Grid, Typography, Button, FormControl, IconButton, InputAdornment, TextField, FormHelperText, Select, MenuItem, useTheme } from '@mui/material';
+import { Box, Grid, Typography, Button, FormControl, IconButton, InputAdornment, TextField, FormHelperText, Select, MenuItem, useTheme, FormLabel, RadioGroup, FormControlLabel, Radio } from '@mui/material';
 import { Field, Form, Formik } from 'formik';
 import { CloseOutlined, Groups, DriveFileRenameOutline } from '@mui/icons-material';
 import * as Yup from 'yup';
@@ -9,10 +9,13 @@ import MesasService from '@/service/mesas.service';
 const validationSchema = Yup.object({
     mesaId: Yup.number().required('Campo obrigatório'),
     num_pessoas: Yup.number().required('Campo obrigatório'),
-    itens: Yup.array()
+    itens: Yup.array(),
+    status: Yup.string().required('Campo obrigatório'),
+    status_payment: Yup.boolean().required('Campo obrigatório'),
+    method_payment: Yup.string().required('Campo obrigatório'),
 });
 
-const PedidosMesasComponent = ({ data, onSubmit, functionStates, onClose }) => {
+const PedidosMesasEditComponent = ({ data, onSubmit, functionStates, onClose }) => {
     const MesasModal = new MesasService()
     const theme = useTheme();
     const [itens, setitens] = useState([]);
@@ -22,6 +25,9 @@ const PedidosMesasComponent = ({ data, onSubmit, functionStates, onClose }) => {
     const [numPessoas, setNumPessoas] = useState(data ? data.num_pessoas : "");
     const [mesaId, setMesaId] = useState(data ? data.mesaId : "");
     const [mesas, setMesas] = useState([]);
+    const [statusPayment, setStatusPayment] = useState(false);
+    const [methodPayment, setMethodPayment] = useState("");
+    const [status, setStatus] = useState("");
 
     const getMesas = async () => {
         try {
@@ -37,7 +43,12 @@ const PedidosMesasComponent = ({ data, onSubmit, functionStates, onClose }) => {
             setitens(data.itens || []);
             setNumPessoas(data.num_pessoas || "");
             setMesaId(data.mesaId || "");
+            setStatus(data.status || "");
+            setStatusPayment(data.status_payment || "");
+            setMethodPayment(data.method_payment || "");
         }
+        console.log(data,"dataaaaaaaaaaa");
+        
         getMesas(); // Buscar as mesas assim que o componente for carregado
     }, [data]);
 
@@ -114,7 +125,7 @@ const PedidosMesasComponent = ({ data, onSubmit, functionStates, onClose }) => {
                     </Grid>
                     <Grid item xs={12}>
                         <Typography variant='h5' color='primary' sx={{ textAlign: 'center' }}>
-                            {functionStates === 'create' ? 'Cadastrar Nova Mesa' : 'Editar Mesa'}
+                        Editar Pedido Mesa
                         </Typography>
                     </Grid>
                     <Grid item xs={12} px={2} mt={2}>
@@ -123,6 +134,9 @@ const PedidosMesasComponent = ({ data, onSubmit, functionStates, onClose }) => {
                                 num_pessoas: numPessoas,
                                 mesaId: mesaId,
                                 itens: itens,
+                                status:status,
+                                status_payment:statusPayment,
+                                method_payment:methodPayment
                             }}
                             validationSchema={validationSchema}
                             onSubmit={handleSubmit}
@@ -220,7 +234,101 @@ const PedidosMesasComponent = ({ data, onSubmit, functionStates, onClose }) => {
                                                     </Field>
                                                 </Grid>
 
+                                                <Grid item xs={6}>
+                                                    <Field name="status">
+                                                        {({ field }) => (
+                                                            <FormControl fullWidth error={Boolean(errors.status && touched.status)}>
+                                                                <TextField
+                                                                    {...field}
+                                                                    id="status"
+                                                                    type="string"
+                                                                    label="status"
+                                                                    value={status}
+                                                                    onChange={(e) => setStatus(e.target.value)}
+                                                                    InputProps={{
+                                                                        endAdornment: (
+                                                                            <InputAdornment position="end">
+                                                                                <Groups sx={{ color: theme.palette.primary.main, width: 17, height: 17 }} />
+                                                                            </InputAdornment>
+                                                                        ),
+                                                                    }}
+                                                                    sx={{
+                                                                        "& .MuiInputBase-input": { color: theme.palette.primary.white },
+                                                                        "& .MuiFormLabel-root": { color: theme.palette.primary.white },
+                                                                        "& .MuiOutlinedInput-root fieldset": { borderColor: theme.palette.primary.main },
+                                                                    }}
+                                                                />
+                                                                {errors.status && touched.status && (
+                                                                    <FormHelperText>{errors.status}</FormHelperText>
+                                                                )}
+                                                            </FormControl>
+                                                        )}
+                                                    </Field>
+                                                </Grid>
 
+                                                <Grid item xs={6}>
+    <Field name="status_payment">
+        {({ field }) => (
+            <FormControl fullWidth error={Boolean(errors.status_payment && touched.status_payment)}>
+                <FormLabel id="status_payment_label">Status de Pagamento</FormLabel>
+                <RadioGroup
+                    aria-labelledby="status_payment_label"
+                    name="status_payment"
+                    value={statusPayment ? "true" : "false"}  // Usando strings para facilitar a comparação
+                    onChange={(e) => setStatusPayment(e.target.value === "true")}  // Atualizando como booleano
+                    row
+                >
+                    <FormControlLabel
+                        value="true"
+                        control={<Radio />}
+                        label="Pago"
+                    />
+                    <FormControlLabel
+                        value="false"
+                        control={<Radio />}
+                        label="Pendente"
+                    />
+                </RadioGroup>
+                {errors.status_payment && touched.status_payment && (
+                    <FormHelperText>{errors.status_payment}</FormHelperText>
+                )}
+            </FormControl>
+        )}
+    </Field>
+</Grid>
+
+
+                                                <Grid item xs={12}>
+                                                    <Field name="method_payment">
+                                                        {({ field }) => (
+                                                            <FormControl fullWidth error={Boolean(errors.status && touched.status)}>
+                                                                <TextField
+                                                                    {...field}
+                                                                    id="method_payment"
+                                                                    type="string"
+                                                                    label="method_payment"
+                                                                    value={methodPayment}
+                                                                    onChange={(e) => setMethodPayment(e.target.value)}
+                                                                    InputProps={{
+                                                                        endAdornment: (
+                                                                            <InputAdornment position="end">
+                                                                                <Groups sx={{ color: theme.palette.primary.main, width: 17, height: 17 }} />
+                                                                            </InputAdornment>
+                                                                        ),
+                                                                    }}
+                                                                    sx={{
+                                                                        "& .MuiInputBase-input": { color: theme.palette.primary.white },
+                                                                        "& .MuiFormLabel-root": { color: theme.palette.primary.white },
+                                                                        "& .MuiOutlinedInput-root fieldset": { borderColor: theme.palette.primary.main },
+                                                                    }}
+                                                                />
+                                                                {errors.method_payment && touched.method_payment && (
+                                                                    <FormHelperText>{errors.method_payment}</FormHelperText>
+                                                                )}
+                                                            </FormControl>
+                                                        )}
+                                                    </Field>
+                                                </Grid>
 
                                                 <Grid item xs={12}>
                                                     <FormControl fullWidth>
@@ -248,7 +356,7 @@ const PedidosMesasComponent = ({ data, onSubmit, functionStates, onClose }) => {
                                                         color="primary"
                                                         fullWidth
                                                     >
-                                                        Criar Pedido
+                                                        Editar Pedido
                                                     </Button>
                                                 </Grid>
                                             </Grid>
@@ -264,4 +372,4 @@ const PedidosMesasComponent = ({ data, onSubmit, functionStates, onClose }) => {
     );
 };
 
-export default PedidosMesasComponent;
+export default PedidosMesasEditComponent;
