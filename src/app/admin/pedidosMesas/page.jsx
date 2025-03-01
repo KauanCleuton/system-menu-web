@@ -163,10 +163,13 @@ const PedidosMesast = () => {
     const handleSubmitPutPedido = async (values) => {
         try {
             setLoading(true); // Marque o carregamento para evitar múltiplas chamadas enquanto carrega
-            //const response = await PedidosMesasSv.create(values); // Chamada para criar a mesa
+            console.log(values,"req edit");
+            const id = values.pedidoId
+            
+            const response = await PedidosMesasSv.putOrderById(id,values); // Chamada para criar a mesa
             //console.log(response, "resposta");
             
-            setOpenModal(false); // Feche o modal após a criação
+            setOpenModalEdit(false); // Feche o modal após a criação
         } catch (error) {
             console.error("Error ao criar novo uma mesa", error);
             dispatch({ type: SET_ALERT, message: error.message, severity: "error", alertType: "category" });

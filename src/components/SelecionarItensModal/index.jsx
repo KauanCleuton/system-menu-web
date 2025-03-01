@@ -4,11 +4,12 @@ import AddIcon from '@mui/icons-material/Add';
 import ProductsSv from '@/service/productsAdmin.service';
 import Image from "next/image";
 
-const SelecionarItensModal = ({ open, onClose, onSelectItem, selectedItems, setSelectedItems }) => {
+const SelecionarItensModal = ({ open, onClose, onSelectItem, selectedItems, setSelectedItems,data }) => {
     const theme = useTheme();
     const [groupedProducts, setGroupedProducts] = useState({});
     const [quantities, setQuantities] = useState({});
     const ProdutosModel = new ProductsSv();
+    
 
     // Fetch products data
     useEffect(() => {
@@ -33,6 +34,8 @@ const SelecionarItensModal = ({ open, onClose, onSelectItem, selectedItems, setS
         const productId = product.idProducts;
         const productQuantity = quantities[productId] || 1;
         onSelectItem(product, productQuantity);
+        console.log(data,"dataa dos itens");
+        
     };
 
     const handleQuantityChange = (productId, e) => {
@@ -41,6 +44,19 @@ const SelecionarItensModal = ({ open, onClose, onSelectItem, selectedItems, setS
             setQuantities(prev => ({ ...prev, [productId]: newQuantity }));
         }
     };
+
+    useEffect(() => {
+    const initialQuantities = {};
+
+    if (Array.isArray(data)) {
+        data.forEach(item => {
+            initialQuantities[item.productId] = item.quantity;
+        });
+    }
+
+    setQuantities(initialQuantities);
+}, [data]);
+
 
     return (
         <Modal open={open} onClose={onClose}>
@@ -106,19 +122,20 @@ const SelecionarItensModal = ({ open, onClose, onSelectItem, selectedItems, setS
                                 </Typography>
 
                                 <Box sx={{ display: 'flex', alignItems: 'center' }}>
-                                    <TextField
-                                        type="number"
-                                        value={quantities[product.idProducts] || ''}
-                                        onChange={(e) => handleQuantityChange(product.idProducts, e)}
-                                        sx={{ width: '60px', marginRight: 1, bgcolor: "white" }}
-                                        min="1"
-                                        InputProps={{
-                                            style: {
-                                                color: "black", // Defina a cor do texto aqui
-                                                fontWeight: "bold"
-                                            }
-                                        }}
-                                    />
+                                <TextField
+    type="number"
+    value={quantities[product.idProducts] || ''}
+    onChange={(e) => handleQuantityChange(product.idProducts, e)}
+    sx={{ width: '60px', marginRight: 1, bgcolor: "white" }}
+    min="1"
+    InputProps={{
+        style: {
+            color: "black",
+            fontWeight: "bold"
+        }
+    }}
+/>
+
 
                                     <IconButton
                                         color="black"

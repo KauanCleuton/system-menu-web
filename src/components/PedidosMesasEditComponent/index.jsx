@@ -11,7 +11,7 @@ const validationSchema = Yup.object({
     num_pessoas: Yup.number().required('Campo obrigatório'),
     itens: Yup.array(),
     status: Yup.string().required('Campo obrigatório'),
-    status_payment: Yup.boolean().required('Campo obrigatório'),
+    status_payment: Yup.boolean(),
     method_payment: Yup.string().required('Campo obrigatório'),
 });
 
@@ -20,6 +20,7 @@ const PedidosMesasEditComponent = ({ data, onSubmit, functionStates, onClose }) 
     const theme = useTheme();
     const [itens, setitens] = useState([]);
     const [openItemModal, setOpenItemModal] = useState(false);
+
 
     // Manter o num_pessoas e mesaId fora do Formik, para que eles não sejam resetados ao adicionar um item
     const [numPessoas, setNumPessoas] = useState(data ? data.num_pessoas : "");
@@ -47,8 +48,8 @@ const PedidosMesasEditComponent = ({ data, onSubmit, functionStates, onClose }) 
             setStatusPayment(data.status_payment || "");
             setMethodPayment(data.method_payment || "");
         }
-        console.log(data,"dataaaaaaaaaaa");
-        
+        console.log(data, "dataaaaaaaaaaa");
+
         getMesas(); // Buscar as mesas assim que o componente for carregado
     }, [data]);
 
@@ -57,17 +58,17 @@ const PedidosMesasEditComponent = ({ data, onSubmit, functionStates, onClose }) 
 
     const handleSelectItem = (product, quantity) => {
         const productId = product.idProducts;
-    
+
         // Certifique-se de que quantity seja um número
         const quantityNumber = Number(quantity); // Converte para número
-    
+
         setitens((previtens) => {
             const updatedItems = previtens.map((item) =>
                 item.productId === productId
                     ? { ...item, quantity: quantityNumber } // Atualiza a quantidade convertida
                     : item
             );
-    
+
             if (!updatedItems.find((item) => item.productId === productId)) {
                 updatedItems.push({
                     productId: productId,
@@ -76,22 +77,35 @@ const PedidosMesasEditComponent = ({ data, onSubmit, functionStates, onClose }) 
                     title: product.title
                 });
             }
-    
+
             return updatedItems;
         });
     };
-    
+
 
     const handleSubmit = (values) => {
+        const statusPayment = values.status_payment || false;  // Verifica se já tem algum valor, senão atribui 'false'
+    
         const dataToSubmit = {
             ...values,
-            num_pessoas: Number(values.num_pessoas), // Converte para número
-            mesaId: Number(values.mesaId), // Converte para número
-            itens: itens
+            num_pessoas: Number(values.num_pessoas),  // Converte para número
+            mesaId: Number(values.mesaId),            // Converte para número
+            itens: itens.length > 0 ? itens : data.TableItems,  // Usa 'itens' se existirem, caso contrário usa 'data.TableItems'
+            pedidoId: data.TableItems[0].pedidoId,    // Usa o pedidoId do primeiro item (supondo que todos tenham o mesmo pedidoId)
+            status_payment: statusPayment,             // Adiciona o status_payment aqui com o valor garantido
+            data: data                                 // Passa os dados completos para o submit
         };
-
-        onSubmit(dataToSubmit); // Passando os dados convertidos
+    
+        console.log('Itens:', itens);
+        console.log('Data TableItems:', data.TableItems);
+        console.log('Status paymente:', statusPayment);
+        
+        onSubmit(dataToSubmit);  // Passa os dados para a função de submit
     };
+    
+
+
+
 
     return (
         <>
@@ -101,6 +115,7 @@ const PedidosMesasEditComponent = ({ data, onSubmit, functionStates, onClose }) 
                 onSelectItem={handleSelectItem}
                 itens={itens}
                 setitens={setitens}
+                data={data.TableItems}
             />
 
             <Box
@@ -125,7 +140,7 @@ const PedidosMesasEditComponent = ({ data, onSubmit, functionStates, onClose }) 
                     </Grid>
                     <Grid item xs={12}>
                         <Typography variant='h5' color='primary' sx={{ textAlign: 'center' }}>
-                        Editar Pedido Mesa
+                            Editar Pedido Mesa
                         </Typography>
                     </Grid>
                     <Grid item xs={12} px={2} mt={2}>
@@ -134,9 +149,9 @@ const PedidosMesasEditComponent = ({ data, onSubmit, functionStates, onClose }) 
                                 num_pessoas: numPessoas,
                                 mesaId: mesaId,
                                 itens: itens,
-                                status:status,
-                                status_payment:statusPayment,
-                                method_payment:methodPayment
+                                status: status,
+                                status_payment: statusPayment,
+                                method_payment: methodPayment
                             }}
                             validationSchema={validationSchema}
                             onSubmit={handleSubmit}
@@ -267,35 +282,35 @@ const PedidosMesasEditComponent = ({ data, onSubmit, functionStates, onClose }) 
                                                 </Grid>
 
                                                 <Grid item xs={6}>
-    <Field name="status_payment">
-        {({ field }) => (
-            <FormControl fullWidth error={Boolean(errors.status_payment && touched.status_payment)}>
-                <FormLabel id="status_payment_label">Status de Pagamento</FormLabel>
-                <RadioGroup
-                    aria-labelledby="status_payment_label"
-                    name="status_payment"
-                    value={statusPayment ? "true" : "false"}  // Usando strings para facilitar a comparação
-                    onChange={(e) => setStatusPayment(e.target.value === "true")}  // Atualizando como booleano
-                    row
-                >
-                    <FormControlLabel
-                        value="true"
-                        control={<Radio />}
-                        label="Pago"
-                    />
-                    <FormControlLabel
-                        value="false"
-                        control={<Radio />}
-                        label="Pendente"
-                    />
-                </RadioGroup>
-                {errors.status_payment && touched.status_payment && (
-                    <FormHelperText>{errors.status_payment}</FormHelperText>
-                )}
-            </FormControl>
-        )}
-    </Field>
-</Grid>
+                                                    <Field name="status_payment">
+                                                        {({ field }) => (
+                                                            <FormControl fullWidth error={Boolean(errors.status_payment && touched.status_payment)}>
+                                                                <FormLabel id="status_payment_label">Status de Pagamento</FormLabel>
+                                                                <RadioGroup
+                                                                    aria-labelledby="status_payment_label"
+                                                                    name="status_payment"
+                                                                    value={statusPayment ? "true" : "false"}  // Usando strings para facilitar a comparação
+                                                                    onChange={(e) => setStatusPayment(e.target.value === "true")}  // Atualizando como booleano
+                                                                    row
+                                                                >
+                                                                    <FormControlLabel
+                                                                        value="true"
+                                                                        control={<Radio />}
+                                                                        label="Pago"
+                                                                    />
+                                                                    <FormControlLabel
+                                                                        value="false"
+                                                                        control={<Radio />}
+                                                                        label="Pendente"
+                                                                    />
+                                                                </RadioGroup>
+                                                                {errors.status_payment && touched.status_payment && (
+                                                                    <FormHelperText>{errors.status_payment}</FormHelperText>
+                                                                )}
+                                                            </FormControl>
+                                                        )}
+                                                    </Field>
+                                                </Grid>
 
 
                                                 <Grid item xs={12}>
