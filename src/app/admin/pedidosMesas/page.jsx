@@ -148,8 +148,10 @@ const PedidosMesast = () => {
     const handleSubmitCreatePedido = async (values) => {
         try {
             setLoading(true); // Marque o carregamento para evitar múltiplas chamadas enquanto carrega
-            const response = await PedidosMesasSv.create(values); // Chamada para criar a mesa
-            console.log(response, "resposta");
+            //const response = await PedidosMesasSv.create(values); // Chamada para criar a mesa
+            //console.log(response, "resposta");
+            console.log(values,"reqqqq");
+            
             
             setOpenModal(false); // Feche o modal após a criação
         } catch (error) {
@@ -166,7 +168,7 @@ const PedidosMesast = () => {
             console.log(values,"req edit");
             const id = values.pedidoId
             
-            const response = await PedidosMesasSv.putOrderById(id,values); // Chamada para criar a mesa
+            //const response = await PedidosMesasSv.putOrderById(id,values); // Chamada para criar a mesa
             //console.log(response, "resposta");
             
             setOpenModalEdit(false); // Feche o modal após a criação

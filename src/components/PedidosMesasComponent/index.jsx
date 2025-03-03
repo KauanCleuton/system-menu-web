@@ -5,6 +5,8 @@ import { CloseOutlined, Groups, DriveFileRenameOutline } from '@mui/icons-materi
 import * as Yup from 'yup';
 import SelecionarItensModal from '../../components/SelecionarItensModal'; // Importando o modal separado
 import MesasService from '@/service/mesas.service';
+import ProdutosService from '@/service/productsAdmin.service';
+import MultiProductSelect from '@/components/SelectProducts';
 
 const validationSchema = Yup.object({
     mesaId: Yup.number().required('Campo obrigatório'),
@@ -13,6 +15,7 @@ const validationSchema = Yup.object({
 });
 
 const PedidosMesasComponent = ({ data, onSubmit, functionStates, onClose }) => {
+    const produtosService = new ProdutosService()
     const MesasModal = new MesasService()
     const theme = useTheme();
     const [itens, setitens] = useState([]);
@@ -22,10 +25,13 @@ const PedidosMesasComponent = ({ data, onSubmit, functionStates, onClose }) => {
     const [numPessoas, setNumPessoas] = useState(data ? data.num_pessoas : "");
     const [mesaId, setMesaId] = useState(data ? data.mesaId : "");
     const [mesas, setMesas] = useState([]);
+    const [produtos, setProdutos] = useState([]);
 
     const getMesas = async () => {
         try {
             const response = await MesasModal.getAllMesas()
+            const response2 = await produtosService.getAllProducts()
+            setProdutos(response2)
             setMesas(response); // Armazenando as mesas no estado
         } catch (error) {
             console.log('Erro ao buscar as mesas!', error);
@@ -46,17 +52,17 @@ const PedidosMesasComponent = ({ data, onSubmit, functionStates, onClose }) => {
 
     const handleSelectItem = (product, quantity) => {
         const productId = product.idProducts;
-    
+
         // Certifique-se de que quantity seja um número
         const quantityNumber = Number(quantity); // Converte para número
-    
+
         setitens((previtens) => {
             const updatedItems = previtens.map((item) =>
                 item.productId === productId
                     ? { ...item, quantity: quantityNumber } // Atualiza a quantidade convertida
                     : item
             );
-    
+
             if (!updatedItems.find((item) => item.productId === productId)) {
                 updatedItems.push({
                     productId: productId,
@@ -65,11 +71,11 @@ const PedidosMesasComponent = ({ data, onSubmit, functionStates, onClose }) => {
                     title: product.title
                 });
             }
-    
+
             return updatedItems;
         });
     };
-    
+
 
     const handleSubmit = (values) => {
         const dataToSubmit = {
@@ -78,6 +84,8 @@ const PedidosMesasComponent = ({ data, onSubmit, functionStates, onClose }) => {
             mesaId: Number(values.mesaId), // Converte para número
             itens: itens
         };
+        console.log(itens, "itennnsss");
+
 
         onSubmit(dataToSubmit); // Passando os dados convertidos
     };
@@ -221,8 +229,33 @@ const PedidosMesasComponent = ({ data, onSubmit, functionStates, onClose }) => {
                                                 </Grid>
 
 
-
                                                 <Grid item xs={12}>
+                                                    <FormControl fullWidth>
+                                                        <Typography variant="body2" color="primary" gutterBottom>
+                                                            Selecionar Produtos
+                                                        </Typography>
+                                                        <MultiProductSelect
+                                                            value={itens}
+                                                            onChange={setitens}
+                                                        />
+                                                        <Box mt={2}>
+                                                            {/* Exibe os itens selecionados */}
+                                                            {itens.length > 0 ? (
+                                                                itens.map((item, index) => (
+                                                                    <Typography key={index} variant="body1" color="primary">
+                                                                        {item.title ?? 'Produto não encontrado'} - Quantidade: {item.quantity}
+                                                                    </Typography>
+
+                                                                ))
+                                                            ) : (
+                                                                <Typography variant="body1" color="gray">
+                                                                    Nenhum produto selecionado
+                                                                </Typography>
+                                                            )}
+                                                        </Box>
+                                                    </FormControl>
+                                                </Grid>
+                                                {/* <Grid item xs={12}>
                                                     <FormControl fullWidth>
                                                         <Button variant="outlined" onClick={handleOpenItemModal} sx={{ color: theme.palette.primary.main }}>
                                                             Selecionar Itens
@@ -239,7 +272,7 @@ const PedidosMesasComponent = ({ data, onSubmit, functionStates, onClose }) => {
                                                             )}
                                                         </Box>
                                                     </FormControl>
-                                                </Grid>
+                                                </Grid> */}
 
                                                 <Grid item xs={12} mt={2}>
                                                     <Button

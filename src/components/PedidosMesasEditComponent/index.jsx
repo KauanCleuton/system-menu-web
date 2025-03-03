@@ -5,6 +5,7 @@ import { CloseOutlined, Groups, DriveFileRenameOutline } from '@mui/icons-materi
 import * as Yup from 'yup';
 import SelecionarItensModal from '../../components/SelecionarItensModal'; // Importando o modal separado
 import MesasService from '@/service/mesas.service';
+import MultiProductSelect from '../SelectProducts';
 
 const validationSchema = Yup.object({
     mesaId: Yup.number().required('Campo obrigatório'),
@@ -347,18 +348,26 @@ const PedidosMesasEditComponent = ({ data, onSubmit, functionStates, onClose }) 
 
                                                 <Grid item xs={12}>
                                                     <FormControl fullWidth>
-                                                        <Button variant="outlined" onClick={handleOpenItemModal} sx={{ color: theme.palette.primary.main }}>
-                                                            Selecionar Itens
-                                                        </Button>
-                                                        <Box mt={1}>
+                                                        <Typography variant="body2" color="primary" gutterBottom>
+                                                            Selecionar Produtos
+                                                        </Typography>
+                                                        <MultiProductSelect
+                                                            value={itens}
+                                                            onChange={setitens}
+                                                        />
+                                                        <Box mt={2}>
+                                                            {/* Exibe os itens selecionados */}
                                                             {itens.length > 0 ? (
                                                                 itens.map((item, index) => (
                                                                     <Typography key={index} variant="body1" color="primary">
-                                                                        {item.title} - {item.quantity}
+                                                                        {item.title ?? 'Produto não encontrado'} - Quantidade: {item.quantity}
                                                                     </Typography>
+
                                                                 ))
                                                             ) : (
-                                                                <Typography variant="body2" color="gray">Nenhum item selecionado</Typography>
+                                                                <Typography variant="body1" color="gray">
+                                                                    Nenhum produto selecionado
+                                                                </Typography>
                                                             )}
                                                         </Box>
                                                     </FormControl>
