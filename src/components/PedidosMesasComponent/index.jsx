@@ -280,6 +280,9 @@ const PedidosMesasComponent = ({ data, onSubmit, functionStates, onClose }) => {
                                                         variant="contained"
                                                         color="primary"
                                                         fullWidth
+                                                        sx={{
+                                                            marginBottom:5
+                                                        }}
                                                     >
                                                         Criar Pedido
                                                     </Button>
