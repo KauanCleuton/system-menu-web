@@ -4,19 +4,11 @@ import Link from "next/link";
 import Image from "next/image";
 
 const TableProducts = ({ data, onDelete, toggleVisible, page, limit }) => {
-    const theme = useTheme()
+    const theme = useTheme();
     const isXs = useMediaQuery(theme.breakpoints.down("xs"));
-    const formatPhoneNumber = (phoneNumber) => {
-        const cleaned = ("" + phoneNumber).replace(/\D/g, "");
-        const match = cleaned.match(/^(\d{2})(\d{5})(\d{4})$/);
-        if (match) {
-            return `(${match[1]}) ${match[2]}-${match[3]}`;
-        }
-        return phoneNumber;
-    };
 
     return (
-        <TableContainer >
+        <TableContainer>
             <Table sx={{ minWidth: '100%' }}>
                 <TableHead>
                     <TableRow sx={{ bgcolor: theme.palette.secondary.main }}>
@@ -40,35 +32,28 @@ const TableProducts = ({ data, onDelete, toggleVisible, page, limit }) => {
                     {data && data.slice((page - 1) * limit, page * limit).map((item, index) => (
                         <TableRow key={index}>
                             <TableCell align="center">
-                                <Box sx={{
-                                    width: 70,
-                                    height: 70,
-                                    position: 'relative'
-                                }}>
+                                <Box sx={{ width: 70, height: 70, position: 'relative' }}>
                                     <Image
                                         src={`${process.env.NEXT_PUBLIC_BASE_URL}/uploads/produtos/${item.idProducts}`}
                                         alt="Imagem do produto"
                                         layout="fill"
-                                        style={{
-                                            objectFit: 'cover'
-                                        }}
+                                        style={{ objectFit: 'cover' }}
                                     />
-
                                 </Box>
                             </TableCell>
                             <TableCell align="center">
                                 <Typography variant="body1" sx={{ fontSize: { xs: 10, lg: 13 }, color: 'secondary.main' }}>
-                                    {item.title}
+                                    {item.title || "Sem título"}
                                 </Typography>
                             </TableCell>
                             <TableCell align="center">
                                 <Typography variant="body1" sx={{ fontSize: { xs: 10, lg: 13 }, color: 'secondary.main' }}>
-                                    {item.description}
+                                    {item.description || "Sem descrição"}
                                 </Typography>
                             </TableCell>
                             <TableCell align="center">
                                 <Typography variant="body1" sx={{ fontSize: { xs: 10, lg: 13 }, color: 'secondary.main' }}>
-                                    {item.quantity}
+                                    {item.quantity || "Indefinido"}
                                 </Typography>
                             </TableCell>
                             <TableCell align="center">
@@ -78,7 +63,7 @@ const TableProducts = ({ data, onDelete, toggleVisible, page, limit }) => {
                             </TableCell>
                             <TableCell align="center">
                                 <Typography variant="body1" sx={{ fontSize: { xs: 10, lg: 13 }, color: 'secondary.main' }}>
-                                    {item.Category.name}
+                                    {item.Category?.name || "indefinido"}
                                 </Typography>
                             </TableCell>
                             <TableCell align="center">
@@ -86,17 +71,13 @@ const TableProducts = ({ data, onDelete, toggleVisible, page, limit }) => {
                                     <IconButton
                                         LinkComponent={Link}
                                         href={`/admin/produtos/${item.idProducts}`}
-                                        sx={{
-                                            fontSize: isXs ? 16 : 24,
-                                        }}
+                                        sx={{ fontSize: isXs ? 16 : 24 }}
                                     >
                                         <Edit color="action" />
                                     </IconButton>
                                     <IconButton
                                         onClick={() => onDelete(item.idProducts)}
-                                        sx={{
-                                            fontSize: isXs ? 16 : 24,
-                                        }}
+                                        sx={{ fontSize: isXs ? 16 : 24 }}
                                     >
                                         <Delete color="error" />
                                     </IconButton>
@@ -107,7 +88,7 @@ const TableProducts = ({ data, onDelete, toggleVisible, page, limit }) => {
                                                 onChange={() => toggleVisible(item.idProducts)}
                                             />
                                         }
-                                       
+                                        label="Visível"
                                     />
                                 </Box>
                             </TableCell>

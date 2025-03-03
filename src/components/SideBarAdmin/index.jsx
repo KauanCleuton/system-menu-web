@@ -24,6 +24,7 @@ const routesComponent = [
     { title: "Perfil Administrador", icon: <Person sx={{ width: 20, height: 20 }} />, route: "/admin/perfil" },
     { title: "Tema", icon: <Palette sx={{ width: 20, height: 20 }} />, route: "/admin/theme" }, // Seção para mudar o tema
     { title: "Mesas", icon: <TableBar sx={{ width: 20, height: 20 }} />, route: "/admin/mesas" },
+    { title: "Pedidos Mesas", icon: <TableBar sx={{ width: 20, height: 20 }} />, route: "/admin/pedidosMesas" },
 ];
 
 const Sidebar = () => {
