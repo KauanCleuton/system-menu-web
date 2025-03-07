@@ -232,8 +232,8 @@ const Checkout = () => {
             <CheckoutPreviewAndEdit
               data={data}
               handleFinalize={handleFinalize}
-              pixCola={billing?.pixInfo?.payload || ""}
-              qrCodeImage={billing?.pixInfo?.encodedImage || ""}
+              pixCola={billing?.qr_code || ""}
+              qrCodeImage={billing?.qr_code_base64 || ""}
               qrCodeGenerated={qrCodeGenerate}
             />
 

@@ -651,8 +651,8 @@ const CheckoutPreviewAndEdit = ({ data, handleFinalize, qrCodeGenerated, qrCodeI
 
   return loading ? <Loading /> : (
     <Box sx={{ p: 0 }}>
-      {/* {renderComponent()} */}
-      <Grid container spacing={2}>
+      {renderComponent()}
+      {/* <Grid container spacing={2}>
         <Grid item xs={12} sm={6}>
           <Typography variant="body1" sx={{ color: theme.palette.secondary.main }}>
             <strong>Nome:</strong> {data.name}
@@ -837,7 +837,7 @@ const CheckoutPreviewAndEdit = ({ data, handleFinalize, qrCodeGenerated, qrCodeI
             </Grid>
           </Grid>
         )}
-      </Grid>
+      </Grid> */}
     </Box>
   );
 };
