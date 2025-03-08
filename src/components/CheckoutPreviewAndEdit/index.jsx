@@ -337,7 +337,7 @@ const CheckoutPreviewAndEdit = ({ data, handleFinalize, qrCodeImage, pixCola }) 
                   Copiar Pix cola
                 </Button>
                 <Typography variant="body2" color="error" sx={{ mt: 2, fontWeight: 'bold' }}>
-                  O QR Code expira em 5 minutos.
+                  O QR Code expira em 8 minutos.
                 </Typography>
                 <Typography variant="body2" sx={{ mt: 1, color: theme.palette.primary.main, fontWeight: 'bold' }}>
                   Tempo restante: {Math.floor(timeLeft / 60)}:{timeLeft % 60 < 10 ? '0' : ''}
