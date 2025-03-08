@@ -272,6 +272,7 @@ const CheckoutPreviewAndEdit = ({ data, handleFinalize, qrCodeImage, pixCola }) 
               </Box>
             ) : (
               <Box sx={{ textAlign: 'center', mt: 4 }}>
+
                 <Box
                   sx={{
                     display: 'flex',
@@ -288,12 +289,18 @@ const CheckoutPreviewAndEdit = ({ data, handleFinalize, qrCodeImage, pixCola }) 
                       position: 'relative',
                     }}
                   >
-                    <Image
-                      src={`data:image/png;base64,${qrCodeImage}`}
-                      alt="QR Code PIX"
-                      layout="fill"
-                      style={{ objectFit: 'cover' }}
-                    />
+                    {qrCodeImage ? (
+                      <Image
+                        src={`data:image/png;base64,${qrCodeImage}`}
+                        alt="QR Code PIX"
+                        layout="fill"
+                        style={{ objectFit: 'cover' }}
+                      />
+                    ) : (
+                      <Box sx={{ width: '100%', height: '270px', display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
+                        <Loading />
+                      </Box>
+                    )}
                   </Box>
                 </Box>
 
@@ -304,9 +311,21 @@ const CheckoutPreviewAndEdit = ({ data, handleFinalize, qrCodeImage, pixCola }) 
                   }).format(data.total_price)}</strong>
                 </Typography>
 
-                <Typography sx={{ mb: 1, color: theme.palette.secondary.main, fontSize: { lg: 17, md: 17, sm: 13, xs: 10 } }}>
-                  Pix cola: <strong>{pixCola}</strong>
+                <Typography sx={{ mb: 1, color: theme.palette.secondary.main }}>
+                  Pix cola:
                 </Typography>
+                <Typography
+                  sx={{
+                    mb: 1,
+                    color: theme.palette.secondary.main,
+                    fontWeight: 600,
+                    wordBreak: 'break-word',  // Faz o texto quebrar quando atingir o limite da tela
+                    overflowWrap: 'break-word', // Para garantir que palavras longas que não podem ser quebradas, também quebrem
+                  }}
+                >
+                  {pixCola}
+                </Typography>
+
                 <Button
                   variant="contained"
                   color="primary"

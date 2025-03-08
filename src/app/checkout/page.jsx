@@ -175,28 +175,36 @@ const Checkout = () => {
 
   const [statusPagamento, setStatusPagamento] = useState(null);
 
+  const id = localStorage.getItem("idPayment");
+
   useEffect(() => {
-    if (!billing?.id) {
-      console.warn("billing.id não está definido.");
+    if (!id || !qrCodeGenerate) {
+      console.warn("idPayment não encontrado ou QR Code não gerado.");
       return;
     }
-  
+
+    let intervalId;
+
     const getData = async () => {
       try {
-        const data = await paymentSv.getStatusPaymentById(billing.id);
-  
-        if (data.statusPayment === "PAGO" || data.statusPayment === 'Pago' && data.confirmed) {
+        const data = await paymentSv.getStatusPaymentById(id);
+
+        if ((data.statusPayment === "PAGO" || data.statusPayment === 'Pago') && data.confirmed) {
           setStatusPagamento("success");
           handleNext();
-        } 
+          clearInterval(intervalId);
+        }
       } catch (error) {
         console.error("Erro ao buscar status de pagamento:", error);
       }
     };
-  
-    getData();
-  }, [billing?.idCobranca]);
-  
+    intervalId = setInterval(() => {
+      getData();
+    }, 2000);
+
+    return () => clearInterval(intervalId);
+
+  }, [id, qrCodeGenerate]); 
 
 
   const getStepContent = (step) => {

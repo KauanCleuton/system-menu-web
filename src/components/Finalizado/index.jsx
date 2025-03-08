@@ -10,13 +10,15 @@ import { clearCart } from '@/store/cartSlice';
 const Finalizado = ({ status }) => {
     const router = useRouter();
     const dispatch = useDispatch();
-    const theme = useTheme()
+    const theme = useTheme();
 
     useEffect(() => {
         const timer = setTimeout(() => {
+            console.log("Navegando para a página inicial...");
             dispatch(clearCart());
+            localStorage.removeItem("paymentId")
             router.push("/");
-        }, 60000);
+        }, 5000);
 
         return () => clearTimeout(timer);
     }, [dispatch, router]);
@@ -24,7 +26,7 @@ const Finalizado = ({ status }) => {
     const renderStatusIcon = () => {
         switch (status) {
             case 'success':
-                return <CheckCircleIcon style={{ color: 'green', width: 140, height: 140 }} />; 
+                return <CheckCircleIcon style={{ color: 'green', width: 140, height: 140 }} />;
             case 'pending':
                 return <HourglassEmptyIcon style={{ color: 'orange', width: 140, height: 140 }} />;
             case 'error':
@@ -60,10 +62,13 @@ const Finalizado = ({ status }) => {
                     {renderStatusIcon()}
                 </Grid>
                 <Grid item xs={12}>
-                    <Typography gutterBottom sx={{
-                        color: theme.palette.primary.main,
-                        fontSize: {lg: 30, md: 27, sm: 23, xs: 15}
-                    }}>
+                    <Typography
+                        gutterBottom
+                        sx={{
+                            color: theme.palette.primary.main,
+                            fontSize: { lg: 30, md: 27, sm: 23, xs: 15 },
+                        }}
+                    >
                         {renderStatusMessage()}
                     </Typography>
                 </Grid>
