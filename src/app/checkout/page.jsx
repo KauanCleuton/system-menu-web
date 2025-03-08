@@ -14,8 +14,7 @@ import { useRouter } from 'next/navigation';
 import Finalizado from '@/components/Finalizado';
 import TransactionsService from '@/service/transactions.service';
 
-const UserSv = new userService();
-
+const UserSv = new userService()
 
 const paymentSv = new TransactionsService()
 const Checkout = () => {
@@ -170,9 +169,6 @@ const Checkout = () => {
       });
     }
   };
-
-
-
   const [statusPagamento, setStatusPagamento] = useState(null);
   useEffect(() => {
     if (!qrCodeGenerate) {
