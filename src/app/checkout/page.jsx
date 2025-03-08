@@ -12,9 +12,12 @@ import { SET_ALERT } from '@/store/actions';
 import { clearCart } from '@/store/cartSlice';
 import { useRouter } from 'next/navigation';
 import Finalizado from '@/components/Finalizado';
+import TransactionsService from '@/service/transactions.service';
 
 const UserSv = new userService();
 
+
+const paymentSv = new TransactionsService()
 const Checkout = () => {
   const dispatch = useDispatch()
   const items = useSelector(state => state.cart.items);
@@ -124,8 +127,8 @@ const Checkout = () => {
       formData.append("orderItems", JSON.stringify(data.orderItems));
       formData.append("phone", dataForm.phone);
       formData.append("troco", dataForm.troco);
-    
-      if(dataForm.creditCard && dataForm.installmentCount) {
+
+      if (dataForm.creditCard && dataForm.installmentCount) {
         formData.append("creditCard", JSON.stringify(dataForm.creditCard))
         formData.append("installmentCount", dataForm.installmentCount)
       }
@@ -153,7 +156,7 @@ const Checkout = () => {
       setMessage("success");
       setStatusPagamento("success")
       dispatch(clearCart());
-      if(dataForm.payment === 'CREDIT_CARD' || dataForm.payment === 'Dinheiro') {
+      if (dataForm.payment === 'CREDIT_CARD' || dataForm.payment === 'Dinheiro') {
         handleNext()
       }
     } catch (error) {
@@ -178,28 +181,22 @@ const Checkout = () => {
       return;
     }
   
-    const eventSource = new EventSource(`${process.env.NEXT_PUBLIC_BASE_URL}/events/payment/${billing.id}`);
+    const getData = async () => {
+      try {
+        const data = await paymentSv.getStatusPaymentById(billing.id);
   
-    eventSource.onmessage = (event) => {
-      const data = JSON.parse(event.data);
-  
-      if (data.status === "PAGO") {
-        setStatusPagamento("success");
-        handleNext();
-      } else if (data.status !== "PAGO" && data.reload) {
-        setStatusPagamento("error");
-        handleNext();
+        if (data.statusPayment === "PAGO" || data.statusPayment === 'Pago' && data.confirmed) {
+          setStatusPagamento("success");
+          handleNext();
+        } 
+      } catch (error) {
+        console.error("Erro ao buscar status de pagamento:", error);
       }
     };
   
-    eventSource.onerror = (error) => {
-      console.error("Erro na conexão SSE:", error);
-    };
+    getData();
+  }, [billing?.idCobranca]);
   
-    return () => {
-      eventSource.close();
-    };
-  }, [billing?.id]);
 
 
   const getStepContent = (step) => {

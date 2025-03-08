@@ -14,6 +14,9 @@ class TransactionsService extends ServiceBase {
     deleteTransactionById(id) {
         return this.delete(`/transactions/${id}`)
     }
+    getStatusPaymentById(paymentId) {
+        return this.get(`/payment/status/${paymentId}`)
+    }
     getAllTransactions() {
         return this.get("/transactions")
     }

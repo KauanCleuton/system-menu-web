@@ -33,9 +33,9 @@ const installmentOptions = Array.from({ length: 10 }, (_, i) => `${i + 1}x`);
 
 
 const userSv = new UserNoAuthSv()
-const CheckoutPreviewAndEdit = ({ data, handleFinalize, qrCodeGenerated, qrCodeImage, pixCola }) => {
+const CheckoutPreviewAndEdit = ({ data, handleFinalize, qrCodeImage, pixCola }) => {
   const [comprovante, setComprovante] = useState([])
-  const [timeLeft, setTimeLeft] = useState(300);
+  const [timeLeft, setTimeLeft] = useState(480);
   const navigate = useRouter();
   const theme = useTheme()
   const [loading, setLoading] = useState(false)
@@ -208,24 +208,25 @@ const CheckoutPreviewAndEdit = ({ data, handleFinalize, qrCodeGenerated, qrCodeI
   };
 
 
+  const [qrCodeGenerated, setQrCodeGenerated] = useState(false);
+
   useEffect(() => {
     let timer;
 
-    if (qrCodeGenerated) {
+    if (qrCodeGenerated && timeLeft > 0) {
       timer = setInterval(() => {
         setTimeLeft((prevTime) => prevTime - 1);
       }, 1000);
+    }
 
-      if (timeLeft === 0) {
-        clearInterval(timer);
-        setTimeout(() => {
-          navigate("/");
-        }, 120000);
-      }
+    if (timeLeft === 0) {
+      clearInterval(timer);
+      navigate.replace("/")
     }
 
     return () => clearInterval(timer);
   }, [qrCodeGenerated, timeLeft, navigate]);
+
 
 
   const renderComponent = () => {
@@ -249,7 +250,7 @@ const CheckoutPreviewAndEdit = ({ data, handleFinalize, qrCodeGenerated, qrCodeI
                 <strong>Pagamento via PIX</strong>
               </Typography>
               <Typography variant="body1" sx={{ color: theme.palette.secondary.main }}>
-                Clique no botão abaixo para gerar o QR Code do PIX. Você terá até 5 minutos para realizar o pagamento.
+                Clique no botão abaixo para gerar o QR Code do PIX. Você terá até 8 minutos para realizar o pagamento.
               </Typography>
             </Box>
 
@@ -263,7 +264,7 @@ const CheckoutPreviewAndEdit = ({ data, handleFinalize, qrCodeGenerated, qrCodeI
                   color="primary"
                   onClick={() => {
                     handleFinalize(data);
-                    setTimeLeft(300);
+                    setQrCodeGenerated(true)
                   }}
                 >
                   Gerar QR Code
