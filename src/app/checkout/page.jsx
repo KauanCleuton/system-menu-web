@@ -174,12 +174,9 @@ const Checkout = () => {
 
 
   const [statusPagamento, setStatusPagamento] = useState(null);
-
-  const id = localStorage.getItem("idPayment");
-
   useEffect(() => {
-    if (!id || !qrCodeGenerate) {
-      console.warn("idPayment não encontrado ou QR Code não gerado.");
+    if (!qrCodeGenerate) {
+      console.warn("QR Code não gerado.");
       return;
     }
 
@@ -187,6 +184,8 @@ const Checkout = () => {
 
     const getData = async () => {
       try {
+        const id = localStorage.getItem("idPayment");
+
         const data = await paymentSv.getStatusPaymentById(id);
 
         if ((data.statusPayment === "PAGO" || data.statusPayment === 'Pago') && data.confirmed) {
@@ -204,7 +203,7 @@ const Checkout = () => {
 
     return () => clearInterval(intervalId);
 
-  }, [id, qrCodeGenerate]); 
+  }, [qrCodeGenerate]);
 
 
   const getStepContent = (step) => {
