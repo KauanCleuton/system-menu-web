@@ -389,7 +389,10 @@ const CheckoutPreviewAndEdit = ({ data, handleFinalize, qrCodeImage, pixCola }) 
                 <strong>Tipo do pagamento:</strong>{" "}
                 {data.payment}
               </Typography>
-
+              <Typography variant="h6" color="secondary">
+                <strong>Troco:</strong>{" "}
+                {`${Number(data?.troco).toLocaleString("pt-BR", { style: "currency", currency: "BRL" })} - ${Number(data?.total_price).toLocaleString("pt-BR", { style: "currency", currency: "BRL" })}`} = {Number(data?.troco - data?.total_price).toLocaleString("pt-BR", { style: "currency", currency: "BRL" })}
+              </Typography>
               <Typography variant="h6" color="secondary">
                 <strong>Total:</strong>{" "}
                 {Number(data?.total_price).toLocaleString("pt-BR", { style: "currency", currency: "BRL" })}
@@ -504,6 +507,34 @@ const CheckoutPreviewAndEdit = ({ data, handleFinalize, qrCodeImage, pixCola }) 
             )}
           </Formik>
         </Grid> */}
+
+            <Grid item xs={12}>
+              <Grid container spacing={2} alignItems="center" justifyContent="flex-start">
+                <Grid item>
+                  <Button variant="contained" color="primary" onClick={() => handleFinalize(data)} sx={{
+                    fontSize: 11
+                  }}>
+                    Finalizar Compra
+                  </Button>
+                </Grid>
+
+                <Grid item>
+                  <Button
+                    variant="contained"
+                    color="success"
+                    component="a"
+                    href={`https://wa.me/558592985693?text=${generateWhatsAppMessage()}`}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    sx={{
+                      fontSize: 11
+                    }}
+                  >
+                    Enviar para WhatsApp
+                  </Button>
+                </Grid>
+              </Grid>
+            </Grid>
           </Grid>
         )
       }
