@@ -36,7 +36,9 @@ const UserMenu = ({ anchorEl, handleClose, handleLogout, user}) => {
                     horizontal: 'right',
                 }}
             >
-                <Link href={role === 'ADMIN' ? "/admin" : "/perfil"} passHref>
+                <Link href={role === 'ADMIN' ? "/perfil" : "/perfil"} passHref>
+                {/* <Link href={role === 'ADMIN' ? "/admin/perfil" : "/perfil"} passHref>*/}
+                {/* ESSE É O CERTO TROQUEI SO PRA TESTAR */}
                     <MenuItem onClick={handleClose} sx={{ color: theme.palette.primary.main, px: 3 }}>Perfil</MenuItem>
                 </Link>
                 <MenuItem onClick={() => {
