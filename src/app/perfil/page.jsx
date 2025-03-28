@@ -80,7 +80,7 @@ const Page = () => {
     const [profileImage, setProfileImage] = useState(null);
     const [atualiza, setAtualiza] = useState(false);
 
-    const [isEditing, setIsEditing] = useState(false); 
+    const [isEditing, setIsEditing] = useState(false);
     const [userData, setUserData] = useState({
         name: '',
         phone: '',
@@ -101,8 +101,8 @@ const Page = () => {
         const fetchData = async () => {
             try {
                 const userData = await adminSv.getUserDataById(data.id);
-                console.log("useeeeeerrrrrr",userData);
-                
+                console.log("useeeeeerrrrrr", userData);
+
                 setUserData({
                     name: userData.name || '',
                     phone: userData.phone || '',
@@ -116,7 +116,7 @@ const Page = () => {
                         cep: userData.address?.postalCode || ''
                     }
                 });
-                setEditedData(userData); 
+                setEditedData(userData);
             } catch (error) {
                 console.error("Erro ao buscar dados do usuário:", error);
             }
@@ -134,7 +134,7 @@ const Page = () => {
         postalCode: 'CEP'
     };
 
-   
+
     const handleInputChange = (field, value) => {
         setEditedData((prevState) => ({
             ...prevState,
@@ -142,7 +142,7 @@ const Page = () => {
         }));
     };
 
-    
+
     const handleAddressChange = (field, value) => {
         setEditedData((prevState) => ({
             ...prevState,
@@ -153,16 +153,16 @@ const Page = () => {
         }));
     };
 
-   
+
     const toggleEdit = async () => {
         if (isEditing) {
             try {
                 await adminSv.putUpdateUser(data.id, editedData);
-                console.log(editedData,"eddiiiiittttttt");
-                
+                console.log(editedData, "eddiiiiittttttt");
+
                 setUserData(editedData);
                 setAtualiza(!atualiza)
-                
+
             } catch (error) {
                 console.error("Erro ao atualizar dados:", error);
             }
@@ -172,20 +172,40 @@ const Page = () => {
 
     return (
         <Box sx={{ width: '100%', height: '100vh', display: "flex", justifyContent: "center", alignItems: "center" }}>
-            <Box sx={{ width: '50%', height: '100%', display: "flex", justifyContent: "center", alignItems: "center" }}>
+            <Box sx={{
+                width: { xs: '95%', md: '50%' }, // 100% no mobile, 50% no desktop
+                height: '100%',
+                display: "flex",
+                justifyContent: "center",
+                alignItems: "center",
+            }}>
                 <Grid container spacing={'36px'}>
                     <Grid item xs={12} onClick={() => router.push("/")} sx={{ display: "flex", justifyContent: "flex-start", cursor: "pointer" }}>
                         <ArrowBackIcon sx={{ color: theme.palette.primary.main, mr: "10px" }} />
-                        <Typography variant="h3" sx={{ fontSize: '24px', fontWeight: 700, color: theme.palette.primary.main }}>
+                        <Typography
+                            variant="h3"
+                            sx={{
+                                fontSize: { xs: '16px', sm: '20px', md: '24px' },
+                                fontWeight: 700,
+                                color: theme.palette.primary.main
+                            }}
+                        >
                             Voltar ao menu
                         </Typography>
                     </Grid>
 
-                    <Grid item xs={12} sx={{ display: "flex", justifyContent: "center" }}>
-                        <Typography variant="h3" sx={{ fontSize: '24px', fontWeight: 700, color: theme.palette.primary.main }}>
+                    {/* <Grid item xs={12} sx={{ display: "flex", justifyContent: "center" }}>
+                        <Typography
+                            variant="h3"
+                            sx={{
+                                fontSize: { xs: '16px', sm: '20px', md: '24px' },
+                                fontWeight: 700,
+                                color: theme.palette.primary.main
+                            }}
+                        >
                             Perfil
                         </Typography>
-                    </Grid>
+                    </Grid> */}
                     <Grid item xs={12}>
                         <Grid container>
                             {/* <Grid item xs={12}>
@@ -209,7 +229,7 @@ const Page = () => {
 
                     <Grid item xs={12}>
                         <Grid container spacing={2}>
-                            <Grid item xs={12} lg={6}>
+                            <Grid item xs={6} lg={6}>
                                 <Typography variant="subtitle1" sx={{ fontWeight: "bold", textTransform: "capitalize", color: "gray" }}>
                                     Nome
                                 </Typography>
@@ -222,11 +242,11 @@ const Page = () => {
                                         readOnly: !isEditing,
                                         sx: { color: "black" },
                                     }}
-                                    sx={{ mt: 1 }}
+                                    
                                 />
                             </Grid>
 
-                            <Grid item xs={12} lg={6}>
+                            <Grid item xs={6} lg={6}>
                                 <Typography variant="subtitle1" sx={{ fontWeight: "bold", textTransform: "capitalize", color: "gray" }}>
                                     Telefone
                                 </Typography>
@@ -239,12 +259,12 @@ const Page = () => {
                                         readOnly: !isEditing,
                                         sx: { color: "black" },
                                     }}
-                                    sx={{ mt: 1 }}
+                                    
                                 />
                             </Grid>
 
                             {Object.keys(fieldLabels).map((fieldName) => (
-                                <Grid item xs={12} lg={4} key={fieldName}>
+                                <Grid item xs={4} lg={4} key={fieldName}>
                                     <Typography variant="subtitle1" sx={{ fontWeight: "bold", textTransform: "capitalize", color: "gray" }}>
                                         {fieldLabels[fieldName]}
                                     </Typography>
@@ -257,7 +277,7 @@ const Page = () => {
                                             readOnly: !isEditing,
                                             sx: { color: "black" },
                                         }}
-                                        sx={{ mt: 1 }}
+                                        
                                     />
                                 </Grid>
                             ))}
@@ -265,7 +285,7 @@ const Page = () => {
                     </Grid>
 
                     <Grid item xs={12}>
-                        <Box sx={{ display: "flex", justifyContent: "flex-end", mt: 3 }}>
+                        <Box sx={{ display: "flex", justifyContent: "center",}}>
                             <Button variant="contained" color="primary" onClick={toggleEdit}>
                                 {isEditing ? "Salvar" : "Editar"}
                             </Button>
