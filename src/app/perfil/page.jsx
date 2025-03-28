@@ -6,6 +6,7 @@ import {
     Avatar,
     Box,
     Button,
+    Container,
     Grid,
     IconButton,
     InputLabel,
@@ -171,13 +172,9 @@ const Page = () => {
     };
 
     return (
-        <Box sx={{ width: '100%', height: '100vh', display: "flex", justifyContent: "center", alignItems: "center" }}>
-            <Box sx={{
-                width: { xs: '95%', md: '50%' }, // 100% no mobile, 50% no desktop
-                height: '100%',
-                display: "flex",
-                justifyContent: "center",
-                alignItems: "center",
+        <Box sx={{ width: '100%', height: '100%', display: "flex", py: 14,justifyContent: "center", alignItems: "center" }}>
+            <Container fixed sx={{
+                paddingBottom: '50px'
             }}>
                 <Grid container spacing={'36px'}>
                     <Grid item xs={12} onClick={() => router.push("/")} sx={{ display: "flex", justifyContent: "flex-start", cursor: "pointer" }}>
@@ -242,7 +239,7 @@ const Page = () => {
                                         readOnly: !isEditing,
                                         sx: { color: "black" },
                                     }}
-                                    
+
                                 />
                             </Grid>
 
@@ -259,7 +256,7 @@ const Page = () => {
                                         readOnly: !isEditing,
                                         sx: { color: "black" },
                                     }}
-                                    
+
                                 />
                             </Grid>
 
@@ -269,7 +266,7 @@ const Page = () => {
                                         {fieldLabels[fieldName]}
                                     </Typography>
                                     <TextField
-                                        value={editedData.address?.[fieldName] ?? "aaa"}
+                                        value={editedData.address?.[fieldName] ?? ""}
                                         onChange={(e) => handleAddressChange(fieldName, e.target.value)}
                                         variant="outlined"
                                         fullWidth
@@ -277,7 +274,7 @@ const Page = () => {
                                             readOnly: !isEditing,
                                             sx: { color: "black" },
                                         }}
-                                        
+
                                     />
                                 </Grid>
                             ))}
@@ -285,14 +282,14 @@ const Page = () => {
                     </Grid>
 
                     <Grid item xs={12}>
-                        <Box sx={{ display: "flex", justifyContent: "center",}}>
+                        <Box sx={{ display: "flex", justifyContent: "center", }}>
                             <Button variant="contained" color="primary" onClick={toggleEdit}>
                                 {isEditing ? "Salvar" : "Editar"}
                             </Button>
                         </Box>
                     </Grid>
                 </Grid>
-            </Box>
+            </Container>
         </Box>
     );
 };
