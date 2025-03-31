@@ -69,7 +69,6 @@ const Page = () => {
     const [initialValues, setInitialValues] = useState({
         name: '',
         phone: '',
-        photo_url: '',
         address: {
             road: '',
             house_number: '',
@@ -83,10 +82,10 @@ const Page = () => {
         try {
             const userData = await adminSv.getUserDataById(data.id);
             console.log(userData, '991293923929')
+            setProfileImage(userData.photo_url || '')
             setInitialValues({
                 name: userData.name || '',
                 phone: userData.phone || '',
-                photo_url: userData.photo_url || '',
                 address: {
                     road: userData.address?.road || '',
                     house_number: userData.address?.house_number || '',
@@ -153,10 +152,10 @@ const Page = () => {
     };
 
     const handleSubmit = async (values) => {
+        console.log(values,' 123123123')
         try {
             const response = await adminSv.putUpdateUser(values);
             dispatch({ type: SET_ALERT, message: 'Informações atualizadas com sucesso!', severity: 'success', icon: 'user' });
-            window.onload()
         } catch (error) {
             dispatch({ type: SET_ALERT, message: 'Erro ao atualizar dados!', severity: 'error', icon: 'user' });
             console.error(error);
@@ -184,7 +183,7 @@ const Page = () => {
                                     {profileImage ? (
                                         <StyledAvatar src={profileImage} />
                                     ) : (
-                                        initialValues.photo_url ? <StyledAvatar src={initialValues.photo_url} /> : <StyledAccountCircle sx={{ color: theme.palette.primary.main }} />
+                                       <StyledAccountCircle sx={{ color: theme.palette.primary.main }} />
                                     )}
                                     <label htmlFor="icon-button-file">
                                         <Input accept="image/*" id="icon-button-file" type="file" onChange={handleImageUpload} />

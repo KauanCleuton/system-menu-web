@@ -1,26 +1,26 @@
-"use client";
+"use client"
 import { useEffect, useState } from "react";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
+import { SET_ALERT } from "@/store/actions";
 import AdminService from "@/service/admin.service";
 import {
     Avatar,
-    Badge,
     Box,
     Button,
     Container,
+    FormControl,
+    FormHelperText,
     Grid,
     IconButton,
+    InputLabel,
     TextField,
     Typography,
     styled,
     useTheme
 } from "@mui/material";
-import { AccountCircle, ArrowBack, PhotoCamera } from "@mui/icons-material";
+import { AccountCircle, PhotoCamera } from "@mui/icons-material";
+import { Field, Form, Formik } from "formik";
 import { extractDataFromSession } from "@/utils/auth";
-import ArrowBackIcon from "@mui/icons-material/ArrowBack";
-import { useRouter } from 'next/navigation';
-import { Formik, Form, Field, ErrorMessage } from 'formik';
-import * as Yup from 'yup';
 
 const StyledBox = styled(Box)({
     display: 'flex',
@@ -28,8 +28,17 @@ const StyledBox = styled(Box)({
     alignItems: 'center'
 });
 
+const ImageEditor = styled(Box)({
+    margin: '20px'
+});
+
 const Input = styled('input')({
     display: 'none'
+});
+
+const Badge = styled('div')({
+    position: 'relative',
+    display: 'inline-block'
 });
 
 const StyledAvatar = styled(Avatar)({
@@ -43,33 +52,54 @@ const StyledAccountCircle = styled(AccountCircle)({
     height: '200px'
 });
 
+const BadgeIcon = styled(IconButton)({
+    position: 'absolute',
+    bottom: '0px',
+    right: '-22px',
+});
+
 const adminSv = new AdminService();
-
-
 
 const Page = () => {
     const theme = useTheme();
     const data = extractDataFromSession();
-    const router = useRouter();
-    const [profileImage, setProfileImage] = useState(null);
-    const [atualiza, setAtualiza] = useState(false);
 
-    const [isEditing, setIsEditing] = useState(false);
-    const [userData, setUserData] = useState({
+    console.log(data, '9293912391293923921392')
+    const dispatch = useDispatch();
+    const [profileImage, setProfileImage] = useState(null);
+    const [initialValues, setInitialValues] = useState({
         name: '',
         phone: '',
-
         address: {
             road: '',
             house_number: '',
             neighborhood: '',
             city: '',
             complement: '',
-            cep: ''
+            postalCode: ''
         }
     });
-
-    const [editedData, setEditedData] = useState(userData);
+    const fetchData = async () => {
+        try {
+            const userData = await adminSv.getUserDataById(data.id);
+            console.log(userData, '991293923929')
+            setProfileImage(userData.photo_url || '')
+            setInitialValues({
+                name: userData.name || '',
+                phone: userData.phone || '',
+                address: {
+                    road: userData.address?.road || '',
+                    house_number: userData.address?.house_number || '',
+                    neighborhood: userData.address?.neighborhood || '',
+                    city: userData.address?.city || '',
+                    complement: userData.address?.complement || '',
+                    postalCode: userData.address?.postalCode || ''
+                }
+            });
+        } catch (error) {
+            console.error("Erro ao buscar dados do usuário:", error);
+        }
+    };
 
     const handleImageUpload = async (event) => {
         const file = event.target.files[0];
@@ -93,64 +123,25 @@ const Page = () => {
         }
     };
 
-
-    const validationSchema = Yup.object().shape({
-        name: Yup.string()
-            .required('Nome é obrigatório')
-            .min(2, 'Nome deve ter pelo menos 2 caracteres'),
-        phone: Yup.string()
-            .required('Telefone é obrigatório')
-            .matches(/^\d+$/, 'Telefone deve conter apenas números'),
-        address: Yup.object().shape({
-            road: Yup.string().required('Rua é obrigatória'),
-            house_number: Yup.string().required('Número é obrigatório'),
-            neighborhood: Yup.string().required('Bairro é obrigatório'),
-            city: Yup.string().required('Cidade é obrigatória'),
-            complement: Yup.string(),
-            cep: Yup.string().required('CEP é obrigatório').matches(/^\d{5}-\d{3}$/, 'CEP inválido'),
-        }),
-    });
-
     useEffect(() => {
-        const fetchData = async () => {
-            try {
-                const userData = await adminSv.getUserDataById(data.id);
-                console.log("user data", userData);
-
-                setUserData({
-                    name: userData.name || '',
-                    phone: userData.phone || '',
-                    photo_url:userData.photo_url || '',
-                    address: {
-                        road: userData.address?.road || '',
-                        house_number: userData.address?.house_number || '',
-                        neighborhood: userData.address?.neighborhood || '',
-                        city: userData.address?.city || '',
-                        complement: userData.address?.complement || 'Sem complemento',
-                        cep: userData.address?.postalCode || ''
-                    }
-                });
-
-                setEditedData({
-                    name: userData.name || '',
-                    phone: userData.phone || '',
-
-                    address: {
-                        road: userData.address?.road || '',
-                        house_number: userData.address?.house_number || '',
-                        neighborhood: userData.address?.neighborhood || '',
-                        city: userData.address?.city || '',
-                        complement: userData.address?.complement || 'Sem complemento',
-                        cep: userData.address?.postalCode || ''
-                    }
-                });
-            } catch (error) {
-                console.error("Erro ao buscar dados do usuário:", error);
-            }
-        };
 
         fetchData();
-    }, [atualiza]);
+    }, [data.id]);
+
+
+    const validate = (values) => {
+        const errors = {};
+        if (!values.name) errors.name = 'Campo obrigatório';
+        if (!values.phone) errors.phone = 'Campo obrigatório';
+
+        Object.keys(values.address).forEach(field => {
+            if (!values.address[field]) {
+                errors.address = { ...(errors.address || {}), [field]: 'Campo obrigatório' };
+            }
+        });
+
+        return errors;
+    };
 
     const fieldLabels = {
         road: 'Rua',
@@ -158,176 +149,183 @@ const Page = () => {
         neighborhood: 'Bairro',
         city: 'Cidade',
         complement: 'Complemento',
-        cep: 'CEP'
+        postalCode: 'CEP'
     };
 
-    const handleInputChange = (field, value) => {
-        setEditedData((prevState) => ({
-            ...prevState,
-            [field]: value
-        }));
-    };
-
-    const handleAddressChange = (field, value) => {
-        setEditedData((prevState) => ({
-            ...prevState,
-            address: {
-                ...prevState.address,
-                [field]: value
-            }
-        }));
-    };
-
-    const toggleEdit = async (values) => {
-        if (isEditing) {
-            try {
-               
-
-                console.log(values, "dados editados");
-
-                
-                await adminSv.putUpdateUser(values);
-                setUserData(requestData);
-                setAtualiza(!atualiza);
-            } catch (error) {
-                console.error("Erro ao atualizar dados:", error);
-            }
+    const handleSubmit = async (values) => {
+        try {
+            const response = await adminSv.putUpdateUser(values);
+            dispatch({ type: SET_ALERT, message: 'Informações atualizadas com sucesso!', severity: 'success', icon: 'user' });
+            window.onload()
+        } catch (error) {
+            dispatch({ type: SET_ALERT, message: 'Erro ao atualizar dados!', severity: 'error', icon: 'user' });
+            console.error(error);
         }
-        setIsEditing(!isEditing);
     };
-
 
     return (
-        <Box sx={{ width: '100%', height: '100%', display: "flex", py: 14, justifyContent: "center", alignItems: "center" }}>
-            <Container fixed sx={{ paddingBottom: '50px' }}>
-                <Grid container spacing={'36px'}>
-                    <Grid item xs={12} onClick={() => router.push("/")} sx={{ display: "flex", justifyContent: "flex-start", cursor: "pointer" }}>
-                        <ArrowBackIcon sx={{ color: theme.palette.primary.main, mr: "10px" }} />
-                        <Typography variant="h3" sx={{ fontSize: { xs: '16px', sm: '20px', md: '24px' }, fontWeight: 700, color: theme.palette.primary.main }}>
-                            Voltar ao menu
-                        </Typography>
-                    </Grid>
-
-                    <Grid item xs={12}>
-                        <Box sx={{ width: "100%", display: "flex", justifyContent: "center" }}>
-                            <StyledAvatar src={profileImage || userData.photo_url} />
-                        </Box>
-                        {isEditing && (
-                            <Box sx={{ display: "flex", justifyContent: "center", marginTop: '10px' }}>
-                                <label htmlFor="icon-button-file">
-                                    <Input accept="image/*" id="icon-button-file" type="file" onChange={handleImageUpload} />
-                                    <Badge sx={{ color: theme.palette.primary.main }} aria-label="upload picture" component="span">
-                                        <PhotoCamera />
-                                    </Badge>
-                                </label>
+        <Box sx={{ width: '100%', height: '100%', py: 15 }}>
+            <Container fixed sx={{
+                paddingBottom: 10
+            }}>
+            <Grid container spacing={'36px'}>
+                <Grid item xs={12}>
+                    <Typography variant="h3" sx={{ fontSize: '24px', fontWeight: 700, color: theme.palette.primary.main }}>
+                        Perfil
+                    </Typography>
+                </Grid>
+                <Grid item xs={12}>
+                    <Grid container>
+                        <Grid item xs={12}>
+                            <Typography variant="h3" sx={{ fontSize: '19.69px', fontWeight: 400, color: theme.palette.primary.main }}>
+                                Foto
+                            </Typography>
+                        </Grid>
+                        <Grid item xs={12}>
+                            <Box sx={{ width: "100%", display: "flex", justifyContent: "center" }}>
+                                <Badge>
+                                    {profileImage ? (
+                                        <StyledAvatar src={profileImage} />
+                                    ) : (
+                                        profileImage ? <StyledAvatar src={profileImage} /> : <StyledAccountCircle sx={{ color: theme.palette.primary.main }} />
+                                    )}
+                                    <label htmlFor="icon-button-file">
+                                        <Input accept="image/*" id="icon-button-file" type="file" onChange={handleImageUpload} />
+                                        <BadgeIcon sx={{ color: theme.palette.primary.main }} aria-label="upload picture" component="span">
+                                            <PhotoCamera />
+                                        </BadgeIcon>
+                                    </label>
+                                </Badge>
                             </Box>
-                        )}
-
+                        </Grid>
                     </Grid>
-
+                </Grid>
+                <Grid item xs={12}>
                     <Formik
-                        key={JSON.stringify(editedData)}
-                        initialValues={editedData || { name: '', phone: '', address: {} }}
-                        validationSchema={validationSchema}
-                        validateOnBlur={true}
-                        validateOnChange={false}
-                        onSubmit={(values) => {
-                            console.log(values, "enviado");
-                            toggleEdit(values); // Passa os valores para salvar
-                        }}
+                        enableReinitialize
+                        initialValues={initialValues}
+                        onSubmit={handleSubmit}
+                        validate={validate}
                     >
-                        {({ values, handleChange, handleBlur, errors, touched, setFieldValue }) => (
-                            <Grid item xs={12}>
+                        {() => (
+                            <Form>
                                 <Grid container spacing={2}>
-                                    <Grid item xs={6} lg={6}>
-                                        <Typography variant="subtitle1" sx={{ fontWeight: "bold", textTransform: "capitalize", color: "gray" }}>
-                                            Nome
-                                        </Typography>
-                                        <TextField
-                                            name="name"
-                                            value={values.name || ''}
-                                            onChange={handleChange}
-                                            onBlur={handleBlur}
-                                            variant="outlined"
-                                            fullWidth
-                                            error={touched.name && Boolean(errors.name)}
-                                            helperText={touched.name && errors.name}
-                                            InputProps={{
-                                                readOnly: !isEditing,
-                                                sx: { backgroundColor: isEditing ? theme.palette.background.paper : "transparent", color: "black" },
-                                            }}
-                                        />
+                                    <Grid item xs={12} lg={6}>
+                                        <InputLabel htmlFor="name">Nome</InputLabel>
+                                        <Field name="name">
+                                            {({ field, form }) => (
+                                                <FormControl fullWidth sx={{ mt: 1 }}>
+                                                    <TextField {...field} id="name" variant="outlined" sx={{
+                                                        "& .MuiInputBase-input": {
+                                                            color: theme.palette.secondary.main
+                                                        },
+                                                        "& .MuiFormLabel-root": {
+                                                            color: theme.palette.secondary.main
+                                                        },
+                                                        "& .MuiOutlinedInput-root": {
+                                                            "& fieldset": {
+                                                                borderColor: theme.palette.primary.main
+                                                            },
+                                                            "&:hover fieldset": {
+                                                                borderColor: theme.palette.primary.dark
+                                                            },
+                                                            "&.Mui-focused fieldset": {
+                                                                borderColor: theme.palette.primary.main
+                                                            }
+                                                        },
+                                                        "& .MuiFormHelperText-root": {
+                                                            color: theme.palette.primary.main
+                                                        }
+                                                    }} />
+                                                    {form.errors.name && form.touched.name && (
+                                                        <FormHelperText error>{form.errors.name}</FormHelperText>
+                                                    )}
+                                                </FormControl>
+                                            )}
+                                        </Field>
                                     </Grid>
-
-                                    <Grid item xs={6} lg={6}>
-                                        <Typography variant="subtitle1" sx={{ fontWeight: "bold", textTransform: "capitalize", color: "gray" }}>
-                                            Telefone
-                                        </Typography>
-                                        <TextField
-                                            name="phone"
-                                            value={values.phone || ''}
-                                            onChange={handleChange}
-                                            onBlur={handleBlur}
-                                            variant="outlined"
-                                            fullWidth
-                                            error={touched.phone && Boolean(errors.phone)}
-                                            helperText={touched.phone && errors.phone}
-                                            InputProps={{
-                                                readOnly: !isEditing,
-                                                sx: { backgroundColor: isEditing ? theme.palette.background.paper : "transparent", color: "black" },
-                                            }}
-                                        />
+                                    <Grid item xs={12} lg={6}>
+                                        <InputLabel htmlFor="phone">Telefone</InputLabel>
+                                        <Field name="phone">
+                                            {({ field, form }) => (
+                                                <FormControl fullWidth sx={{ mt: 1 }}>
+                                                    <TextField {...field} id="phone" variant="outlined" sx={{
+                                                        "& .MuiInputBase-input": {
+                                                            color: theme.palette.secondary.main
+                                                        },
+                                                        "& .MuiFormLabel-root": {
+                                                            color: theme.palette.secondary.main
+                                                        },
+                                                        "& .MuiOutlinedInput-root": {
+                                                            "& fieldset": {
+                                                                borderColor: theme.palette.primary.main
+                                                            },
+                                                            "&:hover fieldset": {
+                                                                borderColor: theme.palette.primary.dark
+                                                            },
+                                                            "&.Mui-focused fieldset": {
+                                                                borderColor: theme.palette.primary.main
+                                                            }
+                                                        },
+                                                        "& .MuiFormHelperText-root": {
+                                                            color: theme.palette.primary.main
+                                                        }
+                                                    }} />
+                                                    {form.errors.phone && form.touched.phone && (
+                                                        <FormHelperText error>{form.errors.phone}</FormHelperText>
+                                                    )}
+                                                </FormControl>
+                                            )}
+                                        </Field>
                                     </Grid>
-
                                     {Object.keys(fieldLabels).map((fieldName) => (
-                                        <Grid item xs={4} lg={4} key={fieldName}>
-                                            <Typography variant="subtitle1" sx={{ fontWeight: "bold", textTransform: "capitalize", color: "gray" }}>
-                                                {fieldLabels[fieldName]}
-                                            </Typography>
-                                            <TextField
-                                                name={`address.${fieldName}`}
-                                                value={values.address?.[fieldName] || ''}
-                                                onChange={handleChange}
-                                                onBlur={handleBlur}
-                                                variant="outlined"
-                                                fullWidth
-                                                error={touched.address?.[fieldName] && Boolean(errors.address?.[fieldName])}
-                                                helperText={touched.address?.[fieldName] && errors.address?.[fieldName]}
-                                                InputProps={{
-                                                    readOnly: !isEditing,
-                                                    sx: { backgroundColor: isEditing ? theme.palette.background.paper : "transparent", color: "black" },
-                                                }}
-                                            />
+                                        <Grid item xs={12} lg={4} key={fieldName}>
+                                            <InputLabel htmlFor={fieldName}>{fieldLabels[fieldName]}</InputLabel>
+                                            <Field name={`address.${fieldName}`}>
+                                                {({ field, form }) => (
+                                                    <FormControl fullWidth sx={{ mt: 1 }}>
+                                                        <TextField {...field} id={fieldName} variant="outlined" sx={{
+                                                            "& .MuiInputBase-input": {
+                                                                color: theme.palette.secondary.main
+                                                            },
+                                                            "& .MuiFormLabel-root": {
+                                                                color: theme.palette.secondary.main
+                                                            },
+                                                            "& .MuiOutlinedInput-root": {
+                                                                "& fieldset": {
+                                                                    borderColor: theme.palette.primary.main
+                                                                },
+                                                                "&:hover fieldset": {
+                                                                    borderColor: theme.palette.primary.dark
+                                                                },
+                                                                "&.Mui-focused fieldset": {
+                                                                    borderColor: theme.palette.primary.main
+                                                                }
+                                                            },
+                                                            "& .MuiFormHelperText-root": {
+                                                                color: theme.palette.primary.main
+                                                            }
+                                                        }} />
+                                                        {form.errors.address && form.errors.address[fieldName] && form.touched.address && (
+                                                            <FormHelperText error>{form.errors.address[fieldName]}</FormHelperText>
+                                                        )}
+                                                    </FormControl>
+                                                )}
+                                            </Field>
                                         </Grid>
                                     ))}
                                 </Grid>
-
-                                <Grid item xs={12}>
-                                    <Box sx={{ display: "flex", justifyContent: "center" }}>
-                                        {!isEditing ? (
-                                            <Box>
-                                            <Button sx={{ mr: 2, my: 1 }} variant="contained" color="primary" onClick={() => toggleEdit(values)}>
-                                                Editar
-                                            </Button>
-                                            </Box>
-                                        ) : (
-                                            <Box>
-
-                                                <Button sx={{ mr: 2, my: 1 }} variant="contained" color="primary" onClick={() => setIsEditing(false)}>
-                                                    Cancelar
-                                                </Button>
-                                                <Button variant="contained" color="primary" onClick={() => toggleEdit(values)}>
-                                                    Salvar
-                                                </Button>
-                                            </Box>
-                                        )}
-
-                                    </Box>
-                                </Grid>
-                            </Grid>
+                                <Box sx={{ display: "flex", justifyContent: "flex-end", mt: 3 }}>
+                                    <Button variant="text">Cancelar</Button>
+                                    <Button variant="contained" type="submit" sx={{ ml: 2 }}>
+                                        Enviar
+                                    </Button>
+                                </Box>
+                            </Form>
                         )}
                     </Formik>
                 </Grid>
+            </Grid>
             </Container>
         </Box>
     );

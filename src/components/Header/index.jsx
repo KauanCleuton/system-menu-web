@@ -130,18 +130,18 @@ const Header = () => {
                                     }}>
                                         {isLoggedIn() ? (
                                             <>
-                                                <IconButton onClick={handleOpenMenu}>
+                                                <IconButton onClick={handleOpenMenu} sx={{}}>
                                                     {userData?.photo_url ? (
                                                         // <StyledAvatar src={userData.photo_url} sx={{width: 40, height: 40, mr: 1}} />
                                                         <Avatar
                                                             src={userData?.photo_url}
                                                             alt={userData?.name || "User Avatar"}
-                                                            sx={{ width: 40, height: 40, mr: 1 }}
+                                                            sx={{ width: 55, height: 55, mr: 1,  border: trigger && `2px solid ${theme.palette.primary.main}` }}
                                                         />
                                                     ) : (
                                                         <Avatar
                                                             alt={userData?.name || "User Avatar"}
-                                                            sx={{ width: 40, height: 40, mr: 1 }}
+                                                            sx={{ width: 55, height: 55, mr: 1,  border: trigger && `2px solid ${theme.palette.primary.main}`  }}
                                                         >
                                                         {userData?.name ? userData.name.charAt(0).toUpperCase() : null}
                                                         </Avatar>
