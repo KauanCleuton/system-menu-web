@@ -36,20 +36,7 @@ const Header = () => {
     const handleLeftDrawerToggle = () => {
         dispatch({ type: SET_LOGIN_MENU, opened: true, mode: 'login' });
     };
-    const [userData, setUserData] = useState({
-        name: '',
-        phone: '',
-
-        address: {
-            road: '',
-            house_number: '',
-            neighborhood: '',
-            city: '',
-            complement: '',
-            cep: ''
-        }
-    });
-
+    const [userData, setUserData] = useState({})
     const handleClose = () => process.env.NODE_ENV !== 'production' && console.log('teste2');
 
     const handleLogout = () => {
@@ -58,46 +45,22 @@ const Header = () => {
         router.push("/")
     };
 
-    const userDados = extractDataFromSession()
+    const getData = async () => {
+        try {
+            const response = await adminSv.getUserData()
+
+            setUserData(response)
+        } catch (error) {
+            console.error(error)
+        }
+    }
+
 
     useEffect(() => {
-        const fetchUserData = async () => {
-            try {
-                const userData = await adminSv.getUserDataById(userDados.id);
-                console.log("user data", userData);
-
-                setUserData({
-                    name: userData.name || '',
-                    phone: userData.phone || '',
-                    photo_url: userData.photo_url || '',
-                    address: {
-                        road: userData.address?.road || '',
-                        house_number: userData.address?.house_number || '',
-                        neighborhood: userData.address?.neighborhood || '',
-                        city: userData.address?.city || '',
-                        complement: userData.address?.complement || 'Sem complemento',
-                        cep: userData.address?.postalCode || ''
-                    }
-                });
-            } catch (error) {
-                console.error("Erro ao buscar dados do usuário:", error);
-            }
-        };
-
-        fetchUserData();
-    }, [userDados.id]); // O useEffect será reexecutado apenas se `userDados.id` mudar
-
-    // const fetchUserData = async () => {
-    //     try {
-    //         const accessToken = sessionStorage.getItem("accessToken");
-    //         const response = await userService.getUser(accessToken);
-    //         setUserData(response.data);
-    //     } catch (error) {
-    //         console.error('Erro ao buscar usuário logado!', error);
-    //         throw error;
-    //     }
-    // };
-
+        if(isLoggedIn()) {
+            getData()
+        }
+    }, [])
     const handleOpenMenu = (event) => {
         setAnchorEl(event.currentTarget);
     };

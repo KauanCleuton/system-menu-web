@@ -13,6 +13,7 @@ import SnackBar from "@/components/SnackBar";
 import { createCustomTheme } from "@/theme";
 import { ThemeServiceNoAuth } from "@/service/theme.service";
 import { NotificationsUser } from "@/service/notifications.service";
+import FloatingWhatsAppButton from "@/components/FloatingWhatsappButton";
 
 const themeSv = new ThemeServiceNoAuth();
 const notificationSv = new NotificationsUser()
@@ -169,6 +170,7 @@ function AppTemplate({ children }) {
       <CssBaseline />
       <Header />
       <Box>{children}</Box>
+      <FloatingWhatsAppButton />
       <Footer />
     </ThemeProvider>
   );

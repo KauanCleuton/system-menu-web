@@ -186,7 +186,7 @@ const Page = () => {
                 console.log(values, "dados editados");
 
                 
-                await adminSv.putUpdateUser(data.id, values);
+                await adminSv.putUpdateUser(values);
                 setUserData(requestData);
                 setAtualiza(!atualiza);
             } catch (error) {

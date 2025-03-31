@@ -41,8 +41,8 @@ class AdminService extends ServiceBase {
     putUpdateUserPassword(id) {
         return this.put(`/user/${id}/password`)
     }
-    putUpdateUser(id, payload) {
-        return this.put(`/user/${id}`, payload)
+    putUpdateUser(payload) {
+        return this.put(`/user`, payload)
     }
     putUpdateUserAdmin(id, payload) {
         return this.put(`/admin/${id}`, payload)

@@ -55,11 +55,11 @@ const Footer = () => {
                                 Telefone: <Link href="tel:558592985693" style={{
                                     color: theme.palette.primary.main
                                 }}>
-                                    {formatPhoneNumber(phone)}
+                                    {formatPhoneNumber(phone ? phone : "8592985693")}
                                 </Link>
                             </Typography>
                             <Typography variant="body2" sx={{ mb: 1, fontSize: {lg: '0.75rem', xs: '0.60rem'} }}>
-                                PIX: {`${formatPhoneNumber(phone)}`}
+                                PIX: {`${formatPhoneNumber(phone ? phone : "8592985693")}`}
                             </Typography>
                         </Box>
                     </Grid>

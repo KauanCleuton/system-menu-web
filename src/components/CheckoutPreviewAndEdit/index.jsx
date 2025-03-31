@@ -308,7 +308,7 @@ const CheckoutPreviewAndEdit = ({ data, handleFinalize, qrCodeImage, pixCola }) 
                   Valor a pagar: <strong>{Intl.NumberFormat('pt-BR', {
                     style: 'currency',
                     currency: 'BRL'
-                  }).format(data.total_price)}</strong>
+                  }).format(data.total_price )}</strong>
                 </Typography>
 
                 <Typography sx={{ mb: 1, color: theme.palette.secondary.main }}>
@@ -394,8 +394,12 @@ const CheckoutPreviewAndEdit = ({ data, handleFinalize, qrCodeImage, pixCola }) 
                 {`${Number(data?.troco).toLocaleString("pt-BR", { style: "currency", currency: "BRL" })} - ${Number(data?.total_price).toLocaleString("pt-BR", { style: "currency", currency: "BRL" })}`} = {Number(data?.troco - data?.total_price).toLocaleString("pt-BR", { style: "currency", currency: "BRL" })}
               </Typography>
               <Typography variant="h6" color="secondary">
+                <strong>Frete:</strong>{" "}
+                {`${Number(2).toLocaleString("pt-BR", { style: "currency", currency: "BRL" })}`}
+              </Typography>
+              <Typography variant="h6" color="secondary">
                 <strong>Total:</strong>{" "}
-                {Number(data?.total_price).toLocaleString("pt-BR", { style: "currency", currency: "BRL" })}
+                {Number(data?.total_price + 2).toLocaleString("pt-BR", { style: "currency", currency: "BRL" })}
               </Typography>
             </Grid>
 
