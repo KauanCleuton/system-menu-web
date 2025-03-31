@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { AppBar, Toolbar, IconButton, Grid, Box, Container, Menu, MenuItem, Avatar, useScrollTrigger, Modal, Typography, useTheme } from '@mui/material';
+import { AppBar, Toolbar, IconButton, Grid, Box, Container, Menu, MenuItem, Avatar, useScrollTrigger, Modal, Typography, useTheme,styled, } from '@mui/material';
 import { useDispatch, useSelector } from 'react-redux';
 import BadgeCart from '../BadgeCart';
 import { usePathname, useRouter } from 'next/navigation';
@@ -7,11 +7,20 @@ import Image from 'next/image';
 import ModalLogin from '../ModalLogin';
 import { SET_LOGIN_MENU } from '@/store/actions';
 import Link from 'next/link';
-import { isLoggedIn } from '@/utils/auth';
+import { extractDataFromSession, isLoggedIn } from '@/utils/auth';
 import userService from '@/service/user.service';
 import { AccountCircle } from '@mui/icons-material';
 import UserMenu from '../MenuProfile';
 import SnackBar from '../SnackBar';
+import AdminService from "@/service/admin.service"
+
+const adminSv = new AdminService();
+
+const StyledAvatar = styled(Avatar)({
+    width: '40px',
+    height: '40px',
+    cursor: 'pointer'
+});
 
 const Header = () => {
     const theme = useTheme()
@@ -19,7 +28,7 @@ const Header = () => {
     const totalItems = useSelector(state => state.cart.totalItems);
     const path = usePathname();
     const trigger = useScrollTrigger({ disableHysteresis: true, threshold: 0 });
-    const userData = useSelector(state => state.login.data)
+    // const userData = useSelector(state => state.login.data)
     const [anchorEl, setAnchorEl] = useState(null);
     const loginMenuOpened = useSelector(state => state.login.opened);
     const dispatch = useDispatch();
@@ -27,6 +36,19 @@ const Header = () => {
     const handleLeftDrawerToggle = () => {
         dispatch({ type: SET_LOGIN_MENU, opened: true, mode: 'login' });
     };
+    const [userData, setUserData] = useState({
+        name: '',
+        phone: '',
+
+        address: {
+            road: '',
+            house_number: '',
+            neighborhood: '',
+            city: '',
+            complement: '',
+            cep: ''
+        }
+    });
 
     const handleClose = () => process.env.NODE_ENV !== 'production' && console.log('teste2');
 
@@ -35,6 +57,35 @@ const Header = () => {
         localStorage.removeItem("refreshToken");
         router.push("/")
     };
+
+    const userDados = extractDataFromSession()
+
+    useEffect(() => {
+        const fetchUserData = async () => {
+            try {
+                const userData = await adminSv.getUserDataById(userDados.id);
+                console.log("user data", userData);
+
+                setUserData({
+                    name: userData.name || '',
+                    phone: userData.phone || '',
+                    photo_url: userData.photo_url || '',
+                    address: {
+                        road: userData.address?.road || '',
+                        house_number: userData.address?.house_number || '',
+                        neighborhood: userData.address?.neighborhood || '',
+                        city: userData.address?.city || '',
+                        complement: userData.address?.complement || 'Sem complemento',
+                        cep: userData.address?.postalCode || ''
+                    }
+                });
+            } catch (error) {
+                console.error("Erro ao buscar dados do usuário:", error);
+            }
+        };
+
+        fetchUserData();
+    }, [userDados.id]); // O useEffect será reexecutado apenas se `userDados.id` mudar
 
     // const fetchUserData = async () => {
     //     try {
@@ -118,6 +169,7 @@ const Header = () => {
                                             <>
                                                 <IconButton onClick={handleOpenMenu}>
                                                     {userData?.photo_url ? (
+                                                        // <StyledAvatar src={userData.photo_url} sx={{width: 40, height: 40, mr: 1}} />
                                                         <Avatar
                                                             src={userData?.photo_url}
                                                             alt={userData?.name || "User Avatar"}
