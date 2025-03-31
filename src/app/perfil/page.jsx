@@ -79,7 +79,7 @@ const Page = () => {
                 setProfileImage(reader.result);  
 
                 
-                const payload = { photo_url: reader.result };
+                const payload = { file_url: reader.result };
 
                 try {
                     
@@ -120,7 +120,7 @@ const Page = () => {
                 setUserData({
                     name: userData.name || '',
                     phone: userData.phone || '',
-
+                    photo_url:userData.photo_url || '',
                     address: {
                         road: userData.address?.road || '',
                         house_number: userData.address?.house_number || '',
