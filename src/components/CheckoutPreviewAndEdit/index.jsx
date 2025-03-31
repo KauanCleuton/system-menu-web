@@ -33,9 +33,9 @@ const installmentOptions = Array.from({ length: 10 }, (_, i) => `${i + 1}x`);
 
 
 const userSv = new UserNoAuthSv()
-const CheckoutPreviewAndEdit = ({ data, handleFinalize, qrCodeGenerated, qrCodeImage, pixCola }) => {
+const CheckoutPreviewAndEdit = ({ data, handleFinalize, qrCodeImage, pixCola }) => {
   const [comprovante, setComprovante] = useState([])
-  const [timeLeft, setTimeLeft] = useState(300);
+  const [timeLeft, setTimeLeft] = useState(480);
   const navigate = useRouter();
   const theme = useTheme()
   const [loading, setLoading] = useState(false)
@@ -208,24 +208,25 @@ const CheckoutPreviewAndEdit = ({ data, handleFinalize, qrCodeGenerated, qrCodeI
   };
 
 
+  const [qrCodeGenerated, setQrCodeGenerated] = useState(false);
+
   useEffect(() => {
     let timer;
 
-    if (qrCodeGenerated) {
+    if (qrCodeGenerated && timeLeft > 0) {
       timer = setInterval(() => {
         setTimeLeft((prevTime) => prevTime - 1);
       }, 1000);
+    }
 
-      if (timeLeft === 0) {
-        clearInterval(timer);
-        setTimeout(() => {
-          navigate("/");
-        }, 120000);
-      }
+    if (timeLeft === 0) {
+      clearInterval(timer);
+      navigate.replace("/")
     }
 
     return () => clearInterval(timer);
   }, [qrCodeGenerated, timeLeft, navigate]);
+
 
 
   const renderComponent = () => {
@@ -249,7 +250,7 @@ const CheckoutPreviewAndEdit = ({ data, handleFinalize, qrCodeGenerated, qrCodeI
                 <strong>Pagamento via PIX</strong>
               </Typography>
               <Typography variant="body1" sx={{ color: theme.palette.secondary.main }}>
-                Clique no botão abaixo para gerar o QR Code do PIX. Você terá até 5 minutos para realizar o pagamento.
+                Clique no botão abaixo para gerar o QR Code do PIX. Você terá até 8 minutos para realizar o pagamento.
               </Typography>
             </Box>
 
@@ -263,7 +264,7 @@ const CheckoutPreviewAndEdit = ({ data, handleFinalize, qrCodeGenerated, qrCodeI
                   color="primary"
                   onClick={() => {
                     handleFinalize(data);
-                    setTimeLeft(300);
+                    setQrCodeGenerated(true)
                   }}
                 >
                   Gerar QR Code
@@ -271,6 +272,7 @@ const CheckoutPreviewAndEdit = ({ data, handleFinalize, qrCodeGenerated, qrCodeI
               </Box>
             ) : (
               <Box sx={{ textAlign: 'center', mt: 4 }}>
+
                 <Box
                   sx={{
                     display: 'flex',
@@ -287,12 +289,18 @@ const CheckoutPreviewAndEdit = ({ data, handleFinalize, qrCodeGenerated, qrCodeI
                       position: 'relative',
                     }}
                   >
-                    <Image
-                      src={`data:image/png;base64,${qrCodeImage}`}
-                      alt="QR Code PIX"
-                      layout="fill"
-                      style={{ objectFit: 'cover' }}
-                    />
+                    {qrCodeImage ? (
+                      <Image
+                        src={`data:image/png;base64,${qrCodeImage}`}
+                        alt="QR Code PIX"
+                        layout="fill"
+                        style={{ objectFit: 'cover' }}
+                      />
+                    ) : (
+                      <Box sx={{ width: '100%', height: '270px', display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
+                        <Loading />
+                      </Box>
+                    )}
                   </Box>
                 </Box>
 
@@ -300,12 +308,24 @@ const CheckoutPreviewAndEdit = ({ data, handleFinalize, qrCodeGenerated, qrCodeI
                   Valor a pagar: <strong>{Intl.NumberFormat('pt-BR', {
                     style: 'currency',
                     currency: 'BRL'
-                  }).format(data.total_price)}</strong>
+                  }).format(data.total_price )}</strong>
                 </Typography>
 
-                <Typography sx={{ mb: 1, color: theme.palette.secondary.main, fontSize: { lg: 17, md: 17, sm: 13, xs: 10 } }}>
-                  Pix cola: <strong>{pixCola}</strong>
+                <Typography sx={{ mb: 1, color: theme.palette.secondary.main }}>
+                  Pix cola:
                 </Typography>
+                <Typography
+                  sx={{
+                    mb: 1,
+                    color: theme.palette.secondary.main,
+                    fontWeight: 600,
+                    wordBreak: 'break-word',  // Faz o texto quebrar quando atingir o limite da tela
+                    overflowWrap: 'break-word', // Para garantir que palavras longas que não podem ser quebradas, também quebrem
+                  }}
+                >
+                  {pixCola}
+                </Typography>
+
                 <Button
                   variant="contained"
                   color="primary"
@@ -317,7 +337,7 @@ const CheckoutPreviewAndEdit = ({ data, handleFinalize, qrCodeGenerated, qrCodeI
                   Copiar Pix cola
                 </Button>
                 <Typography variant="body2" color="error" sx={{ mt: 2, fontWeight: 'bold' }}>
-                  O QR Code expira em 5 minutos.
+                  O QR Code expira em 8 minutos.
                 </Typography>
                 <Typography variant="body2" sx={{ mt: 1, color: theme.palette.primary.main, fontWeight: 'bold' }}>
                   Tempo restante: {Math.floor(timeLeft / 60)}:{timeLeft % 60 < 10 ? '0' : ''}
@@ -369,10 +389,17 @@ const CheckoutPreviewAndEdit = ({ data, handleFinalize, qrCodeGenerated, qrCodeI
                 <strong>Tipo do pagamento:</strong>{" "}
                 {data.payment}
               </Typography>
-
+              <Typography variant="h6" color="secondary">
+                <strong>Troco:</strong>{" "}
+                {`${Number(data?.troco).toLocaleString("pt-BR", { style: "currency", currency: "BRL" })} - ${Number(data?.total_price).toLocaleString("pt-BR", { style: "currency", currency: "BRL" })}`} = {Number(data?.troco - data?.total_price).toLocaleString("pt-BR", { style: "currency", currency: "BRL" })}
+              </Typography>
+              <Typography variant="h6" color="secondary">
+                <strong>Frete:</strong>{" "}
+                {`${Number(2).toLocaleString("pt-BR", { style: "currency", currency: "BRL" })}`}
+              </Typography>
               <Typography variant="h6" color="secondary">
                 <strong>Total:</strong>{" "}
-                {Number(data?.total_price).toLocaleString("pt-BR", { style: "currency", currency: "BRL" })}
+                {Number(data?.total_price + 2).toLocaleString("pt-BR", { style: "currency", currency: "BRL" })}
               </Typography>
             </Grid>
 
@@ -484,6 +511,34 @@ const CheckoutPreviewAndEdit = ({ data, handleFinalize, qrCodeGenerated, qrCodeI
             )}
           </Formik>
         </Grid> */}
+
+            <Grid item xs={12}>
+              <Grid container spacing={2} alignItems="center" justifyContent="flex-start">
+                <Grid item>
+                  <Button variant="contained" color="primary" onClick={() => handleFinalize(data)} sx={{
+                    fontSize: 11
+                  }}>
+                    Finalizar Compra
+                  </Button>
+                </Grid>
+
+                <Grid item>
+                  <Button
+                    variant="contained"
+                    color="success"
+                    component="a"
+                    href={`https://wa.me/558592985693?text=${generateWhatsAppMessage()}`}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    sx={{
+                      fontSize: 11
+                    }}
+                  >
+                    Enviar para WhatsApp
+                  </Button>
+                </Grid>
+              </Grid>
+            </Grid>
           </Grid>
         )
       }
@@ -651,8 +706,8 @@ const CheckoutPreviewAndEdit = ({ data, handleFinalize, qrCodeGenerated, qrCodeI
 
   return loading ? <Loading /> : (
     <Box sx={{ p: 0 }}>
-      {/* {renderComponent()} */}
-      <Grid container spacing={2}>
+      {renderComponent()}
+      {/* <Grid container spacing={2}>
         <Grid item xs={12} sm={6}>
           <Typography variant="body1" sx={{ color: theme.palette.secondary.main }}>
             <strong>Nome:</strong> {data.name}
@@ -837,7 +892,7 @@ const CheckoutPreviewAndEdit = ({ data, handleFinalize, qrCodeGenerated, qrCodeI
             </Grid>
           </Grid>
         )}
-      </Grid>
+      </Grid> */}
     </Box>
   );
 };

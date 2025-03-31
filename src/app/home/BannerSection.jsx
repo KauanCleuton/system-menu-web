@@ -47,8 +47,9 @@ const BannerSection = () => {
                                 overflow: "hidden",
                             }}
                         >
-                            {banners.length > 0 && <BannerCard data={banners} />}
-                        </Box>
+                            {/* {banners.length > 0 && <BannerCard data={banners} />} */}
+                            <BannerCard data={banners} />
+                            </Box>
                     </Grid>
                 </Grid>
             </Container>

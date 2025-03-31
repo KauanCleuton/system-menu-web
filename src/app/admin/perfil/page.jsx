@@ -19,6 +19,7 @@ import {
 } from "@mui/material";
 import { AccountCircle, PhotoCamera } from "@mui/icons-material";
 import { Field, Form, Formik } from "formik";
+import { extractDataFromSession } from "@/utils/auth";
 
 const StyledBox = styled(Box)({
     display: 'flex',
@@ -60,9 +61,9 @@ const adminSv = new AdminService();
 
 const Page = () => {
     const theme = useTheme();
-    const id = useSelector(state => state.login.data.id);
+    const data = extractDataFromSession();
 
-    console.log(id, '9293912391293923921392')
+    console.log(data, '9293912391293923921392')
     const dispatch = useDispatch();
     const [profileImage, setProfileImage] = useState(null);
     const [initialValues, setInitialValues] = useState({
@@ -75,12 +76,12 @@ const Page = () => {
             neighborhood: '',
             city: '',
             complement: '',
-            cep: ''
+            postalCode: ''
         }
     });
     const fetchData = async () => {
         try {
-            const userData = await adminSv.getUserDataById(id);
+            const userData = await adminSv.getUserDataById(data.id);
             console.log(userData, '991293923929')
             setInitialValues({
                 name: userData.name || '',
@@ -92,7 +93,7 @@ const Page = () => {
                     neighborhood: userData.address?.neighborhood || '',
                     city: userData.address?.city || '',
                     complement: userData.address?.complement || '',
-                    cep: userData.address?.cep || ''
+                    postalCode: userData.address?.postalCode || ''
                 }
             });
         } catch (error) {
@@ -100,25 +101,33 @@ const Page = () => {
         }
     };
 
-    useEffect(() => {
-
-        fetchData();
-    }, [id]);
-
-    const handleImageUpload = (event) => {
+    const handleImageUpload = async (event) => {
         const file = event.target.files[0];
         if (file) {
             const reader = new FileReader();
-            reader.onloadend = () => {
-                setProfileImage(reader.result);
-                setInitialValues((state) => ({
-                    ...state,
-                    photo_url: reader.result.split(',')[1]
-                }));
+            reader.onloadend = async () => {
+                setProfileImage(reader.result);  
+
+                
+                const payload = { file_url: reader.result };
+
+                try {
+                    
+                    await adminSv.putUpdateUserPhoto(payload);
+                    console.log("Foto atualizada com sucesso!");
+                } catch (error) {
+                    console.error("Erro ao atualizar foto:", error);
+                }
             };
             reader.readAsDataURL(file);
         }
     };
+
+    useEffect(() => {
+
+        fetchData();
+    }, [data.id]);
+
 
     const validate = (values) => {
         const errors = {};
@@ -140,13 +149,14 @@ const Page = () => {
         neighborhood: 'Bairro',
         city: 'Cidade',
         complement: 'Complemento',
-        cep: 'CEP'
+        postalCode: 'CEP'
     };
 
     const handleSubmit = async (values) => {
         try {
-            const response = await adminSv.putUpdateUser(id, values);
+            const response = await adminSv.putUpdateUser(values);
             dispatch({ type: SET_ALERT, message: 'Informações atualizadas com sucesso!', severity: 'success', icon: 'user' });
+            window.onload()
         } catch (error) {
             dispatch({ type: SET_ALERT, message: 'Erro ao atualizar dados!', severity: 'error', icon: 'user' });
             console.error(error);
@@ -174,7 +184,7 @@ const Page = () => {
                                     {profileImage ? (
                                         <StyledAvatar src={profileImage} />
                                     ) : (
-                                        <StyledAccountCircle sx={{ color: theme.palette.primary.main }} />
+                                        initialValues.photo_url ? <StyledAvatar src={initialValues.photo_url} /> : <StyledAccountCircle sx={{ color: theme.palette.primary.main }} />
                                     )}
                                     <label htmlFor="icon-button-file">
                                         <Input accept="image/*" id="icon-button-file" type="file" onChange={handleImageUpload} />
@@ -202,7 +212,28 @@ const Page = () => {
                                         <Field name="name">
                                             {({ field, form }) => (
                                                 <FormControl fullWidth sx={{ mt: 1 }}>
-                                                    <TextField {...field} id="name" variant="outlined" />
+                                                    <TextField {...field} id="name" variant="outlined" sx={{
+                                                        "& .MuiInputBase-input": {
+                                                            color: theme.palette.secondary.main
+                                                        },
+                                                        "& .MuiFormLabel-root": {
+                                                            color: theme.palette.secondary.main
+                                                        },
+                                                        "& .MuiOutlinedInput-root": {
+                                                            "& fieldset": {
+                                                                borderColor: theme.palette.primary.main
+                                                            },
+                                                            "&:hover fieldset": {
+                                                                borderColor: theme.palette.primary.dark
+                                                            },
+                                                            "&.Mui-focused fieldset": {
+                                                                borderColor: theme.palette.primary.main
+                                                            }
+                                                        },
+                                                        "& .MuiFormHelperText-root": {
+                                                            color: theme.palette.primary.main
+                                                        }
+                                                    }} />
                                                     {form.errors.name && form.touched.name && (
                                                         <FormHelperText error>{form.errors.name}</FormHelperText>
                                                     )}
@@ -215,7 +246,28 @@ const Page = () => {
                                         <Field name="phone">
                                             {({ field, form }) => (
                                                 <FormControl fullWidth sx={{ mt: 1 }}>
-                                                    <TextField {...field} id="phone" variant="outlined" />
+                                                    <TextField {...field} id="phone" variant="outlined" sx={{
+                                                        "& .MuiInputBase-input": {
+                                                            color: theme.palette.secondary.main
+                                                        },
+                                                        "& .MuiFormLabel-root": {
+                                                            color: theme.palette.secondary.main
+                                                        },
+                                                        "& .MuiOutlinedInput-root": {
+                                                            "& fieldset": {
+                                                                borderColor: theme.palette.primary.main
+                                                            },
+                                                            "&:hover fieldset": {
+                                                                borderColor: theme.palette.primary.dark
+                                                            },
+                                                            "&.Mui-focused fieldset": {
+                                                                borderColor: theme.palette.primary.main
+                                                            }
+                                                        },
+                                                        "& .MuiFormHelperText-root": {
+                                                            color: theme.palette.primary.main
+                                                        }
+                                                    }} />
                                                     {form.errors.phone && form.touched.phone && (
                                                         <FormHelperText error>{form.errors.phone}</FormHelperText>
                                                     )}
@@ -229,7 +281,28 @@ const Page = () => {
                                             <Field name={`address.${fieldName}`}>
                                                 {({ field, form }) => (
                                                     <FormControl fullWidth sx={{ mt: 1 }}>
-                                                        <TextField {...field} id={fieldName} variant="outlined" />
+                                                        <TextField {...field} id={fieldName} variant="outlined" sx={{
+                                                            "& .MuiInputBase-input": {
+                                                                color: theme.palette.secondary.main
+                                                            },
+                                                            "& .MuiFormLabel-root": {
+                                                                color: theme.palette.secondary.main
+                                                            },
+                                                            "& .MuiOutlinedInput-root": {
+                                                                "& fieldset": {
+                                                                    borderColor: theme.palette.primary.main
+                                                                },
+                                                                "&:hover fieldset": {
+                                                                    borderColor: theme.palette.primary.dark
+                                                                },
+                                                                "&.Mui-focused fieldset": {
+                                                                    borderColor: theme.palette.primary.main
+                                                                }
+                                                            },
+                                                            "& .MuiFormHelperText-root": {
+                                                                color: theme.palette.primary.main
+                                                            }
+                                                        }} />
                                                         {form.errors.address && form.errors.address[fieldName] && form.touched.address && (
                                                             <FormHelperText error>{form.errors.address[fieldName]}</FormHelperText>
                                                         )}

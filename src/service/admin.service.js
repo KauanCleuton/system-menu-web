@@ -36,13 +36,13 @@ class AdminService extends ServiceBase {
         return this.put(`/user/back-admin/${id}`)
     }
     putUpdateUserPhoto(payload) {
-        return this.put("/user/photo", payload)
+        return this.put("/user/update-foto", payload)
     }
     putUpdateUserPassword(id) {
         return this.put(`/user/${id}/password`)
     }
-    putUpdateUser(id, payload) {
-        return this.put(`/user/${id}`, payload)
+    putUpdateUser(payload) {
+        return this.put(`/user`, payload)
     }
     putUpdateUserAdmin(id, payload) {
         return this.put(`/admin/${id}`, payload)

@@ -63,8 +63,8 @@ const TopSection = () => {
                                     }}>
                                         <Box
                                             sx={{
-                                                width: { lg: '170px', md: "140px", sm: '120px', xs: '110px' },
-                                                height: { lg: '170px', md: "140px", sm: '120px', xs: '110px' },
+                                                width: { lg: '200px', md: "140px", sm: '120px', xs: '110px' },
+                                                height: { lg: '190px', md: "140px", sm: '120px', xs: '110px' },
                                                 position: "relative",
                                                 borderRadius:'100%'
                                             }}
@@ -72,7 +72,7 @@ const TopSection = () => {
                                             <Image
                                                 alt="Image do hamburguer"
                                                 src={ logo ? logo : theme.palette.primary.logo}
-                                                style={{ cursor: 'pointer', objectFit: "cover", borderRadius: "50%" }}
+                                                style={{ cursor: 'pointer', objectFit: "contain", borderRadius: "50%" }}
                                                 layout="fill"
                                             />
                                         </Box>
@@ -130,7 +130,7 @@ const TopSection = () => {
 
                                                     }}
                                                 >
-                                                    Seg á Dom - 18:00 as 22:00
+                                                     Todos os dias – 17h às 00h
                                                 </Typography>
                                         </Box>
                                     </Grid>
