@@ -92,7 +92,7 @@ const Checkout = () => {
       address: values,
       phone: phoneNumber,
       quantity: quantity,
-      total_price: total_price,
+      total_price: total_price + 2,
       orderItems: items.map((item) => ({
         product_id: item.idProducts,
         quantity: item.quantity,
