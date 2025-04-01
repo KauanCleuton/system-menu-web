@@ -106,13 +106,13 @@ const Page = () => {
         if (file) {
             const reader = new FileReader();
             reader.onloadend = async () => {
-                setProfileImage(reader.result);  
+                setProfileImage(reader.result);
 
-                
+
                 const payload = { file_url: reader.result };
 
                 try {
-                    
+
                     await adminSv.putUpdateUserPhoto(payload);
                     console.log("Foto atualizada com sucesso!");
                 } catch (error) {
@@ -163,128 +163,60 @@ const Page = () => {
         }
     };
 
+
     return (
         <Box sx={{ width: '100%', height: '100%', py: 15 }}>
             <Container fixed sx={{
                 paddingBottom: 10
             }}>
-            <Grid container spacing={'36px'}>
-                <Grid item xs={12}>
-                    <Typography variant="h3" sx={{ fontSize: '24px', fontWeight: 700, color: theme.palette.primary.main }}>
-                        Perfil
-                    </Typography>
-                </Grid>
-                <Grid item xs={12}>
-                    <Grid container>
-                        <Grid item xs={12}>
-                            <Typography variant="h3" sx={{ fontSize: '19.69px', fontWeight: 400, color: theme.palette.primary.main }}>
-                                Foto
-                            </Typography>
-                        </Grid>
-                        <Grid item xs={12}>
-                            <Box sx={{ width: "100%", display: "flex", justifyContent: "center" }}>
-                                <Badge>
-                                    {profileImage ? (
-                                        <StyledAvatar src={profileImage} />
-                                    ) : (
-                                        profileImage ? <StyledAvatar src={profileImage} /> : <StyledAccountCircle sx={{ color: theme.palette.primary.main }} />
-                                    )}
-                                    <label htmlFor="icon-button-file">
-                                        <Input accept="image/*" id="icon-button-file" type="file" onChange={handleImageUpload} />
-                                        <BadgeIcon sx={{ color: theme.palette.primary.main }} aria-label="upload picture" component="span">
-                                            <PhotoCamera />
-                                        </BadgeIcon>
-                                    </label>
-                                </Badge>
-                            </Box>
+                <Grid container spacing={'36px'}>
+                    <Grid item xs={12}>
+                        <Typography variant="h3" sx={{ fontSize: '24px', fontWeight: 700, color: theme.palette.primary.main }}>
+                            Perfil
+                        </Typography>
+                    </Grid>
+                    <Grid item xs={12}>
+                        <Grid container>
+                            <Grid item xs={12}>
+                                <Typography variant="h3" sx={{ fontSize: '19.69px', fontWeight: 400, color: theme.palette.primary.main }}>
+                                    Foto
+                                </Typography>
+                            </Grid>
+                            <Grid item xs={12}>
+                                <Box sx={{ width: "100%", display: "flex", justifyContent: "center" }}>
+                                    <Badge>
+                                        {profileImage ? (
+                                            <StyledAvatar src={profileImage} />
+                                        ) : (
+                                            profileImage ? <StyledAvatar src={profileImage} /> : <StyledAccountCircle sx={{ color: theme.palette.primary.main }} />
+                                        )}
+                                        <label htmlFor="icon-button-file">
+                                            <Input accept="image/*" id="icon-button-file" type="file" onChange={handleImageUpload} />
+                                            <BadgeIcon sx={{ color: theme.palette.primary.main }} aria-label="upload picture" component="span">
+                                                <PhotoCamera />
+                                            </BadgeIcon>
+                                        </label>
+                                    </Badge>
+                                </Box>
+                            </Grid>
                         </Grid>
                     </Grid>
-                </Grid>
-                <Grid item xs={12}>
-                    <Formik
-                        enableReinitialize
-                        initialValues={initialValues}
-                        onSubmit={handleSubmit}
-                        validate={validate}
-                    >
-                        {() => (
-                            <Form>
-                                <Grid container spacing={2}>
-                                    <Grid item xs={12} lg={6}>
-                                        <InputLabel htmlFor="name">Nome</InputLabel>
-                                        <Field name="name">
-                                            {({ field, form }) => (
-                                                <FormControl fullWidth sx={{ mt: 1 }}>
-                                                    <TextField {...field} id="name" variant="outlined" sx={{
-                                                        "& .MuiInputBase-input": {
-                                                            color: theme.palette.secondary.main
-                                                        },
-                                                        "& .MuiFormLabel-root": {
-                                                            color: theme.palette.secondary.main
-                                                        },
-                                                        "& .MuiOutlinedInput-root": {
-                                                            "& fieldset": {
-                                                                borderColor: theme.palette.primary.main
-                                                            },
-                                                            "&:hover fieldset": {
-                                                                borderColor: theme.palette.primary.dark
-                                                            },
-                                                            "&.Mui-focused fieldset": {
-                                                                borderColor: theme.palette.primary.main
-                                                            }
-                                                        },
-                                                        "& .MuiFormHelperText-root": {
-                                                            color: theme.palette.primary.main
-                                                        }
-                                                    }} />
-                                                    {form.errors.name && form.touched.name && (
-                                                        <FormHelperText error>{form.errors.name}</FormHelperText>
-                                                    )}
-                                                </FormControl>
-                                            )}
-                                        </Field>
-                                    </Grid>
-                                    <Grid item xs={12} lg={6}>
-                                        <InputLabel htmlFor="phone">Telefone</InputLabel>
-                                        <Field name="phone">
-                                            {({ field, form }) => (
-                                                <FormControl fullWidth sx={{ mt: 1 }}>
-                                                    <TextField {...field} id="phone" variant="outlined" sx={{
-                                                        "& .MuiInputBase-input": {
-                                                            color: theme.palette.secondary.main
-                                                        },
-                                                        "& .MuiFormLabel-root": {
-                                                            color: theme.palette.secondary.main
-                                                        },
-                                                        "& .MuiOutlinedInput-root": {
-                                                            "& fieldset": {
-                                                                borderColor: theme.palette.primary.main
-                                                            },
-                                                            "&:hover fieldset": {
-                                                                borderColor: theme.palette.primary.dark
-                                                            },
-                                                            "&.Mui-focused fieldset": {
-                                                                borderColor: theme.palette.primary.main
-                                                            }
-                                                        },
-                                                        "& .MuiFormHelperText-root": {
-                                                            color: theme.palette.primary.main
-                                                        }
-                                                    }} />
-                                                    {form.errors.phone && form.touched.phone && (
-                                                        <FormHelperText error>{form.errors.phone}</FormHelperText>
-                                                    )}
-                                                </FormControl>
-                                            )}
-                                        </Field>
-                                    </Grid>
-                                    {Object.keys(fieldLabels).map((fieldName) => (
-                                        <Grid item xs={12} lg={4} key={fieldName}>
-                                            <InputLabel htmlFor={fieldName}>{fieldLabels[fieldName]}</InputLabel>
-                                            <Field name={`address.${fieldName}`}>
+                    <Grid item xs={12}>
+                        <Formik
+                            enableReinitialize
+                            initialValues={initialValues}
+                            onSubmit={handleSubmit}
+                            validate={validate}
+                        >
+                            {() => (
+                                <Form>
+                                    <Grid container spacing={2}>
+                                        <Grid item xs={12} lg={6}>
+                                            <InputLabel htmlFor="name">Nome</InputLabel>
+                                            <Field name="name">
                                                 {({ field, form }) => (
                                                     <FormControl fullWidth sx={{ mt: 1 }}>
-                                                        <TextField {...field} id={fieldName} variant="outlined" sx={{
+                                                        <TextField {...field} id="name" variant="outlined" sx={{
                                                             "& .MuiInputBase-input": {
                                                                 color: theme.palette.secondary.main
                                                             },
@@ -306,26 +238,97 @@ const Page = () => {
                                                                 color: theme.palette.primary.main
                                                             }
                                                         }} />
-                                                        {form.errors.address && form.errors.address[fieldName] && form.touched.address && (
-                                                            <FormHelperText error>{form.errors.address[fieldName]}</FormHelperText>
+                                                        {form.errors.name && form.touched.name && (
+                                                            <FormHelperText error>{form.errors.name}</FormHelperText>
                                                         )}
                                                     </FormControl>
                                                 )}
                                             </Field>
                                         </Grid>
-                                    ))}
-                                </Grid>
-                                <Box sx={{ display: "flex", justifyContent: "flex-end", mt: 3 }}>
-                                    <Button variant="text">Cancelar</Button>
-                                    <Button variant="contained" type="submit" sx={{ ml: 2 }}>
-                                        Enviar
-                                    </Button>
-                                </Box>
-                            </Form>
-                        )}
-                    </Formik>
+                                        <Grid item xs={12} lg={6}>
+                                            <InputLabel htmlFor="phone">Telefone</InputLabel>
+                                            <Field name="phone">
+                                                {({ field, form }) => (
+                                                    <FormControl fullWidth sx={{ mt: 1 }}>
+                                                        <TextField {...field} id="phone" variant="outlined" sx={{
+                                                            "& .MuiInputBase-input": {
+                                                                color: theme.palette.secondary.main
+                                                            },
+                                                            "& .MuiFormLabel-root": {
+                                                                color: theme.palette.secondary.main
+                                                            },
+                                                            "& .MuiOutlinedInput-root": {
+                                                                "& fieldset": {
+                                                                    borderColor: theme.palette.primary.main
+                                                                },
+                                                                "&:hover fieldset": {
+                                                                    borderColor: theme.palette.primary.dark
+                                                                },
+                                                                "&.Mui-focused fieldset": {
+                                                                    borderColor: theme.palette.primary.main
+                                                                }
+                                                            },
+                                                            "& .MuiFormHelperText-root": {
+                                                                color: theme.palette.primary.main
+                                                            }
+                                                        }} />
+                                                        {form.errors.phone && form.touched.phone && (
+                                                            <FormHelperText error>{form.errors.phone}</FormHelperText>
+                                                        )}
+                                                    </FormControl>
+                                                )}
+                                            </Field>
+                                        </Grid>
+                                        {Object.keys(fieldLabels).map((fieldName) => (
+                                            <Grid item xs={12} lg={4} key={fieldName}>
+                                                <InputLabel htmlFor={fieldName}>{fieldLabels[fieldName]}</InputLabel>
+                                                <Field name={`address.${fieldName}`}>
+                                                    {({ field, form }) => (
+                                                        <FormControl fullWidth sx={{ mt: 1 }}>
+                                                            <TextField {...field} id={fieldName} variant="outlined" sx={{
+                                                                "& .MuiInputBase-input": {
+                                                                    color: theme.palette.secondary.main
+                                                                },
+                                                                "& .MuiFormLabel-root": {
+                                                                    color: theme.palette.secondary.main
+                                                                },
+                                                                "& .MuiOutlinedInput-root": {
+                                                                    "& fieldset": {
+                                                                        borderColor: theme.palette.primary.main
+                                                                    },
+                                                                    "&:hover fieldset": {
+                                                                        borderColor: theme.palette.primary.dark
+                                                                    },
+                                                                    "&.Mui-focused fieldset": {
+                                                                        borderColor: theme.palette.primary.main
+                                                                    }
+                                                                },
+                                                                "& .MuiFormHelperText-root": {
+                                                                    color: theme.palette.primary.main
+                                                                }
+                                                            }} />
+                                                            {form.errors.address && form.errors.address[fieldName] && form.touched.address && (
+                                                                <FormHelperText error>{form.errors.address[fieldName]}</FormHelperText>
+                                                            )}
+                                                        </FormControl>
+                                                    )}
+                                                </Field>
+                                            </Grid>
+                                        ))}
+                                    </Grid>
+                                    <Box sx={{ display: "flex", justifyContent: "flex-end", mt: 3 }}>
+                                        <Button variant="text" onClick={() => window.location.reload()}>
+                                            Cancelar
+                                        </Button>
+                                        <Button variant="contained" type="submit" sx={{ ml: 2 }}>
+                                            Enviar
+                                        </Button>
+                                    </Box>
+                                </Form>
+                            )}
+                        </Formik>
+                    </Grid>
                 </Grid>
-            </Grid>
             </Container>
         </Box>
     );
