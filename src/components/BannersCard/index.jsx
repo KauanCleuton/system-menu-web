@@ -49,7 +49,12 @@ export default function BannerCard({ data }) {
                                     backgroundColor: theme.palette.secondary.main,
                                     alignItems: 'center',
                                     justifyContent: 'center',
-                                    px: 2,
+                                    px: {
+                                        xs: 0,
+                                        lg: 2,
+                                        md: 2,
+                                        sm: 0
+                                    },
                                     py: 2
                                 }}
                             >
