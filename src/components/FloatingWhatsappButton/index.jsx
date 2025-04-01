@@ -16,7 +16,12 @@ function FloatingWhatsAppButton() {
         target="_blank"
         sx={{
           position: "fixed",
-          bottom: 580,
+          bottom: {
+            xs: 400,
+            sm: 400,
+            md: 380,
+            lg: 380
+          },
           right: 20,
           backgroundColor: "#25D366",
           color: "white",

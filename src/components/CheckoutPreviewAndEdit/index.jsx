@@ -228,6 +228,8 @@ const CheckoutPreviewAndEdit = ({ data, handleFinalize, qrCodeImage, pixCola }) 
   }, [qrCodeGenerated, timeLeft, navigate]);
 
 
+  const taxaEntrega = data.total_price < 15 ? 2.00 : 0;
+  const valorFinal = data.total_price + taxaEntrega;
 
   const renderComponent = () => {
     switch (data.payment) {
@@ -252,6 +254,10 @@ const CheckoutPreviewAndEdit = ({ data, handleFinalize, qrCodeImage, pixCola }) 
               <Typography variant="body1" sx={{ color: theme.palette.secondary.main }}>
                 Clique no botão abaixo para gerar o QR Code do PIX. Você terá até 8 minutos para realizar o pagamento.
               </Typography>
+              <Typography variant="body2" sx={{ color: theme.palette.error.main, fontWeight: 'bold', mt: 1 }}>
+                Para pedidos com valor menor que R$ 15,00 será cobrada uma taxa de entrega adicional.
+              </Typography>
+
             </Box>
 
             {!qrCodeGenerated ? (
@@ -304,12 +310,18 @@ const CheckoutPreviewAndEdit = ({ data, handleFinalize, qrCodeImage, pixCola }) 
                   </Box>
                 </Box>
 
+
                 <Typography variant="body1" sx={{ mb: 1, color: theme.palette.secondary.main }}>
                   Valor a pagar: <strong>{Intl.NumberFormat('pt-BR', {
                     style: 'currency',
                     currency: 'BRL'
-                  }).format(data.total_price )}</strong>
+                  }).format(valorFinal)}</strong>
+                  {taxaEntrega > 0 && ` (inclui taxa de entrega de ${Intl.NumberFormat('pt-BR', {
+                    style: 'currency',
+                    currency: 'BRL'
+                  }).format(taxaEntrega)})`}
                 </Typography>
+
 
                 <Typography sx={{ mb: 1, color: theme.palette.secondary.main }}>
                   Pix cola:

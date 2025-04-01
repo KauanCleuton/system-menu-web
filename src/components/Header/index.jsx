@@ -130,18 +130,18 @@ const Header = () => {
                                     }}>
                                         {isLoggedIn() ? (
                                             <>
-                                                <IconButton onClick={handleOpenMenu} sx={{}}>
+                                                <IconButton onClick={handleOpenMenu} >
                                                     {userData?.photo_url ? (
                                                         // <StyledAvatar src={userData.photo_url} sx={{width: 40, height: 40, mr: 1}} />
                                                         <Avatar
                                                             src={userData?.photo_url}
                                                             alt={userData?.name || "User Avatar"}
-                                                            sx={{ width: 55, height: 55, mr: 1,  border: trigger && `2px solid ${theme.palette.primary.main}` }}
+                                                            sx={{ width: {xs: 45, sm: 45, md: 50, lg: 50}, height: {xs: 45, sm: 45, md: 50, lg: 50}, mr: 1,  border: trigger && `2px solid ${theme.palette.primary.main}` }}
                                                         />
                                                     ) : (
                                                         <Avatar
                                                             alt={userData?.name || "User Avatar"}
-                                                            sx={{ width: 55, height: 55, mr: 1,  border: trigger && `2px solid ${theme.palette.primary.main}`  }}
+                                                            sx={{ width: {xs: 45, sm: 45, md: 50, lg: 50}, height: {xs: 45, sm: 45, md: 50, lg: 50}, mr: 1,  border: trigger && `2px solid ${theme.palette.primary.main}`  }}
                                                         >
                                                         {userData?.name ? userData.name.charAt(0).toUpperCase() : null}
                                                         </Avatar>
