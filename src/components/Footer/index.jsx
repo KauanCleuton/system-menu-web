@@ -139,11 +139,14 @@ const Footer = () => {
                             <Typography variant="body2" sx={{ fontSize: { lg: '0.75rem', xs: '0.60rem' }, color: 'primary.main' }}>
                                 {updateDateYearCopyright()}
                                 <br />
-                                <Link href="https://instagram.com/kauan.cleuton" target="_blank" passHref style={{ color: 'primary.main', textDecoration: 'none', fontWeight: 'bold' }}>
-                                    Desenvolvido por Kauan Cleuton 
+                                <Link href="https://instagram.com/kauan.cleuton" target="_blank" passHref style={{ color: 'primary.main', textDecoration: 'none', fontWeight: 'bold', marginRight: 3 }}>
+                                    Desenvolvido por Kauan Cleuton
+                                </Link>
+                                <Link  href="#" passHref style={{ color: 'primary.main', textDecoration: 'none', fontWeight: 'bold', marginRight: 3 }}>
+                                    &
                                 </Link>
                                 <Link href="https://instagram.com/davi.rodrigues3" target="_blank" passHref style={{ color: 'primary.main', textDecoration: 'none', fontWeight: 'bold' }}>
-                                   e Davi Rodrigues
+                                    Davi Rodrigues
                                 </Link>
                             </Typography>
                         </Box>

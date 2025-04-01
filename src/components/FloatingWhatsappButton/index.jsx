@@ -17,7 +17,7 @@ function FloatingWhatsAppButton() {
         sx={{
           position: "fixed",
           bottom: {
-            xs: 400,
+            xs: 450,
             sm: 400,
             md: 380,
             lg: 380

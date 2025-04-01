@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { AppBar, Toolbar, IconButton, Grid, Box, Container, Menu, MenuItem, Avatar, useScrollTrigger, Modal, Typography, useTheme,styled, } from '@mui/material';
+import { AppBar, Toolbar, IconButton, Grid, Box, Container, Menu, MenuItem, Avatar, useScrollTrigger, Modal, Typography, useTheme,styled, useMediaQuery, } from '@mui/material';
 import { useDispatch, useSelector } from 'react-redux';
 import BadgeCart from '../BadgeCart';
 import { usePathname, useRouter } from 'next/navigation';
@@ -38,7 +38,7 @@ const Header = () => {
     };
     const [userData, setUserData] = useState({})
     const handleClose = () => process.env.NODE_ENV !== 'production' && console.log('teste2');
-
+    const isXs = useMediaQuery(theme.breakpoints.down("sm"));
     const handleLogout = () => {
         localStorage.removeItem("accessToken");
         localStorage.removeItem("refreshToken");
@@ -85,7 +85,7 @@ const Header = () => {
             </Modal>
             <Box>
                 <AppBar
-                    elevation={4}
+                    elevation={isXs ? 0 : 4 }
                     position={trigger ? 'fixed' : 'absolute'}
                     sx={{
                         width: '100vw',
@@ -108,8 +108,8 @@ const Header = () => {
                                             component={Link}
                                             href="/"
                                             sx={{
-                                                width: "67px",
-                                                height: '67px',
+                                                width: {xs: '50px', sm: '50px', md: '67px', lg: '67px'},
+                                                height: {xs: '50px', sm: '50px', md: '67px', lg: '67px'},
                                                 position: "relative"
                                             }}
                                         >
