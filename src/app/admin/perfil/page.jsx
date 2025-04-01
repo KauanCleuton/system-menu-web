@@ -105,13 +105,13 @@ const Page = () => {
         if (file) {
             const reader = new FileReader();
             reader.onloadend = async () => {
-                setProfileImage(reader.result);  
+                setProfileImage(reader.result);
 
-                
+
                 const payload = { file_url: reader.result };
 
                 try {
-                    
+
                     await adminSv.putUpdateUserPhoto(payload);
                     console.log("Foto atualizada com sucesso!");
                 } catch (error) {
@@ -152,7 +152,7 @@ const Page = () => {
     };
 
     const handleSubmit = async (values) => {
-        console.log(values,' 123123123')
+        console.log(values, ' 123123123')
         try {
             const response = await adminSv.putUpdateUser(values);
             dispatch({ type: SET_ALERT, message: 'Informações atualizadas com sucesso!', severity: 'success', icon: 'user' });
@@ -183,7 +183,7 @@ const Page = () => {
                                     {profileImage ? (
                                         <StyledAvatar src={profileImage} />
                                     ) : (
-                                       <StyledAccountCircle sx={{ color: theme.palette.primary.main }} />
+                                        <StyledAccountCircle sx={{ color: theme.palette.primary.main }} />
                                     )}
                                     <label htmlFor="icon-button-file">
                                         <Input accept="image/*" id="icon-button-file" type="file" onChange={handleImageUpload} />
@@ -312,7 +312,9 @@ const Page = () => {
                                     ))}
                                 </Grid>
                                 <Box sx={{ display: "flex", justifyContent: "flex-end", mt: 3 }}>
-                                    <Button variant="text">Cancelar</Button>
+                                    <Button variant="text" onClick={() => window.location.reload()}>
+                                        Cancelar
+                                    </Button>
                                     <Button variant="contained" type="submit" sx={{ ml: 2 }}>
                                         Enviar
                                     </Button>
