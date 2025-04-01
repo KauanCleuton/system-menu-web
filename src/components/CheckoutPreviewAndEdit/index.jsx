@@ -399,7 +399,7 @@ const CheckoutPreviewAndEdit = ({ data, handleFinalize, qrCodeImage, pixCola }) 
               </Typography>
               <Typography variant="h6" color="secondary">
                 <strong>Total:</strong>{" "}
-                {Number(data?.total_price + 2).toLocaleString("pt-BR", { style: "currency", currency: "BRL" })}
+                {Number(data?.total_price).toLocaleString("pt-BR", { style: "currency", currency: "BRL" })}
               </Typography>
             </Grid>
 
