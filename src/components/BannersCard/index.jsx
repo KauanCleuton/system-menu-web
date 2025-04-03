@@ -23,10 +23,10 @@ export default function BannerCard({ data }) {
     return (
         <Grid container>
             <Grid item xs={12}>
-                <Box sx={{ width: "100%", position: "relative" }}>
+                <Box sx={{ width: "100%", position: "relative", zIndex: 1  }}>
                     <Swiper
                         modules={[Pagination]}
-                        pagination={{ 
+                        pagination={{
                             clickable: true,
                             bulletStyle: {
                                 backgroundColor: theme.palette.text.primary
@@ -55,7 +55,7 @@ export default function BannerCard({ data }) {
                                         md: 2,
                                         sm: 0
                                     },
-                                    py: 2
+                                    py: 2,
                                 }}
                             >
                                 <Grid container justifyContent="flex-start" alignItems="center" spacing={0}>
@@ -77,7 +77,7 @@ export default function BannerCard({ data }) {
                                             <Image
                                                 src={logo || theme.palette.primary.logo}
                                                 layout="fill"
-                                                style={{ objectFit: 'contain'}}
+                                                style={{ objectFit: 'contain' }}
                                                 alt="Logo"
                                                 priority
                                             />
@@ -118,7 +118,7 @@ export default function BannerCard({ data }) {
                                         }}>
                                             <Typography variant="h1" sx={{
                                                 fontWeight: 900,
-                                                fontSize: { xs: '17px', md: '25px' },
+                                                fontSize: { xs: '20px', md: '25px' },
                                                 color: theme.palette.primary.main
                                             }}>
                                                 R$ 40,00
@@ -126,10 +126,10 @@ export default function BannerCard({ data }) {
                                         </Box>
 
                                         <Typography variant="h6" sx={{
-                                            mb: {xs: 1, md: 4},
+                                            mb: { xs: 1, md: 4 },
                                             fontSize: { xs: '12px', md: '1.1rem' },
-                                            maxWidth: 500,
-                                            lineHeight: 1.6
+                                            lineHeight: 1.6,
+                                            textAlign: {xs: 'center', sm: 'center', md: 'left', lg: 'left'}
                                         }}>
                                             Salgados frescos e crocantes feitos diariamente com ingredientes selecionados!
                                         </Typography>
@@ -141,12 +141,13 @@ export default function BannerCard({ data }) {
                                                 backgroundColor: theme.palette.primary.main,
                                                 color: theme.palette.primary.white,
                                                 borderRadius: '30px',
-                                                fontSize: '14px',
+                                                fontSize: { xs: '12px', md: '1.1rem' },
                                                 fontWeight: 700,
                                                 '&:hover': {
                                                     backgroundColor: theme.palette.background.white,
                                                 },
-                                                mb: 2
+                                                mb: 2,
+                                                mt: 1
                                             }}
                                         >
                                             PEÇA PELO WHATSAPP

@@ -7,9 +7,7 @@ function FloatingWhatsAppButton() {
   const message = "Olá! Gostaria de mais informações.";
 
   return (
-    <Tooltip title="Fale conosco:" arrow sx={{
-      zIndex: 1
-    }}>
+    <Tooltip title="Fale conosco:" arrow sx={{ zIndex: 9999 }}>
       <IconButton
         component={Link}
         href={`https://wa.me/${phoneNumber}?text=${encodeURIComponent(message)}`}
@@ -17,10 +15,10 @@ function FloatingWhatsAppButton() {
         sx={{
           position: "fixed",
           bottom: {
-            xs: 450,
+            xs: 420,
             sm: 400,
             md: 380,
-            lg: 380
+            lg: 380,
           },
           right: 20,
           backgroundColor: "#25D366",
@@ -31,6 +29,7 @@ function FloatingWhatsAppButton() {
           width: 56,
           height: 56,
           boxShadow: 3,
+          zIndex: 9999,
         }}
       >
         <WhatsApp fontSize="large" />

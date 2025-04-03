@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { Button, TextField, Box, Grid, Typography, useTheme } from '@mui/material';
 import { MoneyOff, CreditCard, AttachMoneyOutlined, PixOutlined, CreditCardOutlined } from '@mui/icons-material';
 
-const Pagamento = ({ onPaymentMethodChange, handleNext }) => {
+const Pagamento = ({ onPaymentMethodChange, handleNext, handleBack }) => {
   const [paymentMethod, setPaymentMethod] = useState('');
   const [troco, setTroco] = useState('');
 
@@ -93,16 +93,57 @@ const Pagamento = ({ onPaymentMethodChange, handleNext }) => {
           </Button>
         </Grid>
 
+        {paymentMethod === 'Dinheiro' && (
+          <Grid item xs={12} >
+            <TextField
+              label="Troco"
+              type="number"
+              value={troco}
+              sx={{
+                "& .MuiInputBase-input": {
+                  color: theme.palette.secondary.main
+                },
+                "& .MuiFormLabel-root": {
+                  color: theme.palette.secondary.main
+                },
+                "& .MuiFormHelperText-root": {
+                  color: theme.palette.primary.main // Cor do texto de ajuda
+                }
+              }}
+              onChange={handleTrocoChange}
+              fullWidth
+              margin="normal"
+            />
+          </Grid>
+        )}
+        <Grid item xs={12} >
+          <Box sx={{
+            width: "100%",
+            height: '100%',
+            display: 'flex',
+            justifyContent: 'space-between'
+          }}>
+            <Button
+              variant="contained"
+              color="primary"
+              onClick={handleBack}
+              sx={{ mt: 2 }}
+            >
+              Voltar
+            </Button>
+            <Button
+              variant="contained"
+              color="primary"
+              onClick={handleNext}
+              sx={{ mt: 2 }}
+              disabled={!isNextButtonEnabled()}
+            >
+              Próximo
+            </Button>
+          </Box>
+        </Grid>
       </Grid>
-      <Button
-        variant="contained"
-        color="primary"
-        onClick={handleNext}
-        sx={{ mt: 2 }}
-        disabled={!isNextButtonEnabled()}
-      >
-        Próximo
-      </Button>
+
     </Box>
   );
 };

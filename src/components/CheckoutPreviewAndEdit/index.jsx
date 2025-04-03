@@ -228,8 +228,12 @@ const CheckoutPreviewAndEdit = ({ data, handleFinalize, qrCodeImage, pixCola }) 
   }, [qrCodeGenerated, timeLeft, navigate]);
 
 
+
   const taxaEntrega = data.total_price < 15 ? 2.00 : 0;
-  const valorFinal = data.total_price + taxaEntrega;
+  const valorFinal = Number(data.total_price) + Number(taxaEntrega);
+
+
+
 
   const renderComponent = () => {
     switch (data.payment) {
@@ -401,17 +405,19 @@ const CheckoutPreviewAndEdit = ({ data, handleFinalize, qrCodeImage, pixCola }) 
                 <strong>Tipo do pagamento:</strong>{" "}
                 {data.payment}
               </Typography>
-              <Typography variant="h6" color="secondary">
-                <strong>Troco:</strong>{" "}
-                {`${Number(data?.troco).toLocaleString("pt-BR", { style: "currency", currency: "BRL" })} - ${Number(data?.total_price).toLocaleString("pt-BR", { style: "currency", currency: "BRL" })}`} = {Number(data?.troco - data?.total_price).toLocaleString("pt-BR", { style: "currency", currency: "BRL" })}
-              </Typography>
+              {data?.troco && (
+                <Typography variant="h6" color="secondary">
+                  <strong>Troco:</strong>{" "}
+                  {`${Number(data?.troco).toLocaleString("pt-BR", { style: "currency", currency: "BRL" })} - ${Number(data?.total_price).toLocaleString("pt-BR", { style: "currency", currency: "BRL" })}`} = {Number(data?.troco - data?.total_price).toLocaleString("pt-BR", { style: "currency", currency: "BRL" })}
+                </Typography>
+              )}
               <Typography variant="h6" color="secondary">
                 <strong>Frete:</strong>{" "}
-                {`${Number(2).toLocaleString("pt-BR", { style: "currency", currency: "BRL" })}`}
+                {taxaEntrega.toLocaleString("pt-BR", { style: "currency", currency: "BRL" })}
               </Typography>
               <Typography variant="h6" color="secondary">
                 <strong>Total:</strong>{" "}
-                {Number(data?.total_price).toLocaleString("pt-BR", { style: "currency", currency: "BRL" })}
+                {valorFinal.toLocaleString("pt-BR", { style: "currency", currency: "BRL" })}
               </Typography>
             </Grid>
 
@@ -555,6 +561,202 @@ const CheckoutPreviewAndEdit = ({ data, handleFinalize, qrCodeImage, pixCola }) 
         )
       }
       case 'CREDIT_CARD': {
+        return (
+          <Grid container spacing={2}>
+            <Grid item xs={12} sm={6}>
+              <Typography variant="body1" sx={{ color: theme.palette.secondary.main }}>
+                <strong>Nome:</strong> {data.name}
+              </Typography>
+              <Typography variant="body1" sx={{ color: theme.palette.secondary.main }}>
+                <strong>Telefone:</strong> {data.phone}
+              </Typography>
+              <Typography variant="body1" sx={{ color: theme.palette.secondary.main }}>
+                <strong>Endereço:</strong>{" "}
+                {data?.address
+                  ? `${data?.address.postalCode}, ${data?.address.house_number}, ${data?.address.neighborhood}, ${data?.address.city}, ${data?.address.postalCode}, ${data?.address.complement}`
+                  : "Não disponível"}
+              </Typography>
+              <Typography variant="body1" sx={{ color: theme.palette.secondary.main }}>
+                <strong>Data:</strong> {new Date().toLocaleDateString()}
+              </Typography>
+              {data?.orderItems.map((item, index) => (
+                <Box key={index} sx={{ mb: 2, mt: 2 }}>
+                  <Typography variant="body1" sx={{ color: theme.palette.secondary.main }}>
+                    <strong>Produto:</strong> {item.title}
+                  </Typography>
+                  <Typography variant="body1" sx={{ color: theme.palette.secondary.main }}>
+                    <strong>Quantidade:</strong> {item.quantity}
+                  </Typography>
+                  <Typography variant="body1" sx={{ color: theme.palette.secondary.main }}>
+                    <strong>Observação:</strong> {item.observation}
+                  </Typography>
+                  <Typography variant="body1" sx={{ color: theme.palette.secondary.main }}>
+                    <strong>Preço:</strong>{" "}
+                    {Number(item.price).toLocaleString("pt-BR", { style: "currency", currency: "BRL" })}
+                  </Typography>
+                </Box>
+              ))}
+
+              <Typography variant="h6" color="secondary">
+                <strong>Tipo do pagamento:</strong>{" "}
+                {data.payment === 'CREDIT_CARD' && 'Cartão de crédito'}
+              </Typography>
+              {data?.troco && (
+                <Typography variant="h6" color="secondary">
+                  <strong>Troco:</strong>{" "}
+                  {`${Number(data?.troco).toLocaleString("pt-BR", { style: "currency", currency: "BRL" })} - ${Number(data?.total_price).toLocaleString("pt-BR", { style: "currency", currency: "BRL" })}`} = {Number(data?.troco - data?.total_price).toLocaleString("pt-BR", { style: "currency", currency: "BRL" })}
+                </Typography>
+              )}
+              <Typography variant="h6" color="secondary">
+                <strong>Frete:</strong>{" "}
+                {taxaEntrega.toLocaleString("pt-BR", { style: "currency", currency: "BRL" })}
+              </Typography>
+              <Typography variant="h6" color="secondary">
+                <strong>Total:</strong>{" "}
+                {valorFinal.toLocaleString("pt-BR", { style: "currency", currency: "BRL" })}
+              </Typography>
+            </Grid>
+
+            {/* <Grid item xs={12}>
+          <Formik
+            initialValues={{ file: null }}
+            validationSchema={validationSchema}
+            onSubmit={(values) => {
+              const finalData = {
+                ...data,
+                comprovante: values.file,
+              };
+              handleFinalize(finalData);
+            }}
+          >
+            {({ setFieldValue, errors, touched, values }) => (
+              <Form>
+                <Grid container spacing={2}>
+                  <Grid item xs={12}>
+                    <Typography variant="h6" color="secondary" fontWeight='bold'>
+                      Envie o comprovante
+                    </Typography>
+                  </Grid>
+
+                  <Grid item xs={12}>
+                    <FormControl fullWidth error={touched.file && Boolean(errors.file)}>
+                      <InputLabel htmlFor="file-input">Arquivo</InputLabel>
+                      <TextField
+                        id="file-input"
+                        type="file"
+                        inputProps={{ accept: "image/jpeg,image/png,application/pdf" }}
+                        onChange={(e) => {
+                          const file = e.target.files[0];
+                          setFieldValue("file", file);
+                          handleChangeForm(e)
+                        }}
+                        sx={{
+                          "& .MuiInputBase-input": { color: theme.palette.secondary.main },
+                          "& .MuiFormLabel-root": { color: theme.palette.secondary.main },
+                          "& .MuiFormHelperText-root": { color: theme.palette.primary.main}
+                        }}
+                        label="Arquivo"
+                        InputProps={{
+                          sx: {
+                            flexShrink: 0,
+                          },
+                        }}
+                        helperText={loading ? "Carregando arquivo..." : "Selecione um arquivo para upload"}
+                      />
+                      {touched.file && errors.file && (
+                        <FormHelperText>{errors.file}</FormHelperText>
+                      )}
+                    </FormControl>
+                  </Grid>
+                  {comprovante.status && (
+                    <Grid item xs={12}>
+                      <Typography
+                        variant="body1"
+                        sx={{
+                          display: "flex",
+                          alignItems: "center",
+                          color: comprovante.status === "valido"
+                            ? theme.palette.success.main
+                            : theme.palette.error.main,
+                          fontSize: 18,
+                        }}
+                      >
+                        {comprovante.status === "valido" ? (
+                          <>
+                            <CheckCircleIcon sx={{ marginRight: 1 }} /> Status: Válido
+                          </>
+                        ) : (
+                          <>
+                            <ErrorIcon sx={{ marginRight: 1 }} /> Status: Inválido
+                          </>
+                        )}
+                      </Typography>
+                    </Grid>
+                  )}
+                  <Grid item xs={12}>
+                    <Grid container spacing={2} alignItems="center" justifyContent="flex-start">
+                      <Grid item>
+                        <Button variant="contained" color="primary" type="submit" sx={{
+                          fontSize: 11
+                        }}>
+                          Finalizar Compra
+                        </Button>
+                      </Grid>
+
+                      <Grid item>
+                        <Button
+                          variant="contained"
+                          color="success"
+                          component="a"
+                          href={`https://wa.me/558592985693?text=${generateWhatsAppMessage()}`}
+                          target="_blank"
+                          rel="noopener noreferrer"
+                          sx={{
+                            fontSize: 11
+                          }}
+                        >
+                          Enviar para WhatsApp
+                        </Button>
+                      </Grid>
+                    </Grid>
+                  </Grid>
+                </Grid>
+              </Form>
+            )}
+          </Formik>
+        </Grid> */}
+
+            <Grid item xs={12}>
+              <Grid container spacing={2} alignItems="center" justifyContent="flex-start">
+                <Grid item>
+                  <Button variant="contained" color="primary" onClick={() => handleFinalize(data)} sx={{
+                    fontSize: 11
+                  }}>
+                    Finalizar Compra
+                  </Button>
+                </Grid>
+
+                <Grid item>
+                  <Button
+                    variant="contained"
+                    color="success"
+                    component="a"
+                    href={`https://wa.me/558592985693?text=${generateWhatsAppMessage()}`}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    sx={{
+                      fontSize: 11
+                    }}
+                  >
+                    Enviar para WhatsApp
+                  </Button>
+                </Grid>
+              </Grid>
+            </Grid>
+          </Grid>
+        )
+      }
+      case 'CREDIT_CARD-2': {
         return (
           <Grid container spacing={2}>
             <Grid item xs={12}>

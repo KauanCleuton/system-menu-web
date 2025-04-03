@@ -1,5 +1,5 @@
 "use client"
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useMemo, useState } from 'react';
 import { Container, Box, Grid } from '@mui/material';
 import CheckoutSteps from '@/components/StepsCheckout';
 import PhoneNumberInput from '@/components/PhoneNumberInput';
@@ -42,6 +42,7 @@ const Checkout = () => {
     document: ''
   });
 
+  const memoizedData = useMemo(() => data, [data]);
   const [billing, setBilling] = useState([])
   const [qrCodeGenerate, setQrCodeGenerate] = useState(false)
   const handleNext = () => {
@@ -223,6 +224,7 @@ const Checkout = () => {
             <Pagamento
               onPaymentMethodChange={handlePaymentMethodChange}
               handleNext={handleNext}
+              handleBack={handleBack}
             />
           </Grid>
         );
