@@ -56,30 +56,6 @@ const Pagamento = ({ onPaymentMethodChange, handleNext, handleBack }) => {
             Dinheiro
           </Button>
         </Grid>
-        {paymentMethod === 'Dinheiro' && (
-          <Grid item xs={12} >
-            <TextField
-              label="Troco"
-              type="number"
-              value={troco}
-              sx={{
-                "& .MuiInputBase-input": {
-                  color: theme.palette.secondary.main
-                },
-                "& .MuiFormLabel-root": {
-                  color: theme.palette.secondary.main
-                },
-                "& .MuiFormHelperText-root": {
-                  color: theme.palette.primary.main // Cor do texto de ajuda
-                }
-              }}
-              onChange={handleTrocoChange}
-              fullWidth
-              margin="normal"
-            />
-          </Grid>
-        )}
-
         <Grid item xs={12} sm={4}>
           <Button
             fullWidth
