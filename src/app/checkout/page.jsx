@@ -121,9 +121,9 @@ const Checkout = () => {
       formData.append("email", dataForm.email);
       formData.append("document", dataForm.document);
       formData.append("quantity", dataForm.quantity);
-      const taxaEntrega = data.total_price < 15 ? 2.00 : 0;
-      const valorFinal = Number(data.total_price) + Number(taxaEntrega);
-      formData.append("total_price", valorFinal);
+      // const taxaEntrega = data.total_price < 15 ? 2.00 : 0;
+      // const valorFinal = Number(data.total_price) + Number(taxaEntrega);
+      formData.append("total_price", data.total_price);
       formData.append("payment", dataForm.payment);
       formData.append("address", JSON.stringify(data.address));
       formData.append("orderItems", JSON.stringify(data.orderItems));
