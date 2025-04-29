@@ -2,7 +2,7 @@ import React from 'react';
 import { Formik, Form, Field, ErrorMessage } from 'formik';
 import * as Yup from 'yup';
 import InputMask from 'react-input-mask';
-import { TextField, Button, Box, Grid, FormControl, FormHelperText, InputAdornment, useTheme } from '@mui/material';
+import { TextField, Button, Box, Grid, FormControl, FormHelperText, InputAdornment, useTheme, Typography } from '@mui/material';
 import { PhoneIphoneOutlined, EmailOutlined } from '@mui/icons-material';
 
 // Validação do Formik
@@ -170,6 +170,8 @@ const PhoneNumberInput = ({ onFetchAddress, setData }) => {
               <FormControl fullWidth>
                 <Field name="document">
                   {({ field }) => (
+                    <>
+                    <Typography sx={{ mb: 1,color:"red" }}>Forneça um CPF válido, caso contrário o pagamento por Pix falhará.</Typography>
                     <InputMask
                       mask="999.999.999-99"
                       {...field}
@@ -204,6 +206,7 @@ const PhoneNumberInput = ({ onFetchAddress, setData }) => {
                         />
                       )}
                     </InputMask>
+                    </>
                   )}
                 </Field>
               </FormControl>
