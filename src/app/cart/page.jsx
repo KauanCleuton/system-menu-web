@@ -1,12 +1,13 @@
 "use client";
 import CartOptionCart from "@/components/CardOptionCart";
-import { Box, Button, Container, Grid, Typography, useTheme } from "@mui/material";
+import { Box, Button, Container, Grid, Modal, Typography, useTheme } from "@mui/material";
 import { useDispatch, useSelector } from "react-redux";
 import { useState, useEffect } from 'react';
 import Link from "next/link";
 import { clearCart } from "@/store/cartSlice";
 import { useRouter } from "next/navigation";
 import Loading from "../loading";
+import ModalAddItemCart from "@/components/ModalCart";
 
 const Cart = () => {
     const theme = useTheme()
@@ -14,6 +15,7 @@ const Cart = () => {
     const router = useRouter();
     const items = useSelector(state => state.cart.items);
     const totalAmount = useSelector(state => state.cart.totalAmount);
+    const { opened, selectedItem, quantity, deliveryDescription } = useSelector((state) => state.modal);
 
 
     console.log(totalAmount, '1293821382183812323', items,'128321838123832821328')
@@ -33,7 +35,13 @@ const Cart = () => {
         return <Loading />;
     }
 
+    const handleClose = () => {
+            dispatch(closeModal());
+        };
+     
+
     return (
+        
         <Box
             sx={{
                 width: "100%",
@@ -130,6 +138,19 @@ const Cart = () => {
                     </Grid>
                 </Grid>
             </Container>
+            <Modal
+                            open={opened}
+                            onClose={handleClose}
+                            aria-labelledby="modal-modal-title"
+                            aria-describedby="modal-modal-description"
+                            sx={{ width: "100vw" }}
+                        >
+                            <ModalAddItemCart
+                                item={selectedItem}
+                                quantity={quantity}
+                                deliveryDescription={deliveryDescription}
+                            />
+                        </Modal>
         </Box>
     );
 }

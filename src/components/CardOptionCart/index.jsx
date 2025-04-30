@@ -1,8 +1,9 @@
 import { removeItemFromCart } from "@/store/cartSlice";
-import { DeleteOutlineOutlined } from "@mui/icons-material";
+import { AddShoppingCartOutlined, DeleteOutlineOutlined } from "@mui/icons-material";
 import { Box, Grid, IconButton, Paper, Typography, useTheme } from "@mui/material";
 import Image from "next/image";
 import { useDispatch } from "react-redux";
+import { openModal } from "@/store/modalSlice";
 
 const CartOptionCart = ({ item }) => {
     const dispatch = useDispatch();
@@ -11,6 +12,10 @@ const CartOptionCart = ({ item }) => {
     const handleRemoveFromCart = (id) => {
         dispatch(removeItemFromCart(id));
         console.log(id)
+    };
+
+    const handleOpenModal = () => {
+        dispatch(openModal(item));
     };
 
     return (
@@ -44,6 +49,25 @@ const CartOptionCart = ({ item }) => {
                             <Typography variant="body2" sx={{ fontWeight: "bold", fontSize: { xs: '13px', md: '16px' } }}>
                                 {Number(item.price).toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' })}
                             </Typography>
+                            <Box>
+                             <IconButton
+                                                                onClick={handleOpenModal}
+                                                                sx={{
+                                                                    color: "#fff",
+                                                                    bgcolor: theme.palette.primary.main,
+                                                                    borderRadius: '4px',
+                                                                    mr:1,
+                                                                    width: {lg: 36, md: 36, sm: 26, xs: 26},
+                                                                    height: {lg: 36, md: 36, sm: 26, xs: 26},
+                                                                    ":hover": {
+                                                                        bgcolor: "transparent",
+                                                                        color: theme.palette.primary.main,
+                                                                    },
+                                                                }}
+                                                                aria-label="Adicionar ao carrinho"
+                                                            >
+                                                                <AddShoppingCartOutlined sx={{ fontSize: {lg: 18, md: 18, sm: 14, xs: 14} }} />
+                                                            </IconButton>
                             <IconButton
                                 onClick={() => handleRemoveFromCart(item.idProducts)}
                                 sx={{
@@ -51,8 +75,8 @@ const CartOptionCart = ({ item }) => {
                                     bgcolor: theme.palette.primary.main,
                                     borderRadius: '4px',
                                     border: `1px solid ${theme.palette.primary.main}`,
-                                    width: 30,
-                                    height: "auto",
+                                    width: {lg: 36, md: 36, sm: 26, xs: 26},
+                                    height: {lg: 36, md: 36, sm: 26, xs: 26},
                                     mr: 0,
                                     ":hover": {
                                         bgcolor: "transparent",
@@ -62,6 +86,7 @@ const CartOptionCart = ({ item }) => {
                             >
                                 <DeleteOutlineOutlined sx={{ fontSize: 14 }} />
                             </IconButton>
+                            </Box>
                         </Box>
                     </Box>
                 </Grid>
