@@ -54,14 +54,14 @@ const ModalAddItemCart = () => {
                                     }}>
                                         <Box sx={{
                                             position: "relative",
-                                            width: "120px",
-                                            height: "120px"
+                                            width: "400px",
+                                            height: "200px"
                                         }}>
                                             <Image
                                                 src={`${process.env.NEXT_PUBLIC_BASE_URL}/uploads/produtos/${item.idProducts}`}
                                                 layout='fill'
                                                 alt='foto do pedido'
-                                                style={{ borderRadius: "5px" }}
+                                                style={{ borderRadius: "5px", objectFit: 'cover' }}
                                             />
                                         </Box>
                                     </Box>
