@@ -14,9 +14,10 @@ const Menu = () => {
     const dispatch = useDispatch();
     const [loading, setLoading] = useState(false);
     const { opened, selectedItem, quantity, deliveryDescription } = useSelector((state) => state.modal);
-    const [categories, setCategories] = useState({}); 
+    const [categories, setCategories] = useState({});
     const router = useRouter();
-    const theme = useTheme()
+    const theme = useTheme();
+
     const handleClose = () => {
         dispatch(closeModal());
     };
@@ -26,11 +27,24 @@ const Menu = () => {
             setLoading(true);
             const response = await productSv.getProducts();
             if (response.data && typeof response.data === "object") {
-                setCategories(response.data);
+                const sortedData = {};
+
+                Object.keys(response.data).forEach((categoryName) => {
+                    const products = response.data[categoryName];
+
+                    if (Array.isArray(products)) {
+                        sortedData[categoryName] = [...products].sort((a, b) => a.price - b.price);
+                    } else {
+                        sortedData[categoryName] = [];
+                    }
+                });
+
+                setCategories(sortedData);
+                console.log(sortedData, "produtooooss filtradooss");
             } else {
                 setCategories({});
             }
-            console.log(response.data);
+            console.log(response.data, "produtoooossss");
         } catch (error) {
             console.error("Erro ao buscar produtos!", error);
             setCategories({});
@@ -53,6 +67,8 @@ const Menu = () => {
                         ...(updatedCategories[newOrder.category] || []),
                         newOrder,
                     ];
+                    // Reordena os produtos dessa categoria por preço
+                    updatedCategories[newOrder.category].sort((a, b) => a.price - b.price);
                 }
                 return updatedCategories;
             });
@@ -68,49 +84,62 @@ const Menu = () => {
         };
     }, []);
 
+    const sortedCategoryEntries = Object.entries(categories).sort(([catA, productsA], [catB, productsB]) => {
+        const isRefriA = catA.toLowerCase().includes("refri");
+        const isRefriB = catB.toLowerCase().includes("refri");
+
+        if (isRefriA && !isRefriB) return 1;
+        if (!isRefriA && isRefriB) return -1;
+
+        const avg = (products) => {
+            if (!Array.isArray(products) || products.length === 0) return Infinity;
+            return products.reduce((sum, p) => sum + (p.price || 0), 0) / products.length;
+        };
+
+        return avg(productsA) - avg(productsB);
+    });
+
     return (
         <>
             <Box sx={{ width: "100%", height: "100%", mb: 2 }}>
                 {loading && <Loading />}
-                {categories &&
-                    Object.keys(categories).map((categoryName, index) => (
-                        <Grid container key={index} spacing={2} mb={7}>
-                            <Grid item xs={12}>
-                                <Box
+                {sortedCategoryEntries.map(([categoryName, products], index) => (
+                    <Grid container key={index} spacing={2} mb={7}>
+                        <Grid item xs={12}>
+                            <Box
+                                sx={{
+                                    width: "100%",
+                                    justifyContent: "flex-start",
+                                    display: "flex",
+                                }}
+                            >
+                                <Typography
+                                    variant="h2"
                                     sx={{
-                                        width: "100%",
-                                        justifyContent: "flex-start",
-                                        display: "flex",
+                                        fontSize: 29,
+                                        fontWeight: "bold",
+                                        color: theme.palette.secondary.main,
+                                        mt: 1,
                                     }}
                                 >
-                                    <Typography
-                                        variant="h2"
-                                        sx={{
-                                            fontSize: 29,
-                                            fontWeight: "bold",
-                                            color:theme.palette.secondary.main,
-                                            mt: 1,
-                                        }}
-                                    >
-                                        {categoryName}
-                                    </Typography>
-                                </Box>
-                            </Grid>
-                            {Array.isArray(categories[categoryName]) &&
-                                categories[categoryName].map((product, idx) => (
-                                    <Grid item xs={12} lg={6} md={6} sm={12} key={idx}>
-                                        <CartOption
-                                            img={product.file_url}
-                                            title={product.title}
-                                            description={product.description}
-                                            price={product.price}
-                                            item={product}
-                                            
-                                        />
-                                    </Grid>
-                                ))}
+                                    {categoryName}
+                                </Typography>
+                            </Box>
                         </Grid>
-                    ))}
+                        {Array.isArray(products) &&
+                            products.map((product, idx) => (
+                                <Grid item xs={12} lg={6} md={6} sm={12} key={idx}>
+                                    <CartOption
+                                        img={product.file_url}
+                                        title={product.title}
+                                        description={product.description}
+                                        price={product.price}
+                                        item={product}
+                                    />
+                                </Grid>
+                            ))}
+                    </Grid>
+                ))}
             </Box>
             <Modal
                 open={opened}
