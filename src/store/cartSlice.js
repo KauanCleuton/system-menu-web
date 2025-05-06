@@ -21,7 +21,7 @@ function getStoredItems() {
 function getStoredAmount() {
   try {
     const storedAmount = window.localStorage.getItem('totalAmount');
-    return storedAmount ? Number(storedAmount).toFixed(2) : 0;
+    return storedAmount ? Number(storedAmount) : 0;
   } catch (error) {
     console.error('Error retrieving total amount from localStorage:', error);
     return 0;
@@ -44,22 +44,25 @@ export const clearCart = createAction('cart/clearCart');
 
 const cartReducer = createReducer(initialState, (builder) => {
   builder
-    .addCase(addItemToCart, (state, action) => {
-      const newItem = action.payload;
-      if (newItem) {
-        const existingItem = state.items.find((item) => item.idProducts === newItem.idProducts);
-        if (existingItem) {
-          existingItem.quantity += newItem.quantity;
-        } else {
-          state.items.push({ ...newItem, quantity: newItem.quantity });
-          state.totalItems++;
-        }
+  .addCase(addItemToCart, (state, action) => {
+    const newItem = action.payload;
+    if (newItem) {
+      const existingItem = state.items.find((item) => item.idProducts === newItem.idProducts);
+      if (existingItem) {
+        state.totalAmount -= existingItem.price * existingItem.quantity;
+        existingItem.quantity = newItem.quantity;
+        existingItem.deliveryDescription = newItem.deliveryDescription;
         state.totalAmount += newItem.price * newItem.quantity;
-        window.localStorage.setItem('cartItems', JSON.stringify(state.items));
-        window.localStorage.setItem('totalAmount', JSON.stringify(state.totalAmount));
-        window.localStorage.setItem('totalItems', JSON.stringify(state.totalItems));
+      } else {
+        state.items.push({ ...newItem, quantity: newItem.quantity });
+        state.totalItems++;
+        state.totalAmount += newItem.price * newItem.quantity;
       }
-    })
+      window.localStorage.setItem('cartItems', JSON.stringify(state.items));
+      window.localStorage.setItem('totalAmount', JSON.stringify(state.totalAmount));
+      window.localStorage.setItem('totalItems', JSON.stringify(state.totalItems));
+    }
+  })
     .addCase(removeItemFromCart, (state, action) => {
       const id = action.payload;
       const existingItemIndex = state.items.findIndex((item) => item.idProducts === id);

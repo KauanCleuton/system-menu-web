@@ -21,6 +21,7 @@ function FloatingWhatsAppButton() {
             lg: 380,
           },
           right: 20,
+          bottom:40,
           backgroundColor: "#25D366",
           color: "white",
           "&:hover": {

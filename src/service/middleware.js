@@ -25,7 +25,7 @@ customAxios.interceptors.response.use(
   (response) => {
     process.env.NODE_ENV !== 'production' && console.log('kkk2');
     if (response.status === 401) {
-      window.location = '/login';
+      // window.location = '/login';
       localStorage.removeItem('accessToken');
       localStorage.removeItem('refreshToken');
     } else if (response.status === 402) {
@@ -86,12 +86,12 @@ customAxios.interceptors.request.use(
             localStorage.removeItem('accessToken');
             localStorage.removeItem('refreshToken');
             localStorage.setItem('redirectUrl', window.location.pathname);
-            window.location = '/login';
+            // window.location = '/login';
             throw new ServiceError('Usuário não autenticado', 'not_auth');
           }
         } else {
           localStorage.setItem('redirectUrl', window.location.pathname);
-          window.location = '/login';
+          // window.location = '/login';
           throw new ServiceError('Usuário não autenticado', 'not_auth');
         }
       }

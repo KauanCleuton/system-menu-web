@@ -2,7 +2,7 @@ import React from 'react';
 import { Formik, Form, Field, ErrorMessage } from 'formik';
 import * as Yup from 'yup';
 import InputMask from 'react-input-mask';
-import { TextField, Button, Box, Grid, FormControl, FormHelperText, InputAdornment, useTheme } from '@mui/material';
+import { TextField, Button, Box, Grid, FormControl, FormHelperText, InputAdornment, useTheme, Typography } from '@mui/material';
 import { PhoneIphoneOutlined, EmailOutlined } from '@mui/icons-material';
 
 // Validação do Formik
@@ -12,9 +12,9 @@ const validationSchema = Yup.object({
     .matches(/^\(\d{2}\) \d{4,5}-\d{4}$/, 'Número de telefone inválido')
     .required('Número de telefone é obrigatório'),
   email: Yup.string().email('Email inválido').required('O email é obrigatório'),
-  document: Yup.string()
-    .matches(/^\d{3}\.\d{3}\.\d{3}-\d{2}$/, 'CPF inválido')
-    .required('O CPF é obrigatório'),
+  // document: Yup.string()
+  //   .matches(/^\d{3}\.\d{3}\.\d{3}-\d{2}$/, 'CPF inválido')
+  //   .required('O CPF é obrigatório'),
 });
 
 const PhoneNumberInput = ({ onFetchAddress, setData }) => {
@@ -22,19 +22,19 @@ const PhoneNumberInput = ({ onFetchAddress, setData }) => {
 
   return (
     <Formik
-      initialValues={{ phone: '', name: '', email: '', document: '' }}
+      initialValues={{ phone: '', name: '', email: '' }}
       validationSchema={validationSchema}
       onSubmit={(values) => {
         const cleanedPhone = values.phone.replace(/\D/g, '');
-        const cleanedDocument = values.document.replace(/\D/g, '');
+        // const cleanedDocument = values.document.replace(/\D/g, '');
         setData((prevData) => ({
           ...prevData,
           phone: cleanedPhone,
           name: values.name,
           email: values.email,
-          document: cleanedDocument,
+          // document: cleanedDocument,
         }));
-        onFetchAddress(cleanedPhone, values.name, values.email, cleanedDocument);
+        onFetchAddress(cleanedPhone, values.name, values.email);
       }}
     >
       {({ handleChange, handleBlur }) => (
@@ -166,10 +166,12 @@ const PhoneNumberInput = ({ onFetchAddress, setData }) => {
               </FormControl>
             </Grid>
 
-            <Grid item xs={12}>
+            {/* <Grid item xs={12}>
               <FormControl fullWidth>
                 <Field name="document">
                   {({ field }) => (
+                    <>
+                    <Typography sx={{ mb: 1,color:"red" }}>Forneça um CPF válido, caso contrário o pagamento por Pix falhará.</Typography>
                     <InputMask
                       mask="999.999.999-99"
                       {...field}
@@ -204,10 +206,11 @@ const PhoneNumberInput = ({ onFetchAddress, setData }) => {
                         />
                       )}
                     </InputMask>
+                    </>
                   )}
                 </Field>
               </FormControl>
-            </Grid>
+            </Grid> */}
 
             <Grid item xs={12}>
               <Box sx={{ width: '100%', alignItems: "center", justifyContent: 'center', display: 'flex' }}>
