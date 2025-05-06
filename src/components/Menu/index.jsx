@@ -74,7 +74,7 @@ const Menu = () => {
                 {loading && <Loading />}
                 {categories &&
                     Object.keys(categories).map((categoryName, index) => (
-                        <Grid container key={index} spacing={2}>
+                        <Grid container key={index} spacing={2} mb={7}>
                             <Grid item xs={12}>
                                 <Box
                                     sx={{
