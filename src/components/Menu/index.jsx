@@ -1,9 +1,9 @@
-import { Box, Grid, Modal, Typography, useTheme } from "@mui/material";
+import { Box, Button, Grid, Modal, Typography, useTheme } from "@mui/material";
 import CartOption from "../CardOption";
 import { useDispatch, useSelector } from "react-redux";
 import ModalAddItemCart from "../ModalCart";
 import { closeModal } from "@/store/modalSlice";
-import { useEffect, useState } from "react";
+import { useEffect, useState, useRef } from "react";
 import Loading from "../Loading";
 import ProductsService from "@/service/products.service";
 import { useRouter } from "next/navigation";
@@ -17,6 +17,29 @@ const Menu = () => {
     const [categories, setCategories] = useState({});
     const router = useRouter();
     const theme = useTheme();
+    const categoryRefs = useRef({}); 
+    const [activeCategory, setActiveCategory] = useState(null);
+    useEffect(() => {
+        const handleScroll = () => {
+            const entries = Object.entries(categoryRefs.current);
+            for (const [category, el] of entries) {
+                if (el) {
+                    const rect = el.getBoundingClientRect();
+                    if (rect.top >= 0 && rect.top <= window.innerHeight / 2) {
+                        setActiveCategory(category);
+                        break;
+                    }
+                }
+            }
+        };
+
+        window.addEventListener("scroll", handleScroll);
+        handleScroll(); 
+
+        return () => {
+            window.removeEventListener("scroll", handleScroll);
+        };
+    }, []);
 
     const handleClose = () => {
         dispatch(closeModal());
@@ -67,7 +90,7 @@ const Menu = () => {
                         ...(updatedCategories[newOrder.category] || []),
                         newOrder,
                     ];
-                    // Reordena os produtos dessa categoria por preço
+                    
                     updatedCategories[newOrder.category].sort((a, b) => a.price - b.price);
                 }
                 return updatedCategories;
@@ -99,12 +122,57 @@ const Menu = () => {
         return avg(productsA) - avg(productsB);
     });
 
+    const scrollToCategory = (category) => {
+        const ref = categoryRefs.current[category];
+        if (ref) {
+            ref.scrollIntoView({ behavior: "smooth" });
+        }
+    };
+
     return (
         <>
             <Box sx={{ width: "100%", height: "100%", mb: 2 }}>
+                {/* Lista de Navegação */}
+                <Box
+                    sx={{
+                        bgcolor: "black",
+                        display: "flex",
+                        gap: 1,
+                        overflowX: "auto",
+                        overflowY: "hidden",
+                        p: 2,
+                        mb: 2,
+                        whiteSpace: "nowrap", 
+                        '&::-webkit-scrollbar': {
+                            height: '6px',
+                        },
+                        '&::-webkit-scrollbar-thumb': {
+                            backgroundColor: '#ccc',
+                            borderRadius: '3px',
+                        }
+                    }}
+                >
+                    {sortedCategoryEntries.map(([categoryName]) => (
+                        <Button
+                            key={categoryName}
+                            variant="outlined"
+                            size="small"
+                            onClick={() => scrollToCategory(categoryName)}
+                            sx={{
+                                px: 2,
+                                flexShrink: 0, 
+                                whiteSpace: 'nowrap', 
+                                backgroundColor: activeCategory === categoryName ? "gray" : undefined,
+                            }}
+                        >
+                            {categoryName}
+                        </Button>
+                    ))}
+                </Box>
                 {loading && <Loading />}
                 {sortedCategoryEntries.map(([categoryName, products], index) => (
-                    <Grid container key={index} spacing={2} mb={7}>
+                    <Grid container key={index} spacing={2} mb={7} ref={(el) => (categoryRefs.current[categoryName] = el)}>
+
                         <Grid item xs={12}>
                             <Box
                                 sx={{
