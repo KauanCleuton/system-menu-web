@@ -1,9 +1,9 @@
-import { Box, Grid, Modal, Typography, useTheme } from "@mui/material";
+import { Box, Button, Grid, Modal, Typography, useTheme } from "@mui/material";
 import CartOption from "../CardOption";
 import { useDispatch, useSelector } from "react-redux";
 import ModalAddItemCart from "../ModalCart";
 import { closeModal } from "@/store/modalSlice";
-import { useEffect, useState } from "react";
+import { useEffect, useState, useRef } from "react";
 import Loading from "../Loading";
 import ProductsService from "@/service/products.service";
 import { useRouter } from "next/navigation";
@@ -14,9 +14,33 @@ const Menu = () => {
     const dispatch = useDispatch();
     const [loading, setLoading] = useState(false);
     const { opened, selectedItem, quantity, deliveryDescription } = useSelector((state) => state.modal);
-    const [categories, setCategories] = useState({}); 
+    const [categories, setCategories] = useState({});
     const router = useRouter();
-    const theme = useTheme()
+    const theme = useTheme();
+    const categoryRefs = useRef({}); 
+    const [activeCategory, setActiveCategory] = useState(null);
+    useEffect(() => {
+        const handleScroll = () => {
+            const entries = Object.entries(categoryRefs.current);
+            for (const [category, el] of entries) {
+                if (el) {
+                    const rect = el.getBoundingClientRect();
+                    if (rect.top >= 0 && rect.top <= window.innerHeight / 2) {
+                        setActiveCategory(category);
+                        break;
+                    }
+                }
+            }
+        };
+
+        window.addEventListener("scroll", handleScroll);
+        handleScroll(); 
+
+        return () => {
+            window.removeEventListener("scroll", handleScroll);
+        };
+    }, []);
+
     const handleClose = () => {
         dispatch(closeModal());
     };
@@ -26,11 +50,24 @@ const Menu = () => {
             setLoading(true);
             const response = await productSv.getProducts();
             if (response.data && typeof response.data === "object") {
-                setCategories(response.data);
+                const sortedData = {};
+
+                Object.keys(response.data).forEach((categoryName) => {
+                    const products = response.data[categoryName];
+
+                    if (Array.isArray(products)) {
+                        sortedData[categoryName] = [...products].sort((a, b) => a.price - b.price);
+                    } else {
+                        sortedData[categoryName] = [];
+                    }
+                });
+
+                setCategories(sortedData);
+                console.log(sortedData, "produtooooss filtradooss");
             } else {
                 setCategories({});
             }
-            console.log(response.data);
+            console.log(response.data, "produtoooossss");
         } catch (error) {
             console.error("Erro ao buscar produtos!", error);
             setCategories({});
@@ -53,6 +90,8 @@ const Menu = () => {
                         ...(updatedCategories[newOrder.category] || []),
                         newOrder,
                     ];
+                    
+                    updatedCategories[newOrder.category].sort((a, b) => a.price - b.price);
                 }
                 return updatedCategories;
             });
@@ -68,49 +107,107 @@ const Menu = () => {
         };
     }, []);
 
+    const sortedCategoryEntries = Object.entries(categories).sort(([catA, productsA], [catB, productsB]) => {
+        const isRefriA = catA.toLowerCase().includes("refri");
+        const isRefriB = catB.toLowerCase().includes("refri");
+
+        if (isRefriA && !isRefriB) return 1;
+        if (!isRefriA && isRefriB) return -1;
+
+        const avg = (products) => {
+            if (!Array.isArray(products) || products.length === 0) return Infinity;
+            return products.reduce((sum, p) => sum + (p.price || 0), 0) / products.length;
+        };
+
+        return avg(productsA) - avg(productsB);
+    });
+
+    const scrollToCategory = (category) => {
+        const ref = categoryRefs.current[category];
+        if (ref) {
+            ref.scrollIntoView({ behavior: "smooth" });
+        }
+    };
+
     return (
         <>
             <Box sx={{ width: "100%", height: "100%", mb: 2 }}>
+                {/* Lista de Navegação */}
+                <Box
+                    sx={{
+                        bgcolor: "black",
+                        display: "flex",
+                        gap: 1,
+                        overflowX: "auto",
+                        overflowY: "hidden",
+                        p: 2,
+                        mb: 2,
+                        whiteSpace: "nowrap", 
+                        '&::-webkit-scrollbar': {
+                            height: '6px',
+                        },
+                        '&::-webkit-scrollbar-thumb': {
+                            backgroundColor: '#ccc',
+                            borderRadius: '3px',
+                        }
+                    }}
+                >
+                    {sortedCategoryEntries.map(([categoryName]) => (
+                        <Button
+                            key={categoryName}
+                            variant="outlined"
+                            size="small"
+                            onClick={() => scrollToCategory(categoryName)}
+                            sx={{
+                                px: 2,
+                                flexShrink: 0, 
+                                whiteSpace: 'nowrap', 
+                                backgroundColor: activeCategory === categoryName ? "gray" : undefined,
+                            }}
+                        >
+                            {categoryName}
+                        </Button>
+                    ))}
+                </Box>
                 {loading && <Loading />}
-                {categories &&
-                    Object.keys(categories).map((categoryName, index) => (
-                        <Grid container key={index} spacing={2} mb={7}>
-                            <Grid item xs={12}>
-                                <Box
+                {sortedCategoryEntries.map(([categoryName, products], index) => (
+                    <Grid container key={index} spacing={2} mb={7} ref={(el) => (categoryRefs.current[categoryName] = el)}>
+
+                        <Grid item xs={12}>
+                            <Box
+                                sx={{
+                                    width: "100%",
+                                    justifyContent: "flex-start",
+                                    display: "flex",
+                                }}
+                            >
+                                <Typography
+                                    variant="h2"
                                     sx={{
-                                        width: "100%",
-                                        justifyContent: "flex-start",
-                                        display: "flex",
+                                        fontSize: 29,
+                                        fontWeight: "bold",
+                                        color: theme.palette.secondary.main,
+                                        mt: 1,
                                     }}
                                 >
-                                    <Typography
-                                        variant="h2"
-                                        sx={{
-                                            fontSize: 29,
-                                            fontWeight: "bold",
-                                            color:theme.palette.secondary.main,
-                                            mt: 1,
-                                        }}
-                                    >
-                                        {categoryName}
-                                    </Typography>
-                                </Box>
-                            </Grid>
-                            {Array.isArray(categories[categoryName]) &&
-                                categories[categoryName].map((product, idx) => (
-                                    <Grid item xs={12} lg={6} md={6} sm={12} key={idx}>
-                                        <CartOption
-                                            img={product.file_url}
-                                            title={product.title}
-                                            description={product.description}
-                                            price={product.price}
-                                            item={product}
-                                            
-                                        />
-                                    </Grid>
-                                ))}
+                                    {categoryName}
+                                </Typography>
+                            </Box>
                         </Grid>
-                    ))}
+                        {Array.isArray(products) &&
+                            products.map((product, idx) => (
+                                <Grid item xs={12} lg={6} md={6} sm={12} key={idx}>
+                                    <CartOption
+                                        img={product.file_url}
+                                        title={product.title}
+                                        description={product.description}
+                                        price={product.price}
+                                        item={product}
+                                    />
+                                </Grid>
+                            ))}
+                    </Grid>
+                ))}
             </Box>
             <Modal
                 open={opened}

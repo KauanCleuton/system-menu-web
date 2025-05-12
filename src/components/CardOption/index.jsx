@@ -78,12 +78,12 @@ const CartOption = ({ img, title, description, price, item }) => {
                             >
                                 {description}
                             </Typography>
-                            <Typography
+                            {/* <Typography
                                 variant="body2"
                                 sx={{ fontSize: { lg: '16px', md: '12px', sm: '10px', xs: '11px' } }}
                             >
                                 Quantidade disponível: {item.quantity}
-                            </Typography>
+                            </Typography> */}
                         </Box>
 
                         <Box
