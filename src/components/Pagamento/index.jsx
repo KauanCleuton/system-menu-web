@@ -210,7 +210,7 @@ const Pagamento = ({ onPaymentMethodChange, handleNext, handleBack }) => {
             <Button
               variant="contained"
               color="primary"
-              onClick={formik.handleSubmit}
+              onClick={isNextButtonEnabled() && handleNext}
               sx={{ mt: 2 }}
               disabled={!isNextButtonEnabled()}
             >
