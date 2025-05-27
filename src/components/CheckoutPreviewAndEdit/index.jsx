@@ -160,7 +160,7 @@ const CheckoutPreviewAndEdit = ({ data, handleFinalize, qrCodeImage, pixCola }) 
       currency: "BRL",
     })}`;
 
-    return `Olá,%20aqui%20estão%20os%20detalhes%20do%20meu%20pedido:%0A%0ANome:%20${data.name}%0ATelefone:%20${data.phone}%0A%0AEndereço:%20${address}%0A%0A${items}%0A%0A${total}`;
+    return `Olá,%20aqui%20estão%20os%20detalhes%20do%20meu%20pedido:%0A%0ANome:%20${data.name}%0ATelefone:%20${data.phone}%0A%0AEndereço:%20${address}%0A%0A${items}%0A%0A${total}%0A%0AMetodo%20de%20Pagamento:%20${data.payment}`;
   };
 
   const validationSchema = Yup.object().shape({
@@ -405,10 +405,11 @@ const CheckoutPreviewAndEdit = ({ data, handleFinalize, qrCodeImage, pixCola }) 
                 <strong>Tipo do pagamento:</strong>{" "}
                 {data.payment}
               </Typography>
+              
               {data?.troco && (
                 <Typography variant="h6" color="secondary">
                   <strong>Troco:</strong>{" "}
-                  {`${Number(data?.troco).toLocaleString("pt-BR", { style: "currency", currency: "BRL" })} - ${Number(data?.total_price).toLocaleString("pt-BR", { style: "currency", currency: "BRL" })}`} = {Number(data?.troco - data?.total_price).toLocaleString("pt-BR", { style: "currency", currency: "BRL" })}
+                  {`${Number(data?.troco).toLocaleString("pt-BR", { style: "currency", currency: "BRL" })} - ${Number(valorFinal).toLocaleString("pt-BR", { style: "currency", currency: "BRL" })}`} = {Number(data?.troco - valorFinal).toLocaleString("pt-BR", { style: "currency", currency: "BRL" })}
                 </Typography>
               )}
               <Typography variant="h6" color="secondary">

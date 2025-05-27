@@ -227,6 +227,7 @@ const Checkout = () => {
               onPaymentMethodChange={handlePaymentMethodChange}
               handleNext={handleNext}
               handleBack={handleBack}
+              total={data.total_price}
             />
           </Grid>
         );
