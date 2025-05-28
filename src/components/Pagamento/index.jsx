@@ -17,10 +17,14 @@ import InputMask from 'react-input-mask';
 import * as Yup from 'yup';
 import { useFormik } from 'formik';
 
-const Pagamento = ({ onPaymentMethodChange, handleNext, handleBack }) => {
+const Pagamento = ({ onPaymentMethodChange, handleNext, handleBack, total }) => {
   const [paymentMethod, setPaymentMethod] = useState('');
   const [troco, setTroco] = useState('');
   const [document, setDocument] = useState('');
+  const valorTotal = total; // total recebido por props
+const frete = valorTotal < 15 ? 2 : 0;
+const totalComFrete = valorTotal + frete;
+
 
   const theme = useTheme();
 
@@ -60,7 +64,7 @@ const Pagamento = ({ onPaymentMethodChange, handleNext, handleBack }) => {
 
   const isNextButtonEnabled = () => {
     if (!paymentMethod) return false;
-  
+
     if (paymentMethod === 'PIX') {
       return (
         !!formik.values.document &&
@@ -68,14 +72,18 @@ const Pagamento = ({ onPaymentMethodChange, handleNext, handleBack }) => {
         formik.touched.document
       );
     }
-  
+
     if (paymentMethod === 'Dinheiro') {
-      return troco.trim() !== '';
-    }
-  
-    return true;
+  if (!troco) return true; // valor exato
+  const trocoValue = parseFloat(troco);
+  return !isNaN(trocoValue) && trocoValue >= totalComFrete;
+}
+
+
+    return true; // cartão não exige validação extra
   };
-  
+
+
 
   return (
     <Box sx={{ p: 2 }}>
@@ -189,6 +197,12 @@ const Pagamento = ({ onPaymentMethodChange, handleNext, handleBack }) => {
               fullWidth
               margin="normal"
             />
+            {paymentMethod === 'Dinheiro' && troco && parseFloat(troco) < total && (
+              <Typography variant="body2" color="error">
+                O valor informado deve ser maior ou igual ao total da compra (R$ {totalComFrete.toFixed(2)}).
+              </Typography>
+            )}
+
           </Grid>
         )}
 
@@ -210,7 +224,7 @@ const Pagamento = ({ onPaymentMethodChange, handleNext, handleBack }) => {
             <Button
               variant="contained"
               color="primary"
-              onClick={formik.handleSubmit}
+              onClick={isNextButtonEnabled() && handleNext}
               sx={{ mt: 2 }}
               disabled={!isNextButtonEnabled()}
             >
