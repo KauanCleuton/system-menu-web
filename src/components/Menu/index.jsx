@@ -125,13 +125,10 @@ const Menu = () => {
             });
         };
 
-        const interval = setInterval(() => {
-            fetchProducts();
-        }, 30000);
+        fetchProducts();
 
         return () => {
             eventSource.close();
-            clearInterval(interval);
         };
     }, []);
 
@@ -205,7 +202,7 @@ const Menu = () => {
                             variant="outlined"
                             size="small"
                             onClick={() => scrollToCategory(categoryName)}
-                            ref={(el) => (buttonsRefs.current[categoryName] = el)} 
+                            ref={(el) => (buttonsRefs.current[categoryName] = el)}
                             sx={{
                                 px: 2,
                                 flexShrink: 0,
